@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLOUDPOWER Palette — Design System</title>
+<meta name="description" content="Cloud Power Inc. Official Color System — Primary #74B2E0">
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body {
+    font-family: 'Segoe UI', 'Meiryo', 'Hiragino Sans', sans-serif;
+    background: var(--cp-page-bg);
+    color: var(--cp-text-body);
+    line-height: 1.6;
+    transition: background .2s, color .2s;
+  }
+
+  /* ========== Header ========== */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--cp-card-bg);
+    border-bottom: 1px solid var(--cp-border);
+    padding: 12px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    backdrop-filter: blur(8px);
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 16px; }
+  .logo-wrap img { height: 32px; }
+  .logo-light { display: block; }
+  .logo-dark { display: none; }
+  [data-theme="dark"] .logo-light { display: none; }
+  [data-theme="dark"] .logo-dark { display: block; }
+  .version-badge {
+    font-size: 11px; font-family: 'Consolas', monospace;
+    background: var(--cp-blue-50); color: var(--cp-blue-700);
+    padding: 3px 8px; border-radius: 4px;
+  }
+  [data-theme="dark"] .version-badge {
+    background: var(--cp-blue-900); color: var(--cp-blue-300);
+  }
+  .theme-toggle {
+    background: var(--cp-blue-50); border: 1px solid var(--cp-border);
+    padding: 6px 14px; border-radius: 20px; cursor: pointer;
+    font-size: 13px; color: var(--cp-text-heading);
+    transition: all .2s;
+  }
+  .theme-toggle:hover { background: var(--cp-blue-100); }
+  [data-theme="dark"] .theme-toggle { background: var(--cp-blue-900); }
+  [data-theme="dark"] .theme-toggle:hover { background: var(--cp-blue-800); }
+
+  /* ========== Layout ========== */
+  .layout {
+    display: grid; grid-template-columns: 240px 1fr;
+    gap: 32px; max-width: 1400px; margin: 0 auto; padding: 32px;
+  }
+
+  /* ========== Sidebar ========== */
+  nav.sidebar {
+    position: sticky; top: 80px; align-self: start;
+    height: calc(100vh - 100px); overflow-y: auto;
+    background: var(--cp-card-bg);
+    border: 1px solid var(--cp-border); border-radius: 12px;
+    padding: 16px 0;
+  }
+  nav.sidebar h4 {
+    font-size: 11px; font-weight: 600; color: var(--cp-text-sub);
+    text-transform: uppercase; letter-spacing: .5px;
+    padding: 8px 20px; margin-top: 8px;
+  }
+  nav.sidebar h4:first-child { margin-top: 0; }
+  nav.sidebar a {
+    display: block; padding: 8px 20px; font-size: 13px;
+    color: var(--cp-text-body); text-decoration: none;
+    border-left: 3px solid transparent; transition: all .15s;
+  }
+  nav.sidebar a:hover {
+    background: var(--cp-blue-50);
+    color: var(--cp-blue-700);
+  }
+  [data-theme="dark"] nav.sidebar a:hover {
+    background: var(--cp-blue-900); color: var(--cp-blue-300);
+  }
+  nav.sidebar a.active {
+    background: var(--cp-blue-50); color: var(--cp-blue-700);
+    border-left-color: var(--cp-blue-400); font-weight: 600;
+  }
+  [data-theme="dark"] nav.sidebar a.active {
+    background: var(--cp-blue-900); color: var(--cp-blue-300);
+  }
+
+  /* ========== Main ========== */
+  main { min-width: 0; }
+  section { margin-bottom: 64px; scroll-margin-top: 80px; }
+  h1 {
+    font-size: 40px; font-weight: 700; color: var(--cp-text-heading);
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-size: 16px; color: var(--cp-text-sub); margin-bottom: 12px;
+  }
+  .meta-row {
+    display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;
+    font-size: 12px; color: var(--cp-text-sub);
+  }
+  .meta-row span { display: flex; align-items: center; gap: 6px; }
+  .meta-row strong { color: var(--cp-text-body); }
+  h2 {
+    font-size: 26px; font-weight: 700; color: var(--cp-text-heading);
+    padding-bottom: 12px; margin-bottom: 20px;
+    border-bottom: 2px solid var(--cp-blue-400);
+  }
+  h3 {
+    font-size: 17px; font-weight: 600; color: var(--cp-text-heading);
+    margin: 24px 0 12px;
+  }
+  p { margin-bottom: 12px; }
+
+  /* ========== Swatch Cards ========== */
+  .swatch-grid {
+    display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  .swatch {
+    background: var(--cp-card-bg);
+    border: 1px solid var(--cp-border); border-radius: 10px;
+    overflow: hidden; cursor: pointer; transition: transform .15s, box-shadow .15s;
+  }
+  .swatch:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .swatch-color {
+    height: 80px; display: flex; align-items: flex-end; padding: 8px 10px;
+    position: relative;
+  }
+  .swatch-color .shade-label {
+    font-size: 11px; font-weight: 700; padding: 2px 6px;
+    background: rgba(255,255,255,0.5); border-radius: 3px;
+  }
+  .swatch-color.dark .shade-label {
+    background: rgba(0,0,0,0.25); color: #fff;
+  }
+  .swatch-color .star-badge {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(255,255,255,0.9); color: var(--cp-blue-700);
+    font-size: 10px; padding: 2px 6px; border-radius: 3px;
+    font-weight: 700;
+  }
+  .swatch-info { padding: 10px 12px; }
+  .swatch-info .name {
+    font-size: 12px; font-weight: 600; color: var(--cp-text-heading);
+    margin-bottom: 2px;
+  }
+  .swatch-info .hex {
+    font-size: 11px; color: var(--cp-text-sub);
+    font-family: 'Consolas', monospace;
+  }
+  .swatch-info .usage {
+    font-size: 10px; color: var(--cp-blue-700); font-style: italic;
+    margin-top: 4px;
+  }
+  [data-theme="dark"] .swatch-info .usage { color: var(--cp-blue-300); }
+
+  /* コピー時のフィードバック */
+  .swatch.copied {
+    animation: copy-flash .6s;
+  }
+  @keyframes copy-flash {
+    0%   { box-shadow: 0 0 0 0 rgba(116, 178, 224, 0.6); }
+    100% { box-shadow: 0 0 0 10px rgba(116, 178, 224, 0); }
+  }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--cp-blue-900); color: #fff;
+    padding: 10px 20px; border-radius: 8px;
+    font-size: 13px; z-index: 1000;
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+  /* ========== Gradient Strip ========== */
+  .gradient-strip {
+    height: 56px; border-radius: 10px; margin: 20px 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  /* ========== Semantic Card ========== */
+  .semantic-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .semantic-card {
+    flex: 1; min-width: 240px; padding: 16px 20px;
+    border-radius: 10px; border-left: 4px solid;
+    background: var(--cp-card-bg);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .semantic-card .label {
+    font-size: 13px; font-weight: 700; margin-bottom: 4px;
+  }
+  .semantic-card .desc { font-size: 13px; color: var(--cp-text-body); }
+
+  /* ========== Chart Demo ========== */
+  .chart-demo {
+    background: var(--cp-card-bg); border: 1px solid var(--cp-border);
+    border-radius: 12px; padding: 24px; margin-top: 20px;
+  }
+  .chart-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .chart-label { width: 100px; font-size: 12px; color: var(--cp-text-sub); text-align: right; }
+  .chart-bar { height: 28px; border-radius: 4px; }
+  .chart-value { font-size: 12px; color: var(--cp-text-sub); }
+
+  /* ========== Dashboard Mockup ========== */
+  .dashboard-preview {
+    border-radius: 12px; overflow: hidden; margin-top: 20px;
+    border: 1px solid var(--cp-border);
+  }
+  .dashboard-light {
+    background: #F2F8FC; padding: 24px;
+  }
+  .dashboard-dark {
+    background: #0F1B2A; padding: 24px;
+  }
+  .dashboard-header-bar {
+    background: linear-gradient(135deg, #2E6BA6 0%, #74B2E0 100%);
+    color: #fff; padding: 16px 20px; border-radius: 8px;
+    margin-bottom: 16px; display: flex; justify-content: space-between;
+  }
+  .dashboard-dark .dashboard-header-bar {
+    background: linear-gradient(135deg, #1A3A5C 0%, #2E6BA6 100%);
+  }
+  .kpi-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .kpi-card {
+    flex: 1; min-width: 120px; background: #fff;
+    border-radius: 8px; padding: 14px; border-top: 3px solid;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .dashboard-dark .kpi-card {
+    background: #1A2940; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .kpi-num { font-size: 24px; font-weight: 700; }
+  .kpi-label { font-size: 11px; color: #666; margin-top: 2px; }
+  .dashboard-dark .kpi-label { color: #8899AA; }
+
+  /* ========== Tables ========== */
+  table.ref {
+    width: 100%; border-collapse: collapse; margin: 12px 0;
+    background: var(--cp-card-bg); border: 1px solid var(--cp-border);
+    border-radius: 10px; overflow: hidden;
+  }
+  table.ref th, table.ref td {
+    padding: 10px 14px; text-align: left;
+    border-bottom: 1px solid var(--cp-border); font-size: 13px;
+  }
+  table.ref th {
+    background: var(--cp-blue-50); color: var(--cp-blue-700);
+    font-weight: 600; font-size: 12px;
+  }
+  [data-theme="dark"] table.ref th { background: var(--cp-blue-900); color: var(--cp-blue-300); }
+  table.ref tr:last-child td { border-bottom: none; }
+  table.ref code {
+    font-family: 'Consolas', monospace; font-size: 12px;
+    background: var(--cp-blue-50); color: var(--cp-blue-700);
+    padding: 2px 6px; border-radius: 3px;
+  }
+  [data-theme="dark"] table.ref code { background: var(--cp-blue-900); color: var(--cp-blue-300); }
+  .color-dot {
+    display: inline-block; width: 16px; height: 16px;
+    border-radius: 3px; border: 1px solid var(--cp-border);
+    vertical-align: middle; margin-right: 6px;
+  }
+
+  /* ========== Code Snippet Tabs ========== */
+  .tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--cp-border); margin-bottom: 0; }
+  .tab-btn {
+    background: transparent; border: none; padding: 10px 18px;
+    font-size: 13px; cursor: pointer; color: var(--cp-text-sub);
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+    transition: all .15s;
+  }
+  .tab-btn:hover { color: var(--cp-text-heading); }
+  .tab-btn.active {
+    color: var(--cp-blue-700); border-bottom-color: var(--cp-blue-400);
+    font-weight: 600;
+  }
+  [data-theme="dark"] .tab-btn.active { color: var(--cp-blue-300); }
+  .tab-content {
+    background: var(--cp-gray-900); color: #E0E0E0;
+    border-radius: 0 0 10px 10px; padding: 20px;
+    position: relative; max-height: 500px; overflow-y: auto;
+  }
+  .tab-content pre { font-family: 'Consolas', monospace; font-size: 12px; line-height: 1.6; }
+  .tab-content.hidden { display: none; }
+  .copy-snippet-btn {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--cp-gray-700); color: #fff;
+    border: none; padding: 6px 12px; border-radius: 4px;
+    font-size: 11px; cursor: pointer; transition: background .15s;
+  }
+  .copy-snippet-btn:hover { background: var(--cp-gray-600); }
+  .copy-snippet-btn.copied { background: var(--cp-success-500); }
+
+  /* ========== Downloads ========== */
+  .download-grid {
+    display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  .download-card {
+    background: var(--cp-card-bg); border: 1px solid var(--cp-border);
+    border-radius: 10px; padding: 16px; text-decoration: none;
+    color: var(--cp-text-body); transition: all .15s;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .download-card:hover {
+    border-color: var(--cp-blue-400);
+    box-shadow: 0 2px 8px rgba(116, 178, 224, 0.15);
+    transform: translateY(-1px);
+  }
+  .download-icon {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: var(--cp-blue-50); color: var(--cp-blue-700);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; flex-shrink: 0;
+  }
+  [data-theme="dark"] .download-icon { background: var(--cp-blue-900); color: var(--cp-blue-300); }
+  .download-card .title { font-size: 14px; font-weight: 600; color: var(--cp-text-heading); }
+  .download-card .hint { font-size: 11px; color: var(--cp-text-sub); margin-top: 2px; }
+
+  /* ========== Footer ========== */
+  footer {
+    margin-top: 48px; padding: 24px 32px;
+    border-top: 1px solid var(--cp-border);
+    text-align: center; font-size: 12px; color: var(--cp-text-sub);
+  }
+
+  /* ========== Responsive ========== */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; padding: 16px; }
+    nav.sidebar { position: static; height: auto; }
+    header { padding: 12px 16px; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Header ========== -->
+<header>
+  <div class="logo-wrap">
+    <img src="assets/logo-horizontal-color.svg" alt="CLOUDPOWER" class="logo-light">
+    <img src="assets/logo-horizontal-white.svg" alt="CLOUDPOWER" class="logo-dark">
+    <span class="version-badge">Palette v2.0.0</span>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <span id="theme-icon">🌙</span> <span id="theme-label">ダークモード</span>
+  </button>
+</header>
+
+<div class="layout">
+
+  <!-- ========== Sidebar ========== -->
+  <nav class="sidebar">
+    <h4>Brand</h4>
+    <a href="#overview">Overview</a>
+    <h4>Color Tokens</h4>
+    <a href="#primary">Primary (CP Blue)</a>
+    <a href="#gray">Gray Scale</a>
+    <a href="#semantic">Semantic</a>
+    <a href="#chart">Chart Accent</a>
+    <h4>Theming</h4>
+    <a href="#darkmode">Dark Mode</a>
+    <a href="#pptx">PPTX Theme</a>
+    <h4>Guide</h4>
+    <a href="#usage">Usage Guide</a>
+    <h4>Developer</h4>
+    <a href="#developer">Code Snippets</a>
+    <a href="#downloads">Downloads</a>
+  </nav>
+
+  <!-- ========== Main ========== -->
+  <main>
+
+  <!-- ========== Overview ========== -->
+  <section id="overview">
+    <h1>CLOUDPOWER Palette</h1>
+    <p class="hero-sub">Cloud Power Inc. Official Color System — ブランド・プロダクト・ドキュメント横断の統合カラー定義</p>
+    <div class="meta-row">
+      <span>📅 <strong>Version 2.0.0</strong></span>
+      <span>🎨 Primary: <strong style="color: var(--cp-blue-400)">#74B2E0</strong></span>
+      <span>📚 参照: デジタル庁ダッシュボードデザインガイド</span>
+    </div>
+    <p>このパレットは、PowerPoint / Web UI / Power BI など CP の全成果物で使われる色を一元管理するためのデザインシステムです。各トークンは CSS 変数・SCSS 変数・JSON・Tailwind 設定として配布されます。</p>
+    <p><strong>⚠️ Brand Gray</strong> <code style="background:var(--cp-gray-100);padding:2px 6px;border-radius:3px;color:var(--cp-gray-700)">#9E9E9F</code> はロゴ専用です。UI の汎用グレーには Gray Scale（<code style="background:var(--cp-gray-100);padding:2px 6px;border-radius:3px;color:var(--cp-gray-700)">#888888</code> など）を使ってください。</p>
+  </section>
+
+  <!-- ========== Primary ========== -->
+  <section id="primary">
+    <h2>Primary — CP Blue</h2>
+    <p>ブランドカラー <strong>#74B2E0</strong> を中心に 10 段階。50〜300 は背景・ボーダーに、400 が Primary（ブランド代表色）、500〜900 は文字・強調に。</p>
+    <div class="swatch-grid" id="primary-grid"></div>
+    <div class="gradient-strip" style="background: linear-gradient(90deg, #F2F8FC, #D6E9F5, #C5DDE9, #A3CDE8, #74B2E0, #5A9BC7, #4A8CC4, #2E6BA6, #245180, #1A3A5C);"></div>
+  </section>
+
+  <!-- ========== Gray ========== -->
+  <section id="gray">
+    <h2>Gray Scale</h2>
+    <p>UI の汎用グレースケール。Body テキストは 700、ボーダーは 200、BG は 50/100 が基本。</p>
+    <div class="swatch-grid" id="gray-grid"></div>
+  </section>
+
+  <!-- ========== Semantic ========== -->
+  <section id="semantic">
+    <h2>Semantic Colors</h2>
+    <p>状態を表す意味色。Base (500)、Light (300)、Dark (700)、BG (50) の 4 段階。</p>
+
+    <h3>Success / Warning / Error / Info</h3>
+    <div class="swatch-grid" id="semantic-grid"></div>
+
+    <h3>実装サンプル</h3>
+    <div class="semantic-row" style="margin-top:12px;">
+      <div class="semantic-card" style="border-left-color:#28A745; background:#E6F5EB;">
+        <div class="label" style="color:#1B7D3A;">Success</div>
+        <div class="desc" style="color:#1B7D3A;">3 件のデプロイが正常に完了しました</div>
+      </div>
+      <div class="semantic-card" style="border-left-color:#F0AD00; background:#FFF8E1;">
+        <div class="label" style="color:#C68A00;">Warning</div>
+        <div class="desc" style="color:#C68A00;">ライセンス残数が 10% を下回っています</div>
+      </div>
+      <div class="semantic-card" style="border-left-color:#DC3545; background:#FDEAEA;">
+        <div class="label" style="color:#B71C1C;">Error</div>
+        <div class="desc" style="color:#B71C1C;">条件付きアクセスポリシーの同期に失敗</div>
+      </div>
+      <div class="semantic-card" style="border-left-color:#74B2E0; background:#F2F8FC;">
+        <div class="label" style="color:#2E6BA6;">Info</div>
+        <div class="desc" style="color:#2E6BA6;">次回の定期スキャンは 04/17 09:00 に実行されます</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Chart ========== -->
+  <section id="chart">
+    <h2>Chart Accent Colors</h2>
+    <p>データ可視化・グラフ用。<strong>この順序で使う</strong>（1 → 2 → 3 → ...）。</p>
+    <div class="swatch-grid" id="chart-grid"></div>
+
+    <h3>設計方針</h3>
+    <table class="ref">
+      <thead><tr><th>色</th><th>基準</th><th>理由</th></tr></thead>
+      <tbody>
+        <tr><td><span class="color-dot" style="background:#D4885C"></span>Sand</td><td>v1 Coral から変更</td><td>Error 赤（#DC3545）との混同防止。橙寄りに</td></tr>
+        <tr><td><span class="color-dot" style="background:#6B8FA3"></span>Steel</td><td>v1 Purple から変更</td><td>CP Blue の延長線。ブランド世界観を維持</td></tr>
+        <tr><td><span class="color-dot" style="background:#3D8B4A"></span>Forest</td><td>v1 Green から変更</td><td>Success 緑（#28A745）との距離を確保</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Chart Sample (Bar)</h3>
+    <div class="chart-demo">
+      <div class="chart-row"><div class="chart-label">Entra ID</div><div class="chart-bar" style="width:85%; background:#74B2E0"></div><span class="chart-value">85%</span></div>
+      <div class="chart-row"><div class="chart-label">Intune</div><div class="chart-bar" style="width:72%; background:#2E6BA6"></div><span class="chart-value">72%</span></div>
+      <div class="chart-row"><div class="chart-label">M365</div><div class="chart-bar" style="width:60%; background:#5BBFB5"></div><span class="chart-value">60%</span></div>
+      <div class="chart-row"><div class="chart-label">Azure</div><div class="chart-bar" style="width:48%; background:#F0AD00"></div><span class="chart-value">48%</span></div>
+      <div class="chart-row"><div class="chart-label">Security</div><div class="chart-bar" style="width:35%; background:#D4885C"></div><span class="chart-value">35%</span></div>
+      <div class="chart-row"><div class="chart-label">Other</div><div class="chart-bar" style="width:20%; background:#6B8FA3"></div><span class="chart-value">20%</span></div>
+    </div>
+  </section>
+
+  <!-- ========== Dark Mode ========== -->
+  <section id="darkmode">
+    <h2>Dark Mode</h2>
+    <p>夜間運用・監視ダッシュボードを想定したダークモード対応。右上のトグルで切替可能。</p>
+    <table class="ref">
+      <thead><tr><th>要素</th><th>Light</th><th>Dark</th></tr></thead>
+      <tbody>
+        <tr><td>Page BG</td><td><code>#F2F8FC</code></td><td><code>#0F1B2A</code></td></tr>
+        <tr><td>Card BG</td><td><code>#FFFFFF</code></td><td><code>#1A2940</code></td></tr>
+        <tr><td>Heading</td><td><code>#1A3A5C</code></td><td><code>#A3CDE8</code></td></tr>
+        <tr><td>Body</td><td><code>#4A4A4A</code></td><td><code>#CCDDEE</code></td></tr>
+        <tr><td>Sub</td><td><code>#666666</code></td><td><code>#8899AA</code></td></tr>
+        <tr><td>Header</td><td>Primary ベタ</td><td>Blue 900 → 700 グラデ</td></tr>
+        <tr><td>Semantic</td><td>Base (500)</td><td>Light (300) ※柔らかく</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Dashboard Mockup (Light)</h3>
+    <div class="dashboard-preview">
+      <div class="dashboard-light">
+        <div class="dashboard-header-bar">
+          <strong>CP OpsPilot Dashboard</strong>
+          <span style="font-size:12px; opacity:.8">2026-04-17</span>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-card" style="border-top-color:#74B2E0"><div class="kpi-num" style="color:#2E6BA6">1,284</div><div class="kpi-label">Managed Devices</div></div>
+          <div class="kpi-card" style="border-top-color:#28A745"><div class="kpi-num" style="color:#1B7D3A">99.2%</div><div class="kpi-label">Compliance</div></div>
+          <div class="kpi-card" style="border-top-color:#F0AD00"><div class="kpi-num" style="color:#C68A00">7</div><div class="kpi-label">Pending Alerts</div></div>
+          <div class="kpi-card" style="border-top-color:#DC3545"><div class="kpi-num" style="color:#B71C1C">2</div><div class="kpi-label">Critical</div></div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Dashboard Mockup (Dark)</h3>
+    <div class="dashboard-preview">
+      <div class="dashboard-dark">
+        <div class="dashboard-header-bar">
+          <strong>CP OpsPilot Dashboard</strong>
+          <span style="font-size:12px; opacity:.8">2026-04-17 — Night Ops</span>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-card" style="border-top-color:#74B2E0"><div class="kpi-num" style="color:#A3CDE8">1,284</div><div class="kpi-label">Managed Devices</div></div>
+          <div class="kpi-card" style="border-top-color:#7DD39B"><div class="kpi-num" style="color:#7DD39B">99.2%</div><div class="kpi-label">Compliance</div></div>
+          <div class="kpi-card" style="border-top-color:#FFD666"><div class="kpi-num" style="color:#FFD666">7</div><div class="kpi-label">Pending Alerts</div></div>
+          <div class="kpi-card" style="border-top-color:#F09DA5"><div class="kpi-num" style="color:#F09DA5">2</div><div class="kpi-label">Critical</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PPTX Theme ========== -->
+  <section id="pptx">
+    <h2>PPTX Theme Mapping</h2>
+    <p><code>クラウドパワーテンプレート_CLOUDPOWER_Palette.pptx</code> にバインドされているテーマカラー対応表。</p>
+    <table class="ref">
+      <thead><tr><th>PPTX Role</th><th>HEX</th><th>Palette Name</th></tr></thead>
+      <tbody>
+        <tr><td><code>dk1</code></td><td><code>#000000</code></td><td>sysClr (windowText)</td></tr>
+        <tr><td><code>lt1</code></td><td><code>#FFFFFF</code></td><td>sysClr (window)</td></tr>
+        <tr><td><code>dk2</code></td><td><code>#1A3A5C</code></td><td>Blue 900</td></tr>
+        <tr><td><code>lt2</code></td><td><code>#F2F8FC</code></td><td>Blue 50</td></tr>
+        <tr><td><code>accent1</code></td><td><span class="color-dot" style="background:#74B2E0"></span><code>#74B2E0</code></td><td>CP Blue (Primary)</td></tr>
+        <tr><td><code>accent2</code></td><td><span class="color-dot" style="background:#D4885C"></span><code>#D4885C</code></td><td>Sand</td></tr>
+        <tr><td><code>accent3</code></td><td><span class="color-dot" style="background:#3D8B4A"></span><code>#3D8B4A</code></td><td>Forest</td></tr>
+        <tr><td><code>accent4</code></td><td><span class="color-dot" style="background:#5BBFB5"></span><code>#5BBFB5</code></td><td>Teal</td></tr>
+        <tr><td><code>accent5</code></td><td><span class="color-dot" style="background:#6B8FA3"></span><code>#6B8FA3</code></td><td>Steel</td></tr>
+        <tr><td><code>accent6</code></td><td><span class="color-dot" style="background:#F0AD00"></span><code>#F0AD00</code></td><td>Amber</td></tr>
+        <tr><td><code>hlink</code></td><td><span class="color-dot" style="background:#2E6BA6"></span><code>#2E6BA6</code></td><td>Deep Blue</td></tr>
+        <tr><td><code>folHlink</code></td><td><span class="color-dot" style="background:#7A98AE"></span><code>#7A98AE</code></td><td>Slate</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px; font-size:12px; color:var(--cp-text-sub);">※ PPTX 内で色を指定する際は <code>srgbClr</code> より <code>schemeClr val="accent1"</code> を使うと、テーマ変更時に自動追従します。</p>
+  </section>
+
+  <!-- ========== Usage Guide ========== -->
+  <section id="usage">
+    <h2>Usage Guide</h2>
+    <h3>シーン別の推奨テンプレ</h3>
+    <table class="ref">
+      <thead><tr><th>シーン</th><th>使うべきもの</th></tr></thead>
+      <tbody>
+        <tr><td>既存案件の継続資料</td><td><code>クラウドパワーテンプレート.pptx</code>（従来）</td></tr>
+        <tr><td>新規提案・ダッシュボード系</td><td><code>クラウドパワーテンプレート_CLOUDPOWER_Palette.pptx</code></td></tr>
+        <tr><td>Web UI / プロダクト</td><td><code>tokens.css</code> (CSS 変数)</td></tr>
+        <tr><td>React / Next.js</td><td><code>tailwind.config.js</code></td></tr>
+        <tr><td>SCSS プロジェクト</td><td><code>tokens.scss</code></td></tr>
+        <tr><td>Power BI / ツール連携</td><td><code>tokens.json</code></td></tr>
+        <tr><td>データ可視化（グラフ）</td><td>Chart Accent の使用順 1〜8</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Do / Don't</h3>
+    <table class="ref">
+      <tbody>
+        <tr><td>✅ Do</td><td>Primary は <code>#74B2E0</code>（blue-400）のみを使う。他の青はサポート色</td></tr>
+        <tr><td>✅ Do</td><td>ロゴを扱うときは Brand Gray <code>#9E9E9F</code> を使う</td></tr>
+        <tr><td>✅ Do</td><td>UI 汎用グレーは Gray Scale（<code>#888888</code> など）を使う</td></tr>
+        <tr><td>✅ Do</td><td>グラフは Chart Accent の順序（1→2→3...）で配色する</td></tr>
+        <tr><td>❌ Don't</td><td>ロゴカラーと UI グレーを混同しない（<code>#9E9E9F</code> と <code>#888888</code> は別物）</td></tr>
+        <tr><td>❌ Don't</td><td>独自に類似色を作って使わない（テーマ一貫性が崩れる）</td></tr>
+        <tr><td>❌ Don't</td><td>PPTX で <code>srgbClr</code> 直指定を多用しない（テーマ変更が反映されない）</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ========== Developer ========== -->
+  <section id="developer">
+    <h2>Developer</h2>
+    <p>実装に組み込むためのコードスニペット。タブから言語を選んでコピーしてください。</p>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('css')">CSS</button>
+      <button class="tab-btn" onclick="showTab('json')">JSON</button>
+      <button class="tab-btn" onclick="showTab('scss')">SCSS</button>
+      <button class="tab-btn" onclick="showTab('tw')">Tailwind</button>
+    </div>
+    <div id="tab-css" class="tab-content">
+      <button class="copy-snippet-btn" onclick="copySnippet('snippet-css', this)">📋 Copy</button>
+<pre id="snippet-css">:root {
+  --cp-primary: #74B2E0;
+  --cp-blue-50:  #F2F8FC;
+  --cp-blue-400: #74B2E0;
+  --cp-blue-700: #2E6BA6;
+  --cp-blue-900: #1A3A5C;
+
+  --cp-gray-700: #4A4A4A;  /* body text */
+
+  --cp-success-500: #28A745;
+  --cp-warning-500: #F0AD00;
+  --cp-error-500:   #DC3545;
+}
+/* 全量は tokens.css を参照 */</pre>
+    </div>
+    <div id="tab-json" class="tab-content hidden">
+      <button class="copy-snippet-btn" onclick="copySnippet('snippet-json', this)">📋 Copy</button>
+<pre id="snippet-json">{
+  "colors": {
+    "primary": { "400": "#74B2E0", "700": "#2E6BA6", "900": "#1A3A5C" },
+    "chart": {
+      "1": "#74B2E0", "2": "#2E6BA6", "3": "#5BBFB5", "4": "#F0AD00",
+      "5": "#D4885C", "6": "#6B8FA3", "7": "#3D8B4A", "8": "#7A98AE"
+    }
+  }
+}
+// 全量は tokens.json を参照</pre>
+    </div>
+    <div id="tab-scss" class="tab-content hidden">
+      <button class="copy-snippet-btn" onclick="copySnippet('snippet-scss', this)">📋 Copy</button>
+<pre id="snippet-scss">$cp-primary: #74B2E0;
+$cp-blue-400: #74B2E0;
+$cp-blue-700: #2E6BA6;
+$cp-gray-700: #4A4A4A;
+
+$cp-chart: (
+  1: #74B2E0, 2: #2E6BA6, 3: #5BBFB5, 4: #F0AD00,
+  5: #D4885C, 6: #6B8FA3, 7: #3D8B4A, 8: #7A98AE
+);
+// 全量は tokens.scss を参照</pre>
+    </div>
+    <div id="tab-tw" class="tab-content hidden">
+      <button class="copy-snippet-btn" onclick="copySnippet('snippet-tw', this)">📋 Copy</button>
+<pre id="snippet-tw">module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          400: '#74B2E0',
+          700: '#2E6BA6',
+          DEFAULT: '#74B2E0'
+        }
+      }
+    }
+  }
+};
+// 全量は tailwind.config.js を参照</pre>
+    </div>
+  </section>
+
+  <!-- ========== Downloads ========== -->
+  <section id="downloads">
+    <h2>Downloads</h2>
+    <p>配布ファイル一覧。プロジェクトごとに必要な形式を取得してください。</p>
+    <div class="download-grid">
+      <a class="download-card" href="tokens.css" download>
+        <div class="download-icon">CSS</div>
+        <div><div class="title">tokens.css</div><div class="hint">CSS カスタムプロパティ</div></div>
+      </a>
+      <a class="download-card" href="tokens.scss" download>
+        <div class="download-icon">SCSS</div>
+        <div><div class="title">tokens.scss</div><div class="hint">SCSS 変数 + ヘルパー</div></div>
+      </a>
+      <a class="download-card" href="tokens.json" download>
+        <div class="download-icon">JSON</div>
+        <div><div class="title">tokens.json</div><div class="hint">構造化トークン</div></div>
+      </a>
+      <a class="download-card" href="tailwind.config.js" download>
+        <div class="download-icon">TW</div>
+        <div><div class="title">tailwind.config.js</div><div class="hint">Tailwind CSS 拡張</div></div>
+      </a>
+      <a class="download-card" href="CLOUDPOWER_Palette_Definition.md" download>
+        <div class="download-icon">MD</div>
+        <div><div class="title">定義書 Markdown</div><div class="hint">全トークン定義 + 使い分けガイド</div></div>
+      </a>
+      <a class="download-card" href="CLOUDPOWER_Palette_Template.pptx" download>
+        <div class="download-icon">PPT</div>
+        <div><div class="title">PowerPoint テンプレ</div><div class="hint">CLOUDPOWER Palette テーマ適用済</div></div>
+      </a>
+      <a class="download-card" href="CLOUDPOWER_Template_Legacy.pptx" download>
+        <div class="download-icon">PPT</div>
+        <div><div class="title">PowerPoint テンプレ（旧）</div><div class="hint">従来テンプレ（既存案件継続用）</div></div>
+      </a>
+      <a class="download-card" href="assets/logo-mark.svg" download>
+        <div class="download-icon">SVG</div>
+        <div><div class="title">Logo Mark</div><div class="hint">マークのみ（ファビコン用）</div></div>
+      </a>
+      <a class="download-card" href="assets/logo-horizontal-color.svg" download>
+        <div class="download-icon">SVG</div>
+        <div><div class="title">Logo Horizontal</div><div class="hint">横組みカラー（ヘッダー用）</div></div>
+      </a>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<!-- ========== Footer ========== -->
+<footer>
+  CLOUDPOWER Palette v2.0.0 &mdash; Cloud Power Inc. &copy; 2026 &mdash; Last updated 2026-04-17
+</footer>
+
+<!-- ========== Toast ========== -->
+<div class="toast" id="toast">✅ Copied to clipboard</div>
+
+<script>
+// ===== Design Tokens (for JS usage) =====
+const TOKENS = {
+  primary: [
+    { shade: 50,  hex: '#F2F8FC', usage: 'Page BG' },
+    { shade: 100, hex: '#D6E9F5', usage: 'Card BG' },
+    { shade: 200, hex: '#C5DDE9', usage: 'Border' },
+    { shade: 300, hex: '#A3CDE8', usage: 'Sub/Dark Heading' },
+    { shade: 400, hex: '#74B2E0', usage: '★ Brand / Primary', star: true },
+    { shade: 500, hex: '#5A9BC7', usage: 'Secondary' },
+    { shade: 600, hex: '#4A8CC4', usage: 'Hover' },
+    { shade: 700, hex: '#2E6BA6', usage: 'Link / Deep' },
+    { shade: 800, hex: '#245180', usage: 'Dark Heading' },
+    { shade: 900, hex: '#1A3A5C', usage: 'Darkest / Footer' }
+  ],
+  gray: [
+    { shade: 50,  hex: '#F8F8F8', usage: 'Page BG' },
+    { shade: 100, hex: '#F0F0F0', usage: 'Row Alt' },
+    { shade: 200, hex: '#E0E0E0', usage: 'Border' },
+    { shade: 300, hex: '#CCCCCC', usage: 'Divider' },
+    { shade: 400, hex: '#AAAAAA', usage: 'Soft Border' },
+    { shade: 500, hex: '#888888', usage: 'Placeholder' },
+    { shade: 600, hex: '#666666', usage: 'Sub Text' },
+    { shade: 700, hex: '#4A4A4A', usage: '★ Body', star: true },
+    { shade: 800, hex: '#333333', usage: 'Heading' },
+    { shade: 900, hex: '#1A1A1A', usage: 'Darkest' }
+  ],
+  semantic: [
+    { name: 'Success 50',  hex: '#E6F5EB', dark: false, usage: 'BG' },
+    { name: 'Success 300', hex: '#7DD39B', dark: false, usage: 'Light' },
+    { name: 'Success 500', hex: '#28A745', dark: true,  usage: 'Base' },
+    { name: 'Success 700', hex: '#1B7D3A', dark: true,  usage: 'Dark' },
+    { name: 'Warning 50',  hex: '#FFF8E1', dark: false, usage: 'BG' },
+    { name: 'Warning 300', hex: '#FFD666', dark: false, usage: 'Light' },
+    { name: 'Warning 500', hex: '#F0AD00', dark: false, usage: 'Base' },
+    { name: 'Warning 700', hex: '#C68A00', dark: true,  usage: 'Dark' },
+    { name: 'Error 50',  hex: '#FDEAEA', dark: false, usage: 'BG' },
+    { name: 'Error 300', hex: '#F09DA5', dark: false, usage: 'Light' },
+    { name: 'Error 500', hex: '#DC3545', dark: true,  usage: 'Base' },
+    { name: 'Error 700', hex: '#B71C1C', dark: true,  usage: 'Dark' },
+    { name: 'Info 50',  hex: '#F2F8FC', dark: false, usage: 'BG' },
+    { name: 'Info 300', hex: '#A3CDE8', dark: false, usage: 'Light' },
+    { name: 'Info 500', hex: '#74B2E0', dark: false, usage: 'Base' },
+    { name: 'Info 700', hex: '#2E6BA6', dark: true,  usage: 'Dark' }
+  ],
+  chart: [
+    { n: 1, name: 'CP Blue',   hex: '#74B2E0', role: 'accent1' },
+    { n: 2, name: 'Deep Blue', hex: '#2E6BA6', role: 'hlink' },
+    { n: 3, name: 'Teal',      hex: '#5BBFB5', role: 'accent4' },
+    { n: 4, name: 'Amber',     hex: '#F0AD00', role: 'accent6' },
+    { n: 5, name: 'Sand',      hex: '#D4885C', role: 'accent2' },
+    { n: 6, name: 'Steel',     hex: '#6B8FA3', role: 'accent5' },
+    { n: 7, name: 'Forest',    hex: '#3D8B4A', role: 'accent3' },
+    { n: 8, name: 'Slate',     hex: '#7A98AE', role: 'folHlink' }
+  ]
+};
+
+// ===== Swatch Rendering =====
+function isDark(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return (r*0.299 + g*0.587 + b*0.114) < 140;
+}
+function renderSwatch(opts) {
+  const darkCls = isDark(opts.hex) ? 'dark' : '';
+  const star = opts.star ? '<span class="star-badge">★ PRIMARY</span>' : '';
+  return `
+    <div class="swatch" onclick="copyHex('${opts.hex}', this)">
+      <div class="swatch-color ${darkCls}" style="background:${opts.hex}">
+        <span class="shade-label" style="color:${isDark(opts.hex) ? '#fff' : '#333'}">${opts.shadeLabel}</span>
+        ${star}
+      </div>
+      <div class="swatch-info">
+        <div class="name">${opts.name}</div>
+        <div class="hex">${opts.hex}</div>
+        ${opts.usage ? `<div class="usage">${opts.usage}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+// Primary grid
+document.getElementById('primary-grid').innerHTML = TOKENS.primary.map(t =>
+  renderSwatch({ hex: t.hex, shadeLabel: t.shade, name: `Blue ${t.shade}`, usage: t.usage, star: t.star })
+).join('');
+
+// Gray grid
+document.getElementById('gray-grid').innerHTML = TOKENS.gray.map(t =>
+  renderSwatch({ hex: t.hex, shadeLabel: t.shade, name: `Gray ${t.shade}`, usage: t.usage, star: t.star })
+).join('');
+
+// Semantic grid
+document.getElementById('semantic-grid').innerHTML = TOKENS.semantic.map(t =>
+  renderSwatch({ hex: t.hex, shadeLabel: t.usage, name: t.name, usage: '' })
+).join('');
+
+// Chart grid
+document.getElementById('chart-grid').innerHTML = TOKENS.chart.map(t =>
+  renderSwatch({ hex: t.hex, shadeLabel: `#${t.n}`, name: t.name, usage: `PPTX: ${t.role}` })
+).join('');
+
+// ===== Copy to Clipboard =====
+function copyHex(hex, el) {
+  navigator.clipboard.writeText(hex).then(() => {
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 600);
+    showToast(`✅ Copied: ${hex}`);
+  });
+}
+function copySnippet(id, btn) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '📋 Copy'; }, 1500);
+  });
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// ===== Dark Mode =====
+function toggleTheme() {
+  const curr = document.documentElement.getAttribute('data-theme');
+  const next = curr === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('cp-theme', next);
+  updateThemeToggle();
+}
+function updateThemeToggle() {
+  const t = document.documentElement.getAttribute('data-theme');
+  document.getElementById('theme-icon').textContent = t === 'dark' ? '☀️' : '🌙';
+  document.getElementById('theme-label').textContent = t === 'dark' ? 'ライトモード' : 'ダークモード';
+}
+// 起動時に復元
+const saved = localStorage.getItem('cp-theme');
+if (saved) document.documentElement.setAttribute('data-theme', saved);
+updateThemeToggle();
+
+// ===== Tabs =====
+function showTab(name) {
+  ['css','json','scss','tw'].forEach(n => {
+    document.getElementById(`tab-${n}`).classList.add('hidden');
+  });
+  document.getElementById(`tab-${name}`).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ===== Scroll Spy =====
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav.sidebar a');
+function updateActiveNav() {
+  let current = 'overview';
+  sections.forEach(sec => {
+    const top = sec.getBoundingClientRect().top;
+    if (top < 150) current = sec.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === `#${current}`);
+  });
+}
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+updateActiveNav();
+</script>
+
+</body>
+</html>

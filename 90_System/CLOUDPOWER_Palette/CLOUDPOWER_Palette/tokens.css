@@ -1,0 +1,96 @@
+/**
+ * CLOUDPOWER Palette — CSS Custom Properties
+ * Cloud Power Inc. Official Color System
+ * Version: 2.0.0
+ */
+
+:root {
+  /* ---------- Brand ---------- */
+  --cp-brand-blue: #74B2E0;
+  --cp-brand-gray: #9E9E9F;
+
+  /* ---------- Primary (CP Blue) ---------- */
+  --cp-blue-50:  #F2F8FC;
+  --cp-blue-100: #D6E9F5;
+  --cp-blue-200: #C5DDE9;
+  --cp-blue-300: #A3CDE8;
+  --cp-blue-400: #74B2E0;
+  --cp-blue-500: #5A9BC7;
+  --cp-blue-600: #4A8CC4;
+  --cp-blue-700: #2E6BA6;
+  --cp-blue-800: #245180;
+  --cp-blue-900: #1A3A5C;
+  --cp-primary:  var(--cp-blue-400);
+
+  /* ---------- Gray Scale ---------- */
+  --cp-gray-50:  #F8F8F8;
+  --cp-gray-100: #F0F0F0;
+  --cp-gray-200: #E0E0E0;
+  --cp-gray-300: #CCCCCC;
+  --cp-gray-400: #AAAAAA;
+  --cp-gray-500: #888888;
+  --cp-gray-600: #666666;
+  --cp-gray-700: #4A4A4A;
+  --cp-gray-800: #333333;
+  --cp-gray-900: #1A1A1A;
+
+  /* ---------- Semantic ---------- */
+  --cp-success-50:  #E6F5EB;
+  --cp-success-300: #7DD39B;
+  --cp-success-500: #28A745;
+  --cp-success-700: #1B7D3A;
+
+  --cp-warning-50:  #FFF8E1;
+  --cp-warning-300: #FFD666;
+  --cp-warning-500: #F0AD00;
+  --cp-warning-700: #C68A00;
+
+  --cp-error-50:  #FDEAEA;
+  --cp-error-300: #F09DA5;
+  --cp-error-500: #DC3545;
+  --cp-error-700: #B71C1C;
+
+  --cp-info-50:  var(--cp-blue-50);
+  --cp-info-300: var(--cp-blue-300);
+  --cp-info-500: var(--cp-blue-400);
+  --cp-info-700: var(--cp-blue-700);
+
+  /* ---------- Chart Accent (使用順) ---------- */
+  --cp-chart-1: #74B2E0; /* CP Blue */
+  --cp-chart-2: #2E6BA6; /* Deep Blue */
+  --cp-chart-3: #5BBFB5; /* Teal */
+  --cp-chart-4: #F0AD00; /* Amber */
+  --cp-chart-5: #D4885C; /* Sand */
+  --cp-chart-6: #6B8FA3; /* Steel */
+  --cp-chart-7: #3D8B4A; /* Forest */
+  --cp-chart-8: #7A98AE; /* Slate */
+
+  /* ---------- Semantic Tokens (Light) ---------- */
+  --cp-page-bg:         var(--cp-blue-50);
+  --cp-card-bg:         #FFFFFF;
+  --cp-text-heading:    var(--cp-blue-900);
+  --cp-text-body:       var(--cp-gray-700);
+  --cp-text-sub:        var(--cp-gray-600);
+  --cp-header-bg:       var(--cp-blue-400);
+  --cp-header-gradient: linear-gradient(135deg, var(--cp-blue-700) 0%, var(--cp-blue-400) 100%);
+  --cp-border:          var(--cp-gray-200);
+  --cp-link:            var(--cp-blue-700);
+}
+
+/* ---------- Dark Mode ---------- */
+[data-theme="dark"] {
+  --cp-page-bg:         #0F1B2A;
+  --cp-card-bg:         #1A2940;
+  --cp-text-heading:    var(--cp-blue-300);
+  --cp-text-body:       #CCDDEE;
+  --cp-text-sub:        #8899AA;
+  --cp-header-bg:       var(--cp-blue-900);
+  --cp-header-gradient: linear-gradient(135deg, var(--cp-blue-900) 0%, var(--cp-blue-700) 100%);
+  --cp-border:          #2A3950;
+
+  /* ダークモード時はセマンティックを 300 番台に（柔らかく） */
+  --cp-success-main: var(--cp-success-300);
+  --cp-warning-main: var(--cp-warning-300);
+  --cp-error-main:   var(--cp-error-300);
+  --cp-info-main:    var(--cp-info-300);
+}
