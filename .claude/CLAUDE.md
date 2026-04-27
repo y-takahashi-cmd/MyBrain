@@ -49,6 +49,17 @@ When user says "done!" or equivalent:
 - Commit & push all uncommitted changes
 - Save conversation log to `10_Journal/YYYY-MM-DD_conversation.md` and push
 
+## 作業開始前の必須ルール（約束事項）
+
+**どんな作業でも、始める前に関連ファイルをすべて読む。読み終わるまで質問しない。**
+
+- 企業名・人名が出たら → そのカルテ・報告書フォルダのファイルを全部・最後まで読む
+- 「作業をやるよ」と伝えられたら → まずファイルを読む、推測で動かない
+- ファイルに情報がある限り、由香さんに聞かない
+- サステナの場合：`01_メンバーカルテ/` と `02_報告会記録/` を全部読んでから動く
+
+これは由香さんとの約束事項。破った場合は時間と信頼を無駄にする。
+
 ## Guidelines
 
 - Structure messy notes into bullet points / Markdown
