@@ -19,6 +19,23 @@ plt.rcParams['axes.unicode_minus'] = False
 
 MEMBERS = [
     {
+        'full': '三井 康平　社長', 'role_title': '黙々集中・独創実行役',
+        'sub': '白・創（過去型）　活動量：139M',
+        'color_h': '#757575', 'color_bg': '#F5F5F5', 'color_edge': '#424242',
+        'text_color': 'white',
+        'fit': [
+            '一人で深く掘り下げる専門作業・経営判断',
+            '独創的なアイデアの具現化',
+            'じっくり考える長期戦略・品質へのこだわり',
+        ],
+        'point': [
+            '「まっいいか」の放置癖→数値・事実で短く',
+            '過去型→「ずっとこの状態なら」が刺さる',
+            '新習慣より「今の延長」の提案が通りやすい',
+            '右腕・左腕への共有が仕事をはかどらせる',
+        ],
+    },
+    {
         'full': '佐藤 洋介', 'role_title': '意思決定・采配役',
         'sub': '赤・王（過去型）　活動量：194M',
         'color_h': '#E53935', 'color_bg': '#FFEBEE', 'color_edge': '#B71C1C',
@@ -53,23 +70,6 @@ MEMBERS = [
         ],
     },
     {
-        'full': '三井 康平', 'role_title': '黙々集中・独創実行役',
-        'sub': '白・創（過去型）　活動量：139M',
-        'color_h': '#757575', 'color_bg': '#F5F5F5', 'color_edge': '#424242',
-        'text_color': 'white',
-        'fit': [
-            '一人で深く掘り下げる専門作業・経営判断',
-            '独創的なアイデアの具現化',
-            'じっくり考える長期戦略・品質へのこだわり',
-        ],
-        'point': [
-            '「まっいいか」の放置癖→数値・事実で短く',
-            '過去型→「ずっとこの状態なら」が刺さる',
-            '新習慣より「今の延長」の提案が通りやすい',
-            '右腕・左腕への共有が仕事をはかどらせる',
-        ],
-    },
-    {
         'full': '大森 美葉', 'role_title': 'サポート・品質保証役',
         'sub': '橙・王（未来型）　活動量：462M',
         'color_h': '#FF7043', 'color_bg': '#FBE9E7', 'color_edge': '#BF360C',
@@ -89,8 +89,8 @@ MEMBERS = [
     {
         'full': '浅野 航', 'role_title': '企画・調整・傾聴役',
         'sub': '白・長（未来型）　活動量：324M',
-        'color_h': '#43A047', 'color_bg': '#E8F5E9', 'color_edge': '#1B5E20',
-        'text_color': 'white',
+        'color_h': '#BDBDBD', 'color_bg': '#FAFAFA', 'color_edge': '#757575',
+        'text_color': '#222222',
         'fit': [
             '企画立案・プロジェクト調整・傾聴',
             'きっかけを与える・可能性を引き出す',
@@ -105,7 +105,8 @@ MEMBERS = [
     },
 ]
 
-OUTPUT = r'C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室\株式会社サステナ\01_メンバーカルテ\サステナ様_適材適所役割マッピング.pdf'
+SOURCE_PDF = r'C:\Users\y-takahashi\Desktop\サステナ関係資料\サステナ様_関係図5名版.pdf'
+OUTPUT = r'C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室\株式会社サステナ\01_メンバーカルテ\サステナ様_関係図＋役割マッピング.pdf'
 
 fig = plt.figure(figsize=(16, 10.5))
 fig.patch.set_facecolor('#F7F8FC')
@@ -185,18 +186,16 @@ def draw_card(fig, left, bottom, width, height, member):
                 ha='left', va='center', fontsize=7.2, color='#333333')
         y -= 0.068
 
-# カード配置：3列×1行目 + 2列中央×2行目
+# カード配置：3列×1行目（三井・佐藤・樋田）+ 2列中央×2行目（大森・浅野）
 card_w = 0.305
 card_h = 0.415
 gap = 0.025
 
-# 1行目（上段）: 佐藤・樋田・三井
 positions_top = [
     (0.025, 0.490),
     (0.025 + card_w + gap, 0.490),
     (0.025 + (card_w + gap) * 2, 0.490),
 ]
-# 2行目（下段）: 大森・浅野（中央寄せ）
 total_bottom = card_w * 2 + gap
 left_bottom = (1.0 - total_bottom) / 2
 positions_bottom = [
@@ -218,8 +217,29 @@ fig.text(0.5, 0.025,
          ha='center', va='center', fontsize=8.5, color='#777777',
          transform=fig.transFigure)
 
-with PdfPages(OUTPUT) as pdf:
-    pdf.savefig(fig, bbox_inches='tight')
+# 関係図PDFに3ページ目として結合して出力
+import io
+from pypdf import PdfWriter, PdfReader
 
+mapping_buf = io.BytesIO()
+with PdfPages(mapping_buf) as pdf:
+    pdf.savefig(fig, bbox_inches='tight')
 plt.close(fig)
+
+mapping_buf.seek(0)
+writer = PdfWriter()
+
+# 既存関係図ページを追加
+source = PdfReader(SOURCE_PDF)
+for page in source.pages:
+    writer.add_page(page)
+
+# 役割マッピングを最後に追加
+mapping_reader = PdfReader(mapping_buf)
+for page in mapping_reader.pages:
+    writer.add_page(page)
+
+with open(OUTPUT, 'wb') as f:
+    writer.write(f)
+
 print(f'保存完了: {OUTPUT}')
