@@ -69,6 +69,21 @@ def wrap_draw(c, text, x, y, max_w, font, size, color=black, leading=4.8*mm):
     return y, len(lines)
 
 
+def label_val_inline(c, cx, cy, label, val, label_font, val_font, size, label_color, val_color):
+    """ラベル：値　をインラインで描画。値ありの場合は値を、なしの場合は空欄ライン"""
+    c.setFont(label_font, size)
+    c.setFillColor(label_color)
+    c.drawString(cx, cy, label)
+    lw = c.stringWidth(label, label_font, size)
+    if val:
+        c.setFont(val_font, size)
+        c.setFillColor(val_color)
+        c.drawString(cx + lw, cy, val)
+        return cx + lw + c.stringWidth(val, val_font, size)
+    else:
+        return cx + lw
+
+
 # ================================================================
 # Sheet 1: メンバー略歴シート
 # ================================================================
@@ -77,7 +92,7 @@ def create_member_sheet(path):
     mx = 14*mm
     cw = W - 2*mx
     y = H - 14*mm
-    ind = mx + 6*mm  # インデント
+    ind = mx + 6*mm
 
     # タイトル
     c.setFont(B, 15)
@@ -119,22 +134,22 @@ def create_member_sheet(path):
     y -= SH + 5*mm
     biz_top = y
 
-    def row(cy, label, val, val_bold=True, line_to=None):
+    def row(cy, label, val):
         c.setFont(R, 9)
         c.setFillColor(GREY)
         c.drawRightString(ind + 26*mm, cy, label)
         lx = ind + 27*mm
         if val:
-            c.setFont(B if val_bold else R, 9)
+            c.setFont(B, 9)
             c.setFillColor(black)
             c.drawString(lx, cy, val)
         else:
-            hline(c, lx, cy - 1, line_to or mx + cw)
+            hline(c, lx, cy - 1, mx + cw)
         return cy - 7*mm
 
     y = row(y, "事業名：", "企業のオンライン保健室")
     y = row(y, "専門分野：", "海音式メソッド（予防医学 × NLP心理学 × コーチング × プロファイリング）")
-    y = row(y, "所在地：", "")
+    y = row(y, "所在地：", "東京都府中市本町1-9-41　坪井ビル3F")
 
     # 過去の職業 + 経験年数（同行）
     c.setFont(R, 9)
@@ -143,13 +158,14 @@ def create_member_sheet(path):
     c.setFont(B, 9)
     c.setFillColor(black)
     c.drawString(ind + 27*mm, y, "看護師")
-    nw = c.stringWidth("看護師", B, 9)
     nen_x = mx + cw * 0.62
     c.setFont(R, 9)
     c.setFillColor(GREY)
     c.drawString(nen_x, y, "経験年数")
     nenw = c.stringWidth("経験年数", R, 9)
-    hline(c, nen_x + nenw + 1*mm, y - 1, mx + cw)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(nen_x + nenw + 2*mm, y, "1年")
     y -= 5*mm
 
     border_box(c, mx, y, cw, biz_top - y)
@@ -160,51 +176,91 @@ def create_member_sheet(path):
     y -= SH + 5*mm
     pers_top = y
 
-    # 家族について
+    # 家族について（値あり）
     c.setFont(R, 9)
     c.setFillColor(GREY)
     c.drawString(ind, y, "家族について：")
     fw = c.stringWidth("家族について：", R, 9)
     fx = ind + fw + 3*mm
 
+    # 配偶者：専業主夫
     c.drawString(fx, y, "配偶者")
     spw = c.stringWidth("配偶者", R, 9)
-    hline(c, fx + spw + 1*mm, y - 1, fx + spw + 22*mm)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(fx + spw + 1*mm, y, "専業主夫")
+    spouse_vw = c.stringWidth("専業主夫", B, 9)
 
-    ofx = fx + spw + 25*mm
+    # その他家族：息子2人
+    ofx = fx + spw + spouse_vw + 8*mm
+    c.setFont(R, 9)
+    c.setFillColor(GREY)
     c.drawString(ofx, y, "その他家族")
     ofw = c.stringWidth("その他家族", R, 9)
-    hline(c, ofx + ofw + 1*mm, y - 1, ofx + ofw + 50*mm)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(ofx + ofw + 1*mm, y, "息子2人")
+    other_vw = c.stringWidth("息子2人", B, 9)
 
-    pfx = ofx + ofw + 53*mm
+    # ペット：なし
+    pfx = ofx + ofw + other_vw + 8*mm
+    c.setFont(R, 9)
+    c.setFillColor(GREY)
     c.drawString(pfx, y, "ペット")
     petw = c.stringWidth("ペット", R, 9)
-    hline(c, pfx + petw + 1*mm, y - 1, mx + cw)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(pfx + petw + 1*mm, y, "なし")
     y -= 7*mm
 
+    # 趣味：カラオケ・漫画・パチスロ・スピリチュアル
+    c.setFont(R, 9)
+    c.setFillColor(GREY)
     c.drawString(ind, y, "趣味：")
     tw = c.stringWidth("趣味：", R, 9)
-    hline(c, ind + tw + 1*mm, y - 1, mx + cw)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(ind + tw, y, "カラオケ・漫画・パチスロ・スピリチュアル")
     y -= 7*mm
 
+    # その他の関心事
+    c.setFont(R, 9)
+    c.setFillColor(GREY)
     c.drawString(ind, y, "その他の関心事：")
     okw = c.stringWidth("その他の関心事：", R, 9)
-    hline(c, ind + okw + 1*mm, y - 1, mx + cw)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(ind + okw, y, "人の在り方の形成の仕方について")
     y -= 7*mm
 
+    # 出身地 / 居住地 / 居住年数
+    c.setFont(R, 9)
+    c.setFillColor(GREY)
     c.drawString(ind, y, "出身地：")
     szw = c.stringWidth("出身地：", R, 9)
-    hline(c, ind + szw + 1*mm, y - 1, mx + cw * 0.36)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(ind + szw, y, "北海道札幌市")
+    szv = c.stringWidth("北海道札幌市", B, 9)
 
-    jyx = mx + cw * 0.38
+    jyx = ind + szw + szv + 6*mm
+    c.setFont(R, 9)
+    c.setFillColor(GREY)
     c.drawString(jyx, y, "居住地：")
     jyw = c.stringWidth("居住地：", R, 9)
-    hline(c, jyx + jyw + 1*mm, y - 1, mx + cw * 0.70)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(jyx + jyw, y, "北海道札幌市東区北31条東7丁目")
+    jyv = c.stringWidth("北海道札幌市東区北31条東7丁目", B, 9)
 
-    nyx = mx + cw * 0.72
+    nyx = jyx + jyw + jyv + 6*mm
+    c.setFont(R, 9)
+    c.setFillColor(GREY)
     c.drawString(nyx, y, "居住年数：")
     nyw = c.stringWidth("居住年数：", R, 9)
-    hline(c, nyx + nyw + 1*mm, y - 1, mx + cw)
+    c.setFont(B, 9)
+    c.setFillColor(black)
+    c.drawString(nyx + nyw, y, "27年")
     y -= 5*mm
 
     border_box(c, mx, y, cw, pers_top - y)
@@ -230,7 +286,7 @@ def create_member_sheet(path):
     c.drawString(ind + wlw + wvw + 2*mm, y, "ことです。")
     y -= 9*mm
 
-    # 誰も知らない私
+    # 誰も知らない私（6回死にかけ）
     c.setFont(R, 9)
     c.setFillColor(GREY)
     dl = "誰も知らない私：　実は、私は…"
@@ -238,7 +294,7 @@ def create_member_sheet(path):
     y -= 5.5*mm
     c.setFont(B, 8.5)
     c.setFillColor(black)
-    dv = "元看護師で、自身もメニエール病・がん（余命1年宣告）を経験。だからこそ「体が資本」を誰より深く知っています。"
+    dv = "過去に6回ほど死にかけています。だからこそ「体が資本」を誰より深く知っています。"
     y, _ = wrap_draw(c, dv, ind + 4*mm, y, cw - 8*mm, B, 8.5, black, 5*mm)
     y -= 4*mm
 
@@ -302,9 +358,10 @@ def create_gains_sheet(path):
             "label": "Accomplishments（実績）：",
             "desc": (
                 "人は自分が誇りにしていることを話題にしたいと思うものです。"
-                "相手が過去に達成した実績は、相手のことを知る上で重要な手掛かりになります。"
-                "また、あなたの知識、スキル、経験、価値は、あなたの実績の中に凝縮されています。"
-                "常に自分の実績を相手に伝えることができるようにしておきましょう。"
+                "相手が過去に達成した実績は、相手のことを知る上で重要な手掛"
+                "かりになります。また、あなたの知識、スキル、経験、価値は、"
+                "あなたの実績の中に凝縮されています。常に自分の実績を相手に"
+                "伝えることができるようにしておきましょう。"
             ),
             "box_label": "Accomplishments",
             "value": (
@@ -320,19 +377,23 @@ def create_gains_sheet(path):
         {
             "label": "Interests（興味）：",
             "desc": (
-                "スポーツ、読書、音楽鑑賞などの関心ごとは、他の人とつながるきっかけになります。"
-                "人は共通の興味を持つ人と過ごしたいと思うものです。"
-                "相手と興味が一致していれば、人間関係の強化につながります。"
+                "スポーツ、読書、音楽鑑賞などの関心ごとは、他の人とつながる"
+                "きっかけになります。人は共通の興味を持つ人と過ごしたいと思"
+                "うものです。相手と興味が一致していれば、人間関係の強化につ"
+                "ながります。"
             ),
             "box_label": "Interests",
-            "value": "予防医学・健康経営・人の可能性を引き出すこと",
+            "value": (
+                "カラオケ・漫画・パチスロ・スピリチュアル・"
+                "人の在り方の形成の仕方・予防医学・健康経営"
+            ),
             "box_h": 20*mm,
         },
         {
             "label": "Networks（人脈）：",
             "desc": (
-                "フォーマル、カジュアルの両方を含めいろいろなものが考えられます。"
-                "あなたが関係を持っている組織や機関、企業や個人など。"
+                "フォーマル、カジュアルの両方を含めいろいろなものが考えられ"
+                "ます。あなたが関係を持っている組織や機関、企業や個人など。"
             ),
             "box_label": "Networks",
             "value": (
@@ -345,15 +406,16 @@ def create_gains_sheet(path):
         {
             "label": "Skills（スキル）：",
             "desc": (
-                "自分の人脈にいる人の才能や能力について理解を深めれば、必要なときに、"
-                "適切かつ手ごろな商品・サービスを見つけたり、紹介したりしやすくなります。"
-                "また、より多くの人があなたのスキルについて知れば、"
-                "それだけビジネスのチャンスを獲得しやすくなります。"
+                "自分の人脈にいる人の才能や能力について理解を深めれば、必要"
+                "なときに、適切かつ手ごろな商品・サービスを見つけたり、紹介"
+                "したりしやすくなります。また、より多くの人があなたのスキル"
+                "について知れば、それだけビジネスのチャンスを獲得しやすくな"
+                "ります。"
             ),
             "box_label": "Skills",
             "value": (
-                "予防医学 / 看護・医療知識 / NLP心理学 / プロファイリング / "
-                "コーチング / 言葉治療カウンセリング。"
+                "予防医学 / 看護・医療知識 / NLP心理学 / プロファイリング"
+                " / コーチング / 言葉治療カウンセリング。"
                 "これらを統合した「海音式メソッド」で、社員の見えないサインを"
                 "早期にキャッチし、離職・休職・パフォーマンス低下を未然に防ぐ。"
             ),
