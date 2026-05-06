@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1週間後フォローアップ｜企業のオンライン保健室</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: #f0f9ff; color: #1e293b; padding: 16px; }
+    .container { max-width: 600px; margin: 0 auto; }
+    h1 { font-size: 20px; color: #1e3a5f; margin-bottom: 8px; }
+    .subtitle { font-size: 13px; color: #64748b; margin-bottom: 20px; }
+    .card { background: #fff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .section-title { font-size: 11px; font-weight: bold; color: #0284c7; letter-spacing: 0.5px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e0f2fe; }
+    .question { margin-bottom: 20px; }
+    .question:last-child { margin-bottom: 0; }
+    label { font-size: 14px; font-weight: bold; color: #1e3a5f; display: block; margin-bottom: 8px; }
+    .slider-wrap { display: flex; align-items: center; gap: 12px; }
+    input[type="range"] { flex: 1; accent-color: #0284c7; height: 6px; }
+    .slider-val { font-size: 22px; font-weight: bold; color: #0284c7; min-width: 32px; text-align: center; }
+    .slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; margin-top: 4px; }
+    textarea { width: 100%; border: 1px solid #bae6fd; border-radius: 8px; padding: 10px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 72px; line-height: 1.6; }
+    textarea:focus { outline: none; border-color: #0284c7; }
+    .percent-wrap { display: flex; align-items: center; gap: 12px; }
+    input[type="number"] { width: 80px; border: 1px solid #bae6fd; border-radius: 8px; padding: 10px; font-size: 18px; font-weight: bold; color: #0284c7; text-align: center; }
+    input[type="number"]:focus { outline: none; border-color: #0284c7; }
+    .percent-label { font-size: 16px; color: #64748b; }
+    .notice { background: #e0f2fe; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #0284c7; margin-bottom: 16px; line-height: 1.6; }
+    .btn { background: linear-gradient(135deg, #1e3a5f, #0c2240); color: #fff; border: none; border-radius: 8px; padding: 14px 24px; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }
+    .btn:hover { opacity: 0.88; }
+    #done { display: none; text-align: center; padding: 48px 20px; }
+    #done .icon { font-size: 56px; margin-bottom: 16px; }
+    #done h2 { font-size: 22px; color: #1e3a5f; margin-bottom: 12px; }
+    #done p { color: #64748b; font-size: 14px; line-height: 1.8; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div id="form-area">
+    <h1>🌿 1週間後フォローアップ</h1>
+    <p class="subtitle">セッションから1週間経ちました。いかがでしたか？</p>
+
+    <div class="notice">
+      先週のセッションで決めたことを思い出しながら答えてください。約3分で終わります。
+    </div>
+
+    <div class="card">
+      <div class="section-title">先週のアクション</div>
+
+      <div class="question">
+        <label>① 先週のセッションで決めたことを教えてください</label>
+        <textarea id="t1" placeholder="例：朝のミーティングで一言、自分の意見を言う…"></textarea>
+      </div>
+
+      <div class="question">
+        <label>② どれくらいできましたか？</label>
+        <div class="percent-wrap">
+          <input type="number" id="action-percent" min="0" max="100" value="0" />
+          <span class="percent-label">%</span>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>③ 実行してみて、どんな変化や気づきがありましたか？</label>
+        <textarea id="t2" placeholder="例：思ったより話しやすかった、意外と受け入れてもらえた…（できなかった場合は何が止めたかを書いてください）"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">今の状態（数字で）</div>
+
+      <div class="question">
+        <label>④ 今の気持ちの重さ</label>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="10" value="5" id="q1" oninput="update('q1','v1')">
+          <span class="slider-val" id="v1">5</span>
+        </div>
+        <div class="slider-labels"><span>1 とても重い</span><span>10 とても軽い</span></div>
+      </div>
+
+      <div class="question">
+        <label>⑤ 体の状態</label>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="10" value="5" id="q2" oninput="update('q2','v2')">
+          <span class="slider-val" id="v2">5</span>
+        </div>
+        <div class="slider-labels"><span>1 とても疲れている</span><span>10 とても元気</span></div>
+      </div>
+
+      <div class="question">
+        <label>⑥ 仕事への取り組み方の変化</label>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="10" value="5" id="q3" oninput="update('q3','v3')">
+          <span class="slider-val" id="v3">5</span>
+        </div>
+        <div class="slider-labels"><span>1 全く変わっていない</span><span>10 大きく変わった</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">髙橋へのひとこと（任意）</div>
+      <div class="question">
+        <label>⑦ 何か伝えたいことがあれば自由に書いてください</label>
+        <textarea id="t3" placeholder="例：次のセッションで相談したいこと、気になっていること…"></textarea>
+      </div>
+    </div>
+
+    <button class="btn" onclick="submitForm()">送信する →</button>
+  </div>
+
+  <div id="done">
+    <div class="icon">🎉</div>
+    <h2>ありがとうございます！</h2>
+    <p>1週間の変化を記録しました。<br>髙橋が確認してご連絡します。<br><br>引き続きよろしくお願いします。</p>
+  </div>
+
+</div>
+<script>
+  const GAS_URL = 'YOUR_GAS_URL';
+  const p = new URLSearchParams(location.search);
+  const clientId    = p.get('id')      || '';
+  const companyId   = p.get('company') || '';
+  const sessionDate = p.get('session') || new Date().toISOString().slice(0,10);
+
+  function update(id, vid) {
+    document.getElementById(vid).textContent = document.getElementById(id).value;
+  }
+
+  async function submitForm() {
+    const data = {
+      surveyType: 'post',
+      clientId, companyId, sessionDate,
+      Q1: +document.getElementById('q1').value,
+      Q2: +document.getElementById('q2').value,
+      Q3: +document.getElementById('q3').value,
+      T1: document.getElementById('t1').value,
+      T2: document.getElementById('t2').value,
+      T3: document.getElementById('t3').value,
+      actionPercent: +document.getElementById('action-percent').value,
+      timestamp: new Date().toISOString(),
+    };
+    try { await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(data) }); } catch(e) {}
+    document.getElementById('form-area').style.display = 'none';
+    document.getElementById('done').style.display = 'block';
+  }
+</script>
+</body>
+</html>

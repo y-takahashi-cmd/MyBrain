@@ -4,38 +4,69 @@ const SHEET_ID = 'YOUR_SPREADSHEET_ID';
 const SHEET_NAME = '回答データ';
 const ADMIN_PASSWORD = 'kanon2026';
 
+// セッションアンケート用シート名
+const SESSION_SHEET_NAME = 'セッションアンケート';
+
 // ===== POST：回答データを受け取って保存 =====
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const ss = SpreadsheetApp.openById(SHEET_ID);
-    let sheet = ss.getSheetByName(SHEET_NAME);
 
-    // シートがなければ作成
+    // セッションアンケート（pre / mid / post）
+    if (data.surveyType === 'pre' || data.surveyType === 'mid' || data.surveyType === 'post') {
+      return saveSessionSurvey(ss, data);
+    }
+
+    // ストレスチェック（既存）
+    let sheet = ss.getSheetByName(SHEET_NAME);
     if (!sheet) {
       sheet = ss.insertSheet(SHEET_NAME);
       sheet.appendRow(['社員ID','企業ID','年月','Q1_体調','Q2_集中力','Q3_ストレス','Q4_睡眠','Q5_人間関係','Q6_仕事量','タイムスタンプ']);
     }
-
     sheet.appendRow([
       data.employeeId,
       data.companyId,
       data.yearMonth,
-      data.Q1,
-      data.Q2,
-      data.Q3,
-      data.Q4,
-      data.Q5,
-      data.Q6,
+      data.Q1, data.Q2, data.Q3, data.Q4, data.Q5, data.Q6,
       data.timestamp || new Date().toISOString()
     ]);
-
     return ContentService.createTextOutput(JSON.stringify({ status: 'ok' }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
     return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.message }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+function saveSessionSurvey(ss, data) {
+  let sheet = ss.getSheetByName(SESSION_SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SESSION_SHEET_NAME);
+    sheet.appendRow([
+      'アンケート種別','クライアントID','企業ID','セッション日',
+      'Q1','Q2','Q3',
+      'T1（記述1）','T2（記述2）','T3（記述3）','T4（記述4）',
+      'アクション達成率','タイムスタンプ'
+    ]);
+  }
+  sheet.appendRow([
+    data.surveyType,
+    data.clientId,
+    data.companyId,
+    data.sessionDate,
+    data.Q1 || '',
+    data.Q2 || '',
+    data.Q3 || '',
+    data.T1 || '',
+    data.T2 || '',
+    data.T3 || '',
+    data.T4 || '',
+    data.actionPercent !== undefined ? data.actionPercent : '',
+    data.timestamp || new Date().toISOString()
+  ]);
+  return ContentService.createTextOutput(JSON.stringify({ status: 'ok' }))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ===== GET：データを返す =====
