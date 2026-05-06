@@ -100,6 +100,26 @@ function doGet(e) {
     return jsonResponse(data);
   }
 
+  // セッションアンケート全件（管理者のみ）
+  if (action === 'sessions-all' && pw === ADMIN_PASSWORD) {
+    const sSheet = ss.getSheetByName(SESSION_SHEET_NAME);
+    if (!sSheet) return jsonResponse([]);
+    const sRows = sSheet.getDataRange().getValues();
+    const sData = sRows.slice(1).map(row => ({
+      surveyType:    row[0],
+      clientId:      row[1],
+      companyId:     row[2],
+      sessionDate:   row[3],
+      Q1: row[4] !== '' ? Number(row[4]) : null,
+      Q2: row[5] !== '' ? Number(row[5]) : null,
+      Q3: row[6] !== '' ? Number(row[6]) : null,
+      T1: row[7], T2: row[8], T3: row[9], T4: row[10],
+      actionPercent: row[11] !== '' ? Number(row[11]) : null,
+      timestamp: row[12],
+    }));
+    return jsonResponse(sData);
+  }
+
   // 企業：自社データのみ・個人ID不変のまま返す（admin側で氏名と紐づけ）
   if (action === 'company' && company) {
     const filtered = data

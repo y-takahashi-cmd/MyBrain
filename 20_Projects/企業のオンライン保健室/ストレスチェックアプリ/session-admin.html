@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>セッション管理｜管理者画面</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: #f0f9ff; color: #1e293b; padding: 16px; }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 { font-size: 20px; color: #1e3a5f; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #bae6fd; }
+    h2 { font-size: 15px; color: #1e3a5f; margin-bottom: 12px; }
+    .card { background: #fff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .hidden { display: none; }
+
+    /* ログイン */
+    #login-screen { max-width: 360px; margin: 60px auto; }
+    #login-screen input { width: 100%; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px; font-size: 14px; margin-bottom: 12px; }
+
+    .btn { background: linear-gradient(135deg, #1e3a5f, #0c2240); color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: bold; cursor: pointer; }
+    .btn:hover { opacity: 0.88; }
+    .btn-green { background: linear-gradient(135deg, #16a34a, #15803d); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+    /* 統計 */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: #fff; border: 1px solid #bae6fd; border-radius: 10px; padding: 14px; text-align: center; }
+    .stat-card .val { font-size: 28px; font-weight: bold; color: #0284c7; }
+    .stat-card .lbl { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+    /* フィルター */
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .filters select, .filters input { border: 1px solid #bae6fd; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+
+    /* セッション一覧 */
+    .session-list { display: flex; flex-direction: column; gap: 8px; }
+    .session-row { background: #fff; border: 1px solid #bae6fd; border-radius: 10px; padding: 14px 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; transition: border-color 0.15s; }
+    .session-row:hover { border-color: #0284c7; }
+    .session-row.active { border-color: #0284c7; background: #f0f9ff; }
+    .session-date { font-weight: bold; font-size: 14px; color: #1e3a5f; min-width: 100px; }
+    .session-client { font-size: 13px; color: #475569; min-width: 80px; }
+    .session-company { font-size: 12px; color: #94a3b8; }
+    .badges { display: flex; gap: 6px; margin-left: auto; }
+    .badge { font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 20px; }
+    .badge-done { background: #dcfce7; color: #16a34a; }
+    .badge-none { background: #f1f5f9; color: #94a3b8; }
+    .score-diff { font-size: 13px; font-weight: bold; padding: 4px 10px; border-radius: 8px; }
+    .diff-up   { background: #dcfce7; color: #16a34a; }
+    .diff-down { background: #fee2e2; color: #dc2626; }
+    .diff-flat { background: #f1f5f9; color: #64748b; }
+
+    /* 詳細パネル */
+    #detail-panel { display: none; }
+    canvas { max-height: 240px; }
+
+    /* テキスト回答 */
+    .qa-list { display: flex; flex-direction: column; gap: 10px; }
+    .qa-item { background: #f8fafc; border-radius: 8px; padding: 12px; }
+    .qa-label { font-size: 11px; font-weight: bold; color: #0284c7; margin-bottom: 4px; }
+    .qa-text { font-size: 13px; color: #334155; line-height: 1.7; white-space: pre-wrap; }
+
+    /* 達成率 */
+    .percent-bar-wrap { background: #e0f2fe; border-radius: 8px; overflow: hidden; height: 20px; margin-top: 8px; }
+    .percent-bar { background: linear-gradient(90deg, #0284c7, #38bdf8); height: 100%; transition: width 0.4s; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+    .percent-bar span { font-size: 11px; font-weight: bold; color: #fff; }
+
+    /* タブ */
+    .tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+    .tab { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; border: 1px solid #bae6fd; color: #475569; background: #fff; }
+    .tab.active { background: #1e3a5f; color: #fff; border-color: #1e3a5f; }
+
+    /* 報告テキスト */
+    #report-text { background: #f8fafc; border: 1px solid #e0f2fe; border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.8; white-space: pre-wrap; margin-top: 12px; }
+
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .badges { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ログイン -->
+  <div id="login-screen" class="card">
+    <h2 style="text-align:center; margin-bottom:20px;">🔒 管理者ログイン</h2>
+    <input type="password" id="pw-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter') doLogin()" />
+    <button class="btn" style="width:100%;" onclick="doLogin()">ログイン</button>
+    <p id="login-err" style="color:#dc2626; font-size:12px; margin-top:8px; text-align:center;"></p>
+  </div>
+
+  <!-- メイン -->
+  <div id="main" class="hidden">
+    <h1>📊 セッション管理ダッシュボード</h1>
+
+    <!-- 統計 -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="val" id="stat-total">—</div><div class="lbl">総セッション数</div></div>
+      <div class="stat-card"><div class="val" id="stat-followup">—</div><div class="lbl">1週間後フォロー回収率</div></div>
+      <div class="stat-card"><div class="val" id="stat-avg-improve">—</div><div class="lbl">平均 気持ち改善（前→終盤）</div></div>
+    </div>
+
+    <!-- フィルター -->
+    <div class="card" style="padding: 14px 20px;">
+      <div class="filters">
+        <select id="filter-company" onchange="renderList()"><option value="">全企業</option></select>
+        <input type="text" id="filter-client" placeholder="クライアントID" oninput="renderList()" style="width:160px;" />
+        <button class="btn btn-sm" onclick="loadData()">🔄 更新</button>
+      </div>
+    </div>
+
+    <!-- タブ -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('list', this)">セッション一覧</div>
+      <div class="tab" onclick="switchTab('company', this)">企業別集計</div>
+    </div>
+
+    <!-- セッション一覧タブ -->
+    <div id="tab-list">
+      <div class="session-list" id="session-list"></div>
+
+      <!-- 詳細パネル -->
+      <div id="detail-panel" class="card" style="margin-top:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+          <h2 id="detail-title">—</h2>
+          <button class="btn btn-sm btn-green" onclick="copyReport()">📋 報告書用テキストをコピー</button>
+        </div>
+
+        <!-- スコア比較チャート -->
+        <div class="card" style="margin-bottom:16px;">
+          <h2>スコア推移（前 → 終盤 → 1週間後）</h2>
+          <canvas id="score-chart"></canvas>
+        </div>
+
+        <!-- アクション達成率 -->
+        <div id="action-wrap" class="card" style="margin-bottom:16px; display:none;">
+          <h2>アクション達成率（1週間後）</h2>
+          <div style="font-size:24px; font-weight:bold; color:#0284c7; margin-bottom:4px;" id="action-percent-val">—</div>
+          <div class="percent-bar-wrap">
+            <div class="percent-bar" id="action-percent-bar"><span id="action-percent-label"></span></div>
+          </div>
+        </div>
+
+        <!-- テキスト回答 -->
+        <div class="card">
+          <h2>テキスト回答</h2>
+          <div class="qa-list" id="qa-list"></div>
+        </div>
+
+        <!-- 報告書テキスト -->
+        <div id="report-text"></div>
+      </div>
+    </div>
+
+    <!-- 企業別集計タブ -->
+    <div id="tab-company" class="hidden">
+      <div class="card">
+        <h2>企業別 平均スコア改善</h2>
+        <canvas id="company-chart"></canvas>
+      </div>
+      <div class="card">
+        <table style="width:100%; border-collapse:collapse; font-size:13px;">
+          <thead>
+            <tr>
+              <th style="background:#1e3a5f; color:#fff; padding:8px 10px; text-align:left;">企業</th>
+              <th style="background:#1e3a5f; color:#fff; padding:8px 10px; text-align:center;">セッション数</th>
+              <th style="background:#1e3a5f; color:#fff; padding:8px 10px; text-align:center;">気持ち改善（前→後）</th>
+              <th style="background:#1e3a5f; color:#fff; padding:8px 10px; text-align:center;">平均達成率</th>
+              <th style="background:#1e3a5f; color:#fff; padding:8px 10px; text-align:center;">フォロー回収率</th>
+            </tr>
+          </thead>
+          <tbody id="company-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const ADMIN_PW = 'kanon2026';
+  const GAS_URL  = 'YOUR_GAS_URL';
+
+  let rawData   = [];
+  let sessions  = [];
+  let scoreChart = null;
+  let companyChart = null;
+  let selectedKey = null;
+
+  function doLogin() {
+    if (document.getElementById('pw-input').value === ADMIN_PW) {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main').classList.remove('hidden');
+      loadData();
+    } else {
+      document.getElementById('login-err').textContent = 'パスワードが違います';
+    }
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetch(`${GAS_URL}?action=sessions-all&pw=${ADMIN_PW}`);
+      rawData = await res.json();
+    } catch(e) {
+      rawData = generateDummy();
+    }
+    sessions = groupSessions(rawData);
+    buildStats();
+    buildCompanyFilter();
+    renderList();
+    renderCompanyTab();
+  }
+
+  function groupSessions(data) {
+    const map = {};
+    data.forEach(d => {
+      const key = `${d.clientId}__${d.sessionDate}`;
+      if (!map[key]) map[key] = { clientId: d.clientId, companyId: d.companyId, sessionDate: d.sessionDate, pre: null, mid: null, post: null };
+      map[key][d.surveyType] = d;
+    });
+    return Object.values(map).sort((a, b) => b.sessionDate.localeCompare(a.sessionDate));
+  }
+
+  function buildStats() {
+    const total = sessions.length;
+    const withPost = sessions.filter(s => s.post).length;
+    const followRate = total > 0 ? Math.round(withPost / total * 100) + '%' : '—';
+
+    const improvements = sessions
+      .filter(s => s.pre && s.mid)
+      .map(s => s.mid.Q1 - s.pre.Q1);
+    const avgImprove = improvements.length
+      ? (improvements.reduce((a,b) => a+b, 0) / improvements.length).toFixed(1)
+      : '—';
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-followup').textContent = followRate;
+    document.getElementById('stat-avg-improve').textContent = avgImprove !== '—' ? (avgImprove > 0 ? '+' : '') + avgImprove : '—';
+  }
+
+  function buildCompanyFilter() {
+    const companies = [...new Set(sessions.map(s => s.companyId))].sort();
+    const sel = document.getElementById('filter-company');
+    sel.innerHTML = '<option value="">全企業</option>' + companies.map(c => `<option value="${c}">${c}</option>`).join('');
+  }
+
+  function getFiltered() {
+    const co = document.getElementById('filter-company').value;
+    const cl = document.getElementById('filter-client').value.trim().toLowerCase();
+    return sessions.filter(s =>
+      (!co || s.companyId === co) &&
+      (!cl || s.clientId.toLowerCase().includes(cl))
+    );
+  }
+
+  function renderList() {
+    const list = document.getElementById('session-list');
+    const filtered = getFiltered();
+
+    list.innerHTML = filtered.map(s => {
+      const key = `${s.clientId}__${s.sessionDate}`;
+      const preBadge = badge(s.pre, '前');
+      const midBadge = badge(s.mid, '終盤');
+      const postBadge = badge(s.post, '1週間後');
+
+      let diffHtml = '';
+      if (s.pre && s.mid) {
+        const diff = s.mid.Q1 - s.pre.Q1;
+        const cls = diff > 0 ? 'diff-up' : diff < 0 ? 'diff-down' : 'diff-flat';
+        const sign = diff > 0 ? '+' : '';
+        diffHtml = `<span class="score-diff ${cls}">気持ち ${sign}${diff.toFixed(1)}</span>`;
+      }
+
+      return `<div class="session-row${selectedKey === key ? ' active' : ''}" onclick="selectSession('${key}')">
+        <span class="session-date">${s.sessionDate}</span>
+        <span class="session-client">${s.clientId}</span>
+        <span class="session-company">${s.companyId}</span>
+        ${diffHtml}
+        <div class="badges">${preBadge}${midBadge}${postBadge}</div>
+      </div>`;
+    }).join('') || '<p style="color:#94a3b8; font-size:13px; padding:12px;">データがありません</p>';
+  }
+
+  function badge(obj, label) {
+    return `<span class="badge ${obj ? 'badge-done' : 'badge-none'}">${label}</span>`;
+  }
+
+  function selectSession(key) {
+    selectedKey = key;
+    renderList();
+    const s = sessions.find(s => `${s.clientId}__${s.sessionDate}` === key);
+    if (!s) return;
+
+    document.getElementById('detail-panel').style.display = 'block';
+    document.getElementById('detail-title').textContent = `${s.sessionDate}　${s.clientId}（${s.companyId}）`;
+
+    renderScoreChart(s);
+    renderActionPercent(s);
+    renderQA(s);
+    renderReportText(s);
+
+    document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function renderScoreChart(s) {
+    const labels = ['前', '終盤', '1週間後'];
+    const q1 = [s.pre?.Q1 ?? null, s.mid?.Q1 ?? null, s.post?.Q1 ?? null];
+    const q2 = [s.pre?.Q2 ?? null, s.mid?.Q2 ?? null, s.post?.Q2 ?? null];
+    const q3 = [s.pre?.Q3 ?? null, s.mid?.Q3 ?? null, s.post?.Q3 ?? null];
+
+    if (scoreChart) scoreChart.destroy();
+    const ctx = document.getElementById('score-chart').getContext('2d');
+    scoreChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: '気持ち', data: q1, backgroundColor: 'rgba(2,132,199,0.7)', borderRadius: 4 },
+          { label: '体の状態', data: q2, backgroundColor: 'rgba(139,92,246,0.7)', borderRadius: 4 },
+          { label: '整理度・変化', data: q3, backgroundColor: 'rgba(16,163,74,0.7)', borderRadius: 4 },
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { min: 0, max: 10, ticks: { stepSize: 2 } } },
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  }
+
+  function renderActionPercent(s) {
+    const wrap = document.getElementById('action-wrap');
+    if (!s.post || s.post.actionPercent === null) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+    const pct = s.post.actionPercent;
+    document.getElementById('action-percent-val').textContent = pct + '%';
+    document.getElementById('action-percent-bar').style.width = pct + '%';
+    document.getElementById('action-percent-label').textContent = pct + '%';
+  }
+
+  function renderQA(s) {
+    const items = [];
+    if (s.pre) {
+      if (s.pre.T1) items.push({ label: '【前】一番重いこと', text: s.pre.T1 });
+      if (s.pre.T2) items.push({ label: '【前】頭では…', text: s.pre.T2 });
+      if (s.pre.T3) items.push({ label: '【前】心では…', text: s.pre.T3 });
+    }
+    if (s.mid) {
+      if (s.mid.T1) items.push({ label: '【終盤】一番わかったこと', text: s.mid.T1 });
+      if (s.mid.T2) items.push({ label: '【終盤】明日からできること', text: s.mid.T2 });
+      if (s.mid.T4) items.push({ label: '【終盤】動きにくくしているもの', text: s.mid.T4 });
+    }
+    if (s.post) {
+      if (s.post.T1) items.push({ label: '【1週間後】決めたこと', text: s.post.T1 });
+      if (s.post.T2) items.push({ label: '【1週間後】変化・気づき', text: s.post.T2 });
+      if (s.post.T3) items.push({ label: '【1週間後】髙橋へひとこと', text: s.post.T3 });
+    }
+    document.getElementById('qa-list').innerHTML = items
+      .map(i => `<div class="qa-item"><div class="qa-label">${i.label}</div><div class="qa-text">${escHtml(i.text)}</div></div>`)
+      .join('') || '<p style="color:#94a3b8; font-size:13px;">テキスト回答なし</p>';
+  }
+
+  function renderReportText(s) {
+    let lines = [`■ セッション記録｜${s.clientId}（${s.companyId}）　${s.sessionDate}`, ''];
+    if (s.pre && s.mid) {
+      lines.push('【セッション効果】');
+      lines.push(`　気持ちの変化：${s.pre.Q1} → ${s.mid.Q1}（${s.mid.Q1 - s.pre.Q1 >= 0 ? '+' : ''}${(s.mid.Q1 - s.pre.Q1).toFixed(1)}）`);
+      lines.push(`　体の変化：${s.pre.Q2} → ${s.mid.Q2 ?? '—'}`);
+      lines.push(`　頭の整理：${s.pre.Q3} → ${s.mid.Q2 ?? '—'}`);
+      lines.push('');
+    }
+    if (s.post) {
+      lines.push('【1週間後 フォローアップ】');
+      if (s.post.actionPercent !== null) lines.push(`　アクション達成率：${s.post.actionPercent}%`);
+      if (s.post.T2) lines.push(`　変化・気づき：${s.post.T2}`);
+      lines.push('');
+    }
+    if (s.mid?.T1) lines.push(`【今日の気づき】\n　${s.mid.T1}`);
+    document.getElementById('report-text').textContent = lines.join('\n');
+  }
+
+  function copyReport() {
+    const text = document.getElementById('report-text').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = event.target;
+      btn.textContent = '✅ コピーしました';
+      setTimeout(() => { btn.textContent = '📋 報告書用テキストをコピー'; }, 2000);
+    });
+  }
+
+  function renderCompanyTab() {
+    const companies = [...new Set(sessions.map(s => s.companyId))].sort();
+    const tbody = document.getElementById('company-tbody');
+    const rows = companies.map(co => {
+      const ss2 = sessions.filter(s => s.companyId === co);
+      const withPost = ss2.filter(s => s.post).length;
+      const followRate = Math.round(withPost / ss2.length * 100);
+
+      const improvements = ss2.filter(s => s.pre && s.mid).map(s => s.mid.Q1 - s.pre.Q1);
+      const avgImprove = improvements.length
+        ? (improvements.reduce((a,b) => a+b, 0) / improvements.length).toFixed(1)
+        : '—';
+
+      const actionPcts = ss2.filter(s => s.post && s.post.actionPercent !== null).map(s => s.post.actionPercent);
+      const avgAction = actionPcts.length
+        ? Math.round(actionPcts.reduce((a,b) => a+b, 0) / actionPcts.length) + '%'
+        : '—';
+
+      const diffClass = avgImprove !== '—' ? (avgImprove > 0 ? 'color:#16a34a' : avgImprove < 0 ? 'color:#dc2626' : '') : '';
+      return `<tr>
+        <td style="padding:10px; font-weight:bold;">${co}</td>
+        <td style="padding:10px; text-align:center;">${ss2.length}</td>
+        <td style="padding:10px; text-align:center; ${diffClass}; font-weight:bold;">${avgImprove !== '—' ? (avgImprove > 0 ? '+' : '') + avgImprove : '—'}</td>
+        <td style="padding:10px; text-align:center;">${avgAction}</td>
+        <td style="padding:10px; text-align:center;">${followRate}%</td>
+      </tr>`;
+    });
+    tbody.innerHTML = rows.join('') || '<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:20px;">データがありません</td></tr>';
+
+    // 企業別チャート
+    const avgImprovements = companies.map(co => {
+      const arr = sessions.filter(s => s.companyId === co && s.pre && s.mid).map(s => s.mid.Q1 - s.pre.Q1);
+      return arr.length ? +(arr.reduce((a,b) => a+b, 0) / arr.length).toFixed(1) : 0;
+    });
+    if (companyChart) companyChart.destroy();
+    const ctx2 = document.getElementById('company-chart').getContext('2d');
+    companyChart = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: companies,
+        datasets: [{
+          label: '気持ち改善スコア（前→終盤）',
+          data: avgImprovements,
+          backgroundColor: avgImprovements.map(v => v >= 0 ? 'rgba(2,132,199,0.7)' : 'rgba(220,38,38,0.7)'),
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { title: { display: true, text: 'スコア変化' } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  function switchTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('tab-list').classList.toggle('hidden', tab !== 'list');
+    document.getElementById('tab-company').classList.toggle('hidden', tab !== 'company');
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function generateDummy() {
+    const clients = [
+      { id: 'A001', co: 'CP' }, { id: 'A002', co: 'CP' }, { id: 'B001', co: 'SG' }
+    ];
+    const dates = ['2026-04-10', '2026-04-24', '2026-05-06'];
+    const result = [];
+    clients.forEach(c => dates.forEach(d => {
+      result.push({ surveyType:'pre', clientId:c.id, companyId:c.co, sessionDate:d, Q1:rand(3,6), Q2:rand(3,6), Q3:rand(3,6), T1:'仕事量が多い', T2:'もっと計画的にすれば良い', T3:'また怒られるのが怖い', T4:'', actionPercent:null, timestamp:'' });
+      result.push({ surveyType:'mid', clientId:c.id, companyId:c.co, sessionDate:d, Q1:rand(6,9), Q2:rand(6,9), Q3:rand(6,9), T1:'自分が思い込んでいたと気づいた', T2:'朝一で進捗を報告してみる', T3:'', T4:'忙しさを言い訳にしてしまうかも', actionPercent:null, timestamp:'' });
+      if (Math.random() > 0.3) result.push({ surveyType:'post', clientId:c.id, companyId:c.co, sessionDate:d, Q1:rand(6,9), Q2:rand(6,9), Q3:rand(6,9), T1:'朝一で進捗を報告する', T2:'意外と褒めてもらえた', T3:'次回は人間関係について話したい', actionPercent:rand(60,100), timestamp:'' });
+    }));
+    return result;
+  }
+  function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+</script>
+</body>
+</html>
