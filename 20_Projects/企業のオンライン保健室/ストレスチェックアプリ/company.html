@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>企業向けレポート｜コンディションチェック</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: #f0f9ff; color: #1e293b; padding: 16px; }
+    .container { max-width: 800px; margin: 0 auto; }
+
+    h1 { font-size: 20px; color: #1e3a5f; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #bae6fd; }
+    h2 { font-size: 15px; color: #1e3a5f; margin-bottom: 12px; }
+
+    .card { background: #fff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+
+    /* ログイン */
+    #login-screen { max-width: 380px; margin: 60px auto; }
+    #login-screen input { width: 100%; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px; font-size: 14px; margin-bottom: 12px; }
+
+    .btn { background: linear-gradient(135deg, #1e3a5f, #0c2240); color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: bold; cursor: pointer; }
+    .btn:hover { opacity: 0.88; }
+
+    /* 統計カード */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: #fff; border: 1px solid #bae6fd; border-radius: 10px; padding: 14px; text-align: center; }
+    .stat-card .val { font-size: 28px; font-weight: bold; color: #0284c7; }
+    .stat-card .lbl { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+    /* 改善率テーブル */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #1e3a5f; color: #fff; padding: 8px 10px; text-align: center; }
+    td { padding: 10px; text-align: center; border-bottom: 1px solid #e0f2fe; }
+    .improve { color: #16a34a; font-weight: bold; }
+    .decline  { color: #dc2626; font-weight: bold; }
+    .neutral  { color: #64748b; }
+
+    canvas { max-height: 260px; }
+    .hidden { display: none; }
+
+    .notice {
+      background: #e0f2fe;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #0284c7;
+      margin-bottom: 16px;
+    }
+
+    select { border: 1px solid #bae6fd; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ログイン -->
+  <div id="login-screen" class="card">
+    <h2 style="text-align:center; margin-bottom:20px;">🏢 企業担当者ログイン</h2>
+    <input type="text" id="company-input" placeholder="企業ID（例：CP）" />
+    <input type="password" id="pw-input" placeholder="パスワード" onkeydown="if(event.key==='Enter') doLogin()" />
+    <button class="btn" style="width:100%;" onclick="doLogin()">ログイン</button>
+    <p id="login-err" style="color:#dc2626; font-size:12px; margin-top:8px; text-align:center;"></p>
+    <p style="font-size:11px; color:#94a3b8; text-align:center; margin-top:12px;">※ 企業IDとパスワードは髙橋よりお知らせします</p>
+  </div>
+
+  <!-- メイン -->
+  <div id="main" class="hidden">
+    <h1>📈 コンディションレポート</h1>
+
+    <div class="notice">
+      ⚠️ このページには個人を特定できる情報は表示されません。全体の集計データのみご覧いただけます。
+    </div>
+
+    <!-- 月選択 -->
+    <div class="card" style="padding:14px 20px;">
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <label style="font-size:13px; color:#475569;">表示月：</label>
+        <select id="month-select" onchange="renderReport()"></select>
+      </div>
+    </div>
+
+    <!-- 統計 -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="val" id="stat-count">—</div><div class="lbl">今月の回答数</div></div>
+      <div class="stat-card"><div class="val" id="stat-rate">—</div><div class="lbl">回答率（目標80%）</div></div>
+      <div class="stat-card"><div class="val" id="stat-avg">—</div><div class="lbl">全体平均スコア</div></div>
+    </div>
+
+    <!-- 月別推移グラフ -->
+    <div class="card">
+      <h2>月別スコア推移（全体平均）</h2>
+      <canvas id="chart-trend"></canvas>
+    </div>
+
+    <!-- 改善率テーブル -->
+    <div class="card">
+      <h2>先月比 改善状況</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th><th>先月</th><th>今月</th><th>変化</th><th>判定</th>
+          </tr>
+        </thead>
+        <tbody id="improve-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- 注意事項 -->
+    <div class="card" style="font-size:12px; color:#64748b; line-height:1.8;">
+      <p>・本レポートは社員の健康状態を統計的に把握するためのものです。</p>
+      <p>・個人を特定する情報は一切含まれません。</p>
+      <p>・詳細なサポートについては髙橋までご相談ください。</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const GAS_URL = 'YOUR_GAS_URL';
+  // 企業ごとのパスワード（GAS側で管理するのが理想だが、簡易版として）
+  const COMPANY_PASSWORDS = {
+    'CP': 'cp2026',
+    'SG': 'sg2026',
+  };
+
+  let companyId = '';
+  let companyData = [];
+  let trendChart = null;
+
+  function doLogin() {
+    const co = document.getElementById('company-input').value.trim().toUpperCase();
+    const pw = document.getElementById('pw-input').value;
+    if (COMPANY_PASSWORDS[co] && COMPANY_PASSWORDS[co] === pw) {
+      companyId = co;
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main').classList.remove('hidden');
+      loadData();
+    } else {
+      document.getElementById('login-err').textContent = '企業IDまたはパスワードが違います';
+    }
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetch(`${GAS_URL}?action=company&company=${companyId}`);
+      companyData = await res.json();
+    } catch(e) {
+      companyData = generateDummy(companyId);
+    }
+
+    const months = [...new Set(companyData.map(d => d.yearMonth))].sort().reverse();
+    const sel = document.getElementById('month-select');
+    sel.innerHTML = months.map(m => `<option value="${m}">${m}</option>`).join('');
+    renderReport();
+  }
+
+  function renderReport() {
+    const selectedMonth = document.getElementById('month-select').value;
+    const thisMonthData = companyData.filter(d => d.yearMonth === selectedMonth);
+
+    // 統計
+    const count = thisMonthData.length;
+    document.getElementById('stat-count').textContent = count + '件';
+    document.getElementById('stat-rate').textContent = count > 0 ? Math.round(count / Math.max(count, 5) * 100) + '%' : '—';
+
+    const avgTotal = count > 0
+      ? (thisMonthData.reduce((s,d) => s + d.Q1 + d.Q2 + d.Q3 + d.Q4 + d.Q5 + d.Q6, 0) / count / 6).toFixed(1)
+      : '—';
+    document.getElementById('stat-avg').textContent = avgTotal;
+
+    // グラフ
+    const months = [...new Set(companyData.map(d => d.yearMonth))].sort();
+    const avgByMonth = (key) => months.map(m => {
+      const rows = companyData.filter(d => d.yearMonth === m);
+      return rows.length ? +(rows.reduce((s,r) => s + r[key], 0) / rows.length).toFixed(1) : null;
+    });
+
+    if (trendChart) trendChart.destroy();
+    const ctx = document.getElementById('chart-trend').getContext('2d');
+    trendChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          { label: '体調', data: avgByMonth('Q1'), borderColor: '#0284c7', tension: 0.3, fill: false },
+          { label: '集中力', data: avgByMonth('Q2'), borderColor: '#0ea5e9', tension: 0.3, fill: false },
+          { label: 'ストレス', data: avgByMonth('Q3'), borderColor: '#f97316', tension: 0.3, fill: false },
+          { label: '睡眠', data: avgByMonth('Q4'), borderColor: '#8b5cf6', tension: 0.3, fill: false },
+          { label: '人間関係', data: avgByMonth('Q5'), borderColor: '#ec4899', tension: 0.3, fill: false },
+          { label: '仕事量', data: avgByMonth('Q6'), borderColor: '#ef4444', tension: 0.3, fill: false },
+        ]
+      },
+      options: { responsive: true, scales: { y: { min: 0, max: 10 } } }
+    });
+
+    // 改善率テーブル
+    const allMonths = months;
+    const idx = allMonths.indexOf(selectedMonth);
+    const prevMonth = idx > 0 ? allMonths[idx - 1] : null;
+    const prevData = prevMonth ? companyData.filter(d => d.yearMonth === prevMonth) : [];
+
+    const avgOf = (rows, key) => rows.length ? rows.reduce((s,r) => s + r[key], 0) / rows.length : null;
+
+    const items = [
+      { name: '体調', key: 'Q1', type: 'good' },
+      { name: '集中力', key: 'Q2', type: 'good' },
+      { name: 'ストレス', key: 'Q3', type: 'stress' },
+      { name: '睡眠の質', key: 'Q4', type: 'good' },
+      { name: '人間関係', key: 'Q5', type: 'stress' },
+      { name: '仕事量の負担', key: 'Q6', type: 'stress' },
+    ];
+
+    const tbody = document.getElementById('improve-tbody');
+    tbody.innerHTML = items.map(item => {
+      const cur = avgOf(thisMonthData, item.key);
+      const prv = avgOf(prevData, item.key);
+      const curStr = cur !== null ? cur.toFixed(1) : '—';
+      const prvStr = prv !== null ? prv.toFixed(1) : '—';
+      let diffStr = '—', cls = 'neutral', judge = '—';
+      if (cur !== null && prv !== null) {
+        const diff = cur - prv;
+        diffStr = (diff >= 0 ? '+' : '') + diff.toFixed(1);
+        const improved = item.type === 'good' ? diff > 0 : diff < 0;
+        cls = improved ? 'improve' : (diff === 0 ? 'neutral' : 'decline');
+        judge = improved ? '✅ 改善' : (diff === 0 ? '→ 維持' : '⚠️ 要注意');
+      }
+      return `<tr>
+        <td><b>${item.name}</b></td>
+        <td>${prvStr}</td>
+        <td>${curStr}</td>
+        <td class="${cls}">${diffStr}</td>
+        <td class="${cls}">${judge}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function generateDummy(co) {
+    const ids = ['x1','x2','x3','x4','x5'];
+    const months = ['2026-03','2026-04','2026-05'];
+    return ids.flatMap(id => months.map(ym => ({
+      employeeId: id, companyId: co, yearMonth: ym,
+      Q1: Math.floor(Math.random()*5)+5, Q2: Math.floor(Math.random()*5)+4,
+      Q3: Math.floor(Math.random()*6)+2, Q4: Math.floor(Math.random()*5)+4,
+      Q5: Math.floor(Math.random()*6)+2, Q6: Math.floor(Math.random()*6)+2,
+    })));
+  }
+</script>
+</body>
+</html>

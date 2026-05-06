@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理者画面｜コンディションチェック</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: #f0f9ff; color: #1e293b; padding: 16px; }
+    .container { max-width: 900px; margin: 0 auto; }
+
+    h1 { font-size: 20px; color: #1e3a5f; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #bae6fd; }
+    h2 { font-size: 16px; color: #1e3a5f; margin-bottom: 12px; }
+
+    .card { background: #fff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+
+    /* ログイン */
+    #login-screen { max-width: 360px; margin: 60px auto; }
+    #login-screen input { width: 100%; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px; font-size: 14px; margin-bottom: 12px; }
+
+    .btn { background: linear-gradient(135deg, #1e3a5f, #0c2240); color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: bold; cursor: pointer; }
+    .btn:hover { opacity: 0.88; }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+    .btn-green { background: linear-gradient(135deg, #16a34a, #15803d); }
+
+    /* フィルター */
+    .filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+    .filters select, .filters input { border: 1px solid #bae6fd; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+
+    /* テーブル */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #1e3a5f; color: #fff; padding: 8px 10px; text-align: center; }
+    td { padding: 8px 10px; text-align: center; border-bottom: 1px solid #e0f2fe; }
+    tr:hover td { background: #f0f9ff; }
+    .score-good { color: #16a34a; font-weight: bold; }
+    .score-bad  { color: #dc2626; font-weight: bold; }
+
+    /* 統計カード */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: #fff; border: 1px solid #bae6fd; border-radius: 10px; padding: 14px; text-align: center; }
+    .stat-card .val { font-size: 28px; font-weight: bold; color: #0284c7; }
+    .stat-card .lbl { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+    canvas { max-height: 260px; }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ログイン -->
+  <div id="login-screen" class="card">
+    <h2 style="text-align:center; margin-bottom:20px;">🔒 管理者ログイン</h2>
+    <input type="password" id="pw-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter') doLogin()" />
+    <button class="btn" style="width:100%;" onclick="doLogin()">ログイン</button>
+    <p id="login-err" style="color:#dc2626; font-size:12px; margin-top:8px; text-align:center;"></p>
+  </div>
+
+  <!-- メイン -->
+  <div id="main" class="hidden">
+    <h1>📊 管理者ダッシュボード</h1>
+
+    <!-- 統計 -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="val" id="stat-total">—</div><div class="lbl">総回答数</div></div>
+      <div class="stat-card"><div class="val" id="stat-companies">—</div><div class="lbl">企業数</div></div>
+      <div class="stat-card"><div class="val" id="stat-this-month">—</div><div class="lbl">今月の回答</div></div>
+    </div>
+
+    <!-- フィルター -->
+    <div class="card">
+      <div class="filters">
+        <select id="filter-company" onchange="renderAll()">
+          <option value="">全企業</option>
+        </select>
+        <select id="filter-month" onchange="renderAll()">
+          <option value="">全月</option>
+        </select>
+        <input type="text" id="filter-id" placeholder="社員ID検索" oninput="renderAll()" />
+        <button class="btn btn-sm btn-green" onclick="exportCSV()">📥 CSV出力</button>
+        <button class="btn btn-sm" onclick="loadData()">🔄 更新</button>
+      </div>
+    </div>
+
+    <!-- グラフ：全体平均推移 -->
+    <div class="card">
+      <h2>全体平均スコア推移</h2>
+      <canvas id="chart-avg"></canvas>
+    </div>
+
+    <!-- グラフ：個人推移（ID指定時） -->
+    <div class="card" id="personal-chart-wrap" style="display:none;">
+      <h2>個人推移：<span id="personal-chart-title"></span></h2>
+      <canvas id="chart-personal"></canvas>
+    </div>
+
+    <!-- データ一覧 -->
+    <div class="card">
+      <h2>回答データ一覧</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>社員ID</th><th>企業ID</th><th>年月</th>
+              <th>体調</th><th>集中力</th><th>ストレス</th>
+              <th>睡眠</th><th>人間関係</th><th>仕事量</th>
+              <th>合計</th><th>日時</th>
+            </tr>
+          </thead>
+          <tbody id="data-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const ADMIN_PW = 'kanon2026';
+  const GAS_URL  = 'YOUR_GAS_URL';
+
+  let allData = [];
+  let avgChart = null;
+  let personalChart = null;
+
+  function doLogin() {
+    if (document.getElementById('pw-input').value === ADMIN_PW) {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main').classList.remove('hidden');
+      loadData();
+    } else {
+      document.getElementById('login-err').textContent = 'パスワードが違います';
+    }
+  }
+
+  async function loadData() {
+    try {
+      const res = await fetch(GAS_URL + '?action=all&pw=' + ADMIN_PW);
+      allData = await res.json();
+    } catch(e) {
+      // テスト用ダミーデータ
+      allData = generateDummy();
+    }
+    buildFilters();
+    renderAll();
+  }
+
+  function buildFilters() {
+    const companies = [...new Set(allData.map(d => d.companyId))].sort();
+    const months    = [...new Set(allData.map(d => d.yearMonth))].sort().reverse();
+
+    const cs = document.getElementById('filter-company');
+    const ms = document.getElementById('filter-month');
+    cs.innerHTML = '<option value="">全企業</option>' + companies.map(c => `<option value="${c}">${c}</option>`).join('');
+    ms.innerHTML = '<option value="">全月</option>'   + months.map(m => `<option value="${m}">${m}</option>`).join('');
+
+    const total = allData.length;
+    const thisMonth = new Date().toISOString().slice(0,7);
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-companies').textContent = companies.length;
+    document.getElementById('stat-this-month').textContent = allData.filter(d => d.yearMonth === thisMonth).length;
+  }
+
+  function getFiltered() {
+    const co = document.getElementById('filter-company').value;
+    const mo = document.getElementById('filter-month').value;
+    const id = document.getElementById('filter-id').value.trim().toLowerCase();
+    return allData.filter(d =>
+      (!co || d.companyId === co) &&
+      (!mo || d.yearMonth === mo) &&
+      (!id || d.employeeId.toLowerCase().includes(id))
+    );
+  }
+
+  function renderAll() {
+    const data = getFiltered();
+    renderTable(data);
+    renderAvgChart(data);
+
+    const idFilter = document.getElementById('filter-id').value.trim();
+    if (idFilter) renderPersonalChart(idFilter);
+    else {
+      document.getElementById('personal-chart-wrap').style.display = 'none';
+    }
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById('data-tbody');
+    tbody.innerHTML = data.map(d => {
+      const total = d.Q1 + d.Q2 + d.Q3 + d.Q4 + d.Q5 + d.Q6;
+      return `<tr>
+        <td><b>${d.employeeId}</b></td>
+        <td>${d.companyId}</td>
+        <td>${d.yearMonth}</td>
+        <td class="${scoreClass(d.Q1,'good')}">${d.Q1}</td>
+        <td class="${scoreClass(d.Q2,'good')}">${d.Q2}</td>
+        <td class="${scoreClass(d.Q3,'stress')}">${d.Q3}</td>
+        <td class="${scoreClass(d.Q4,'good')}">${d.Q4}</td>
+        <td class="${scoreClass(d.Q5,'stress')}">${d.Q5}</td>
+        <td class="${scoreClass(d.Q6,'stress')}">${d.Q6}</td>
+        <td><b>${total}</b></td>
+        <td style="font-size:11px;">${d.timestamp ? d.timestamp.slice(0,16).replace('T',' ') : ''}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function scoreClass(val, type) {
+    if (type === 'good')   return val >= 7 ? 'score-good' : val <= 3 ? 'score-bad' : '';
+    if (type === 'stress') return val <= 3 ? 'score-good' : val >= 7 ? 'score-bad' : '';
+    return '';
+  }
+
+  function renderAvgChart(data) {
+    const months = [...new Set(data.map(d => d.yearMonth))].sort();
+    const avgByMonth = months.map(m => {
+      const rows = data.filter(d => d.yearMonth === m);
+      const avg = (key) => rows.reduce((s,r) => s + r[key], 0) / rows.length;
+      return { month: m, Q1: avg('Q1'), Q2: avg('Q2'), Q3: avg('Q3'), Q4: avg('Q4'), Q5: avg('Q5'), Q6: avg('Q6') };
+    });
+
+    if (avgChart) avgChart.destroy();
+    const ctx = document.getElementById('chart-avg').getContext('2d');
+    avgChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          { label: '体調', data: avgByMonth.map(d => +d.Q1.toFixed(1)), borderColor: '#0284c7', tension: 0.3, fill: false },
+          { label: '集中力', data: avgByMonth.map(d => +d.Q2.toFixed(1)), borderColor: '#0ea5e9', tension: 0.3, fill: false },
+          { label: 'ストレス', data: avgByMonth.map(d => +d.Q3.toFixed(1)), borderColor: '#f97316', tension: 0.3, fill: false },
+          { label: '睡眠', data: avgByMonth.map(d => +d.Q4.toFixed(1)), borderColor: '#8b5cf6', tension: 0.3, fill: false },
+          { label: '人間関係', data: avgByMonth.map(d => +d.Q5.toFixed(1)), borderColor: '#ec4899', tension: 0.3, fill: false },
+          { label: '仕事量', data: avgByMonth.map(d => +d.Q6.toFixed(1)), borderColor: '#ef4444', tension: 0.3, fill: false },
+        ]
+      },
+      options: { responsive: true, scales: { y: { min: 0, max: 10 } } }
+    });
+  }
+
+  function renderPersonalChart(id) {
+    const data = allData.filter(d => d.employeeId.toLowerCase() === id.toLowerCase())
+                        .sort((a,b) => a.yearMonth.localeCompare(b.yearMonth));
+    if (!data.length) return;
+
+    document.getElementById('personal-chart-wrap').style.display = 'block';
+    document.getElementById('personal-chart-title').textContent = id.toUpperCase();
+    const months = data.map(d => d.yearMonth);
+
+    if (personalChart) personalChart.destroy();
+    const ctx = document.getElementById('chart-personal').getContext('2d');
+    personalChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          { label: '体調', data: data.map(d => d.Q1), borderColor: '#0284c7', tension: 0.3, fill: false },
+          { label: '集中力', data: data.map(d => d.Q2), borderColor: '#0ea5e9', tension: 0.3, fill: false },
+          { label: 'ストレス', data: data.map(d => d.Q3), borderColor: '#f97316', tension: 0.3, fill: false },
+          { label: '睡眠', data: data.map(d => d.Q4), borderColor: '#8b5cf6', tension: 0.3, fill: false },
+          { label: '人間関係', data: data.map(d => d.Q5), borderColor: '#ec4899', tension: 0.3, fill: false },
+          { label: '仕事量', data: data.map(d => d.Q6), borderColor: '#ef4444', tension: 0.3, fill: false },
+        ]
+      },
+      options: { responsive: true, scales: { y: { min: 0, max: 10 } } }
+    });
+  }
+
+  function exportCSV() {
+    const data = getFiltered();
+    const header = ['社員ID','企業ID','年月','体調','集中力','ストレス','睡眠','人間関係','仕事量','タイムスタンプ'];
+    const rows = data.map(d => [d.employeeId, d.companyId, d.yearMonth, d.Q1, d.Q2, d.Q3, d.Q4, d.Q5, d.Q6, d.timestamp || ''].join(','));
+    const csv = '﻿' + [header.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `condition_check_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+
+  // テスト用ダミーデータ生成
+  function generateDummy() {
+    const ids = ['A001','A002','A003','B001','B002'];
+    const companies = { A001:'CP', A002:'CP', A003:'CP', B001:'SG', B002:'SG' };
+    const months = ['2026-03','2026-04','2026-05'];
+    const result = [];
+    ids.forEach(id => {
+      months.forEach(ym => {
+        result.push({
+          employeeId: id, companyId: companies[id], yearMonth: ym,
+          Q1: Math.floor(Math.random()*5)+5, Q2: Math.floor(Math.random()*5)+4,
+          Q3: Math.floor(Math.random()*6)+2, Q4: Math.floor(Math.random()*5)+4,
+          Q5: Math.floor(Math.random()*6)+2, Q6: Math.floor(Math.random()*6)+2,
+          timestamp: new Date().toISOString()
+        });
+      });
+    });
+    return result;
+  }
+</script>
+</body>
+</html>
