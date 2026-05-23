@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-杉山耕一税理士事務所 プロファイリング関係図 3ページ統合版（11名）
+杉山耕一税理士事務所 プロファイリング関係図 3ページ統合版（12名）
 Page1: パワーカラー相関図 + アクティビティレベル
 Page2: 思考パターン・意思決定マップ
-Page3: 適材適所 役割マッピング（11名・4列×3行）
+Page3: 適材適所 役割マッピング（12名・4列×3行）
 """
 import math
 import matplotlib
@@ -21,7 +21,7 @@ except ImportError:
 plt.rcParams['axes.unicode_minus'] = False
 
 # ========================
-# メンバーデータ（11名）
+# メンバーデータ（12名）
 # ========================
 # activity_type: 衝動型(>10億) / 体験型(>4億) / 直感型(>2億) / 思考型(<2億)
 # thought_pos: 精神型=0, 過去型=1, 現在型=2, 未来型=3, 直観=4, 創造型=5
@@ -30,71 +30,78 @@ plt.rcParams['axes.unicode_minus'] = False
 # ※ 石渡・松崎のシンキングパターン・時間軸は未取得のため推測値
 
 MEMBERS = [
+    # ---- 所長 ----
+    {'id': '杉山', 'nine': '創',
+     'power_color': '黄', 'grid': (1, 0),
+     'fc': '#F9A825', 'ec': '#F57F17', 'tc': '#333333',
+     'activity': 1_112_637_120, 'activity_type': '体験型',
+     'thought_pos': 3.0, 'speed_pos': 6.8,
+     'thinking': 57, 'thinking_type': '両方タイプ'},
     # ---- グループA ----
-    {'id': 'SA', 'name': '佐々木', 'nine': '空',
+    {'id': '佐々木', 'nine': '空',
      'power_color': '白', 'grid': (2, 2),
      'fc': '#FAFAFA', 'ec': '#757575', 'tc': '#333333',
      'activity': 109_072_931, 'activity_type': '思考型',
      'thought_pos': 1.0, 'speed_pos': 4.3,
      'thinking': 45, 'thinking_type': '両方タイプ'},
-    {'id': 'OW', 'name': '王', 'nine': '創',
+    {'id': '王', 'nine': '創',
      'power_color': '藍', 'grid': (0, 2),
      'fc': '#283593', 'ec': '#1A237E', 'tc': 'white',
      'activity': 56_034_720, 'activity_type': '思考型',
      'thought_pos': 2.0, 'speed_pos': 5.0,
      'thinking': 42, 'thinking_type': '両方タイプ'},
-    {'id': 'UM', 'name': '梅田', 'nine': '長',
+    {'id': '梅田', 'nine': '長',
      'power_color': '黄', 'grid': (1, 0),
      'fc': '#F9A825', 'ec': '#F57F17', 'tc': '#333333',
      'activity': 8_763_124, 'activity_type': '思考型',
      'thought_pos': 2.0, 'speed_pos': 5.2,
      'thinking': 21, 'thinking_type': 'フィーリングタイプ'},
     # ---- グループB ----
-    {'id': 'TO', 'name': '富永', 'nine': '匠',
+    {'id': '富永', 'nine': '匠',
      'power_color': '緑', 'grid': (0, 0),
      'fc': '#2E7D32', 'ec': '#1B5E20', 'tc': 'white',
      'activity': 20_392_909, 'activity_type': '思考型',
      'thought_pos': 2.0, 'speed_pos': 5.4,
      'thinking': 13, 'thinking_type': 'フィーリングタイプ'},
-    {'id': 'MA', 'name': '松崎', 'nine': '長',
+    {'id': '松崎', 'nine': '長',
      'power_color': '青', 'grid': (0, 1),
      'fc': '#1565C0', 'ec': '#0D47A1', 'tc': 'white',
      'activity': 1_175_000_000, 'activity_type': '体験型',
      'thought_pos': 3.0, 'speed_pos': 6.2,
      'thinking': 50, 'thinking_type': '両方タイプ'},  # ※シンキング未取得・推測
-    {'id': 'KU', 'name': '楠本', 'nine': '公',
+    {'id': '楠本', 'nine': '公',
      'power_color': '赤', 'grid': (2, 1),
      'fc': '#C62828', 'ec': '#B71C1C', 'tc': 'white',
      'activity': 190_178_444, 'activity_type': '思考型',
      'thought_pos': 2.0, 'speed_pos': 5.3,
      'thinking': 28, 'thinking_type': 'フィーリング寄り'},
     # ---- グループC ----
-    {'id': 'NA', 'name': '中尾', 'nine': '王',
+    {'id': '中尾', 'nine': '王',
      'power_color': '黒', 'grid': (1, 1),
      'fc': '#212121', 'ec': '#000000', 'tc': 'white',
      'activity': 127_251_753, 'activity_type': '思考型',
      'thought_pos': 2.0, 'speed_pos': 5.4,
      'thinking': 26, 'thinking_type': 'フィーリングタイプ'},
-    {'id': 'SW', 'name': '澤田', 'nine': '守',
+    {'id': '澤田', 'nine': '守',
      'power_color': '赤', 'grid': (2, 1),
      'fc': '#C62828', 'ec': '#B71C1C', 'tc': 'white',
      'activity': 79_382_520, 'activity_type': '思考型',
      'thought_pos': 1.0, 'speed_pos': 4.8,
      'thinking': 91, 'thinking_type': 'ロジカルタイプ'},
     # ---- 追加メンバー ----
-    {'id': 'OT', 'name': '太田', 'nine': '長',
+    {'id': '太田', 'nine': '長',
      'power_color': '藍', 'grid': (0, 2),
      'fc': '#283593', 'ec': '#1A237E', 'tc': 'white',
      'activity': 4_508_347_811, 'activity_type': '衝動型',
      'thought_pos': 5.0, 'speed_pos': 8.6,
      'thinking': 78, 'thinking_type': '両方タイプ'},
-    {'id': 'SH', 'name': '塩澤', 'nine': '智',
+    {'id': '塩澤', 'nine': '智',
      'power_color': '白', 'grid': (2, 2),
      'fc': '#FAFAFA', 'ec': '#757575', 'tc': '#333333',
      'activity': 1_196_595_975, 'activity_type': '体験型',
      'thought_pos': 3.0, 'speed_pos': 6.4,
      'thinking': 99, 'thinking_type': 'ロジカルタイプ'},
-    {'id': 'IS', 'name': '石渡', 'nine': '−',
+    {'id': '石渡', 'nine': '−',
      'power_color': '青', 'grid': (0, 1),
      'fc': '#1565C0', 'ec': '#0D47A1', 'tc': 'white',
      'activity': 350_000_000, 'activity_type': '直感型',  # ※アクティビティ「高い」から推測
@@ -144,7 +151,7 @@ def member_badge(ax, x, y, m, r=0.30):
     circ = mpatches.Circle((x, y), r, facecolor=m['fc'],
                             edgecolor=m['ec'], linewidth=2, zorder=10)
     ax.add_patch(circ)
-    ax.text(x, y, m['id'], ha='center', va='center', fontsize=6,
+    ax.text(x, y, m['id'], ha='center', va='center', fontsize=5,
             fontweight='bold', color=m['tc'], zorder=11)
 
 # ========================
@@ -152,7 +159,7 @@ def member_badge(ax, x, y, m, r=0.30):
 # ========================
 fig1 = plt.figure(figsize=(16, 10))
 fig1.patch.set_facecolor('#FFFFFF')
-fig1.suptitle('杉山耕一税理士事務所　可能性から見る関係図（11名版）',
+fig1.suptitle('杉山耕一税理士事務所　可能性から見る関係図（12名版）',
               fontsize=16, fontweight='bold', y=0.98)
 
 ax_c = fig1.add_axes([0.02, 0.05, 0.50, 0.88])
@@ -191,7 +198,7 @@ for (col, row), (label, fc, tc) in COLOR_GRID.items():
         ax_c.text(x + BOX/2, y + BOX*0.75, label,
                   ha='center', va='center', fontsize=13, fontweight='bold',
                   color=tc, zorder=4)
-        ax_c.text(x + BOX/2, y + BOX*0.30, f"{m['id']}（{m['name']}）",
+        ax_c.text(x + BOX/2, y + BOX*0.30, m['id'],
                   ha='center', va='center', fontsize=8,
                   fontweight='bold', color=tc, zorder=4)
         member_badge(ax_c, x + BOX - 0.28, y + BOX - 0.28, m, r=0.24)
@@ -205,8 +212,7 @@ for (col, row), (label, fc, tc) in COLOR_GRID.items():
         for idx, mi in enumerate(members_here):
             sy = y + BOX*0.85 - (idx + 0.5) * slot_h
             badge_x = x + BOX * 0.25
-            ax_c.text(x + BOX * 0.60, sy,
-                      f"{mi['id']}（{mi['name']}）",
+            ax_c.text(x + BOX * 0.60, sy, mi['id'],
                       ha='center', va='center', fontsize=6.5,
                       fontweight='bold', color=tc, zorder=4)
             member_badge(ax_c, badge_x, sy, mi, r=0.20)
@@ -278,11 +284,11 @@ for m in MEMBERS:
     member_badge(ax_a, 5.0, yp, m, r=0.32)
     ax_a.text(3.2, yp, f"{m['activity']:,}", ha='right', va='center',
               fontsize=6.5, color='#333333')
-    ax_a.text(6.8, yp, f"{m['id']}（{m['name']}）\n{m['activity_type']}",
+    ax_a.text(6.8, yp, f"{m['id']}　{m['activity_type']}",
               ha='left', va='center', fontsize=6.5, color='#333333')
 
 # 凡例
-legend_text = '　'.join([f"{m['id']}:{m['name']}" for m in MEMBERS])
+legend_text = '　'.join([f"{m['id']}（{m['nine']}）" for m in MEMBERS])
 fig1.text(0.54, 0.03, legend_text,
           fontsize=7, ha='left', va='bottom', color='#555555',
           bbox=dict(boxstyle='round', facecolor='#F5F5F5', alpha=0.8))
@@ -292,7 +298,7 @@ fig1.text(0.54, 0.03, legend_text,
 # ========================
 fig2 = plt.figure(figsize=(16, 10))
 fig2.patch.set_facecolor('#FFFFFF')
-fig2.suptitle('杉山耕一税理士事務所　思考パターン・意思決定マップ（11名版）',
+fig2.suptitle('杉山耕一税理士事務所　思考パターン・意思決定マップ（12名版）',
               fontsize=16, fontweight='bold', y=0.98)
 
 ax_th = fig2.add_axes([0.06, 0.60, 0.88, 0.34])
@@ -316,8 +322,8 @@ for pos, group in thought_groups.items():
     for i, m in enumerate(group):
         badge_y = -0.7 - i * 0.65
         member_badge(ax_th, pos, badge_y, m, r=0.28)
-        ax_th.text(pos, badge_y - 0.35, f"{m['id']}",
-                   ha='center', va='top', fontsize=7, fontweight='bold', color='#333333')
+        ax_th.text(pos, badge_y - 0.35, m['id'],
+                   ha='center', va='top', fontsize=6, fontweight='bold', color='#333333')
 
 ax_sp = fig2.add_axes([0.06, 0.24, 0.88, 0.32])
 ax_sp.set_xlim(-0.5, 10.5)
@@ -343,7 +349,7 @@ for pos, group in speed_groups.items():
         badge_y = -0.7 - i * 0.65
         member_badge(ax_sp, pos, badge_y, m, r=0.28)
         ax_sp.text(pos, badge_y - 0.35, m['id'],
-                   ha='center', va='top', fontsize=7, fontweight='bold', color='#333333')
+                   ha='center', va='top', fontsize=6, fontweight='bold', color='#333333')
 
 ax_sk = fig2.add_axes([0.06, 0.03, 0.88, 0.19])
 ax_sk.set_xlim(10, 100)
@@ -374,20 +380,33 @@ for sc, group in thinking_groups.items():
         badge_y = -1.0 - i * 0.45
         member_badge(ax_sk, sc, badge_y, m, r=0.26)
         ax_sk.text(sc, badge_y - 0.32, f"{m['id']}{sc}",
-                   ha='center', va='top', fontsize=7, color='#333333')
+                   ha='center', va='top', fontsize=6, color='#333333')
 
 # 凡例
-legend_text = '　'.join([f"{m['id']}:{m['name']}（{m['nine']}）" for m in MEMBERS])
+legend_text = '　'.join([f"{m['id']}（{m['nine']}）" for m in MEMBERS])
 fig2.text(0.5, 0.01, legend_text,
           fontsize=7, ha='center', va='bottom', color='#555555',
           bbox=dict(boxstyle='round', facecolor='#F5F5F5', alpha=0.8))
 
 # ========================
-# PAGE 3: 役割マッピング（11名・4列×3行）
+# PAGE 3: 役割マッピング（12名・4列×3行）
 # ========================
 
 MAPPING_MEMBERS = [
-    # 行1
+    # 行1（杉山先生が左上トップ）
+    {
+        'full': '杉山 耕一　所長', 'role_title': '開拓・成長推進・経営判断役',
+        'sub': '黄・創（未来型）　Tempo 6.8　活動量：11億',
+        'color_h': '#F9A825', 'color_bg': '#FFFDE7', 'color_edge': '#F57F17',
+        'text_color': '#333333',
+        'fit': ['未来志向の経営判断・新市場開拓',
+                '楽しい場の創出・チームの活気づけ',
+                '衝動的意思決定力を活かした即断即決業務'],
+        'point': ['未来型→「これからこうなります」で伝える',
+                  '両方57→数字＋感情エピソードのセットで届く',
+                  '旅（飽き性）→毎回新しい視点を加える工夫を',
+                  '体験・衝動型→良い話はその場で提案する'],
+    },
     {
         'full': '佐々木 麻衣', 'role_title': '品質保証・過去データ参照役',
         'sub': '白・空（過去型）　Tempo 4.3　活動量：109M',
@@ -427,6 +446,7 @@ MAPPING_MEMBERS = [
                   '長+炎→安定時の行動力と崩れリスクに注意',
                   '自己認識と実態のギャップを意識して関わる'],
     },
+    # 行2
     {
         'full': '富永 春菜', 'role_title': '技術・専門実行役',
         'sub': '緑・匠（現在型）　Tempo 5.4　活動量：20M',
@@ -440,7 +460,6 @@ MAPPING_MEMBERS = [
                   '旅（飽き性）→変化・新しさを取り入れる工夫を',
                   '心理状態が課題→自己受容サポートを優先'],
     },
-    # 行2
     {
         'full': '松崎 幸', 'role_title': '計画立案・安定実行役',
         'sub': '青・長（未来型）　Tempo 6.2　活動量：1.17B',
@@ -480,6 +499,7 @@ MAPPING_MEMBERS = [
                   '疲れ→血尿パターンあり（疲労サインに注意）',
                   '「わーい」を口癖に・勉強の区切りに活用'],
     },
+    # 行3
     {
         'full': '澤田 香織', 'role_title': '精度管理・論理分析役',
         'sub': '赤・守（過去型）　Tempo 4.8　活動量：79M',
@@ -493,7 +513,6 @@ MAPPING_MEMBERS = [
                   '赤→感情表現できる場が開運ポイント',
                   'Tempo4.8（速め）→待ちや曖昧に注意'],
     },
-    # 行3（3名・中央寄せ）
     {
         'full': '太田 毅', 'role_title': '開拓・新規創造役',
         'sub': '藍・長（創造型）　Tempo 8.6　活動量：45億',
@@ -543,7 +562,7 @@ header = FancyBboxPatch((0.01, 0.93), 0.98, 0.065,
                          facecolor='#3949AB', edgecolor='none',
                          transform=fig3.transFigure, zorder=5)
 fig3.add_artist(header)
-fig3.text(0.5, 0.962, '適材適所　各メンバーの役割マッピング（11名）',
+fig3.text(0.5, 0.962, '適材適所　各メンバーの役割マッピング（12名）',
          ha='center', va='center', fontsize=15, fontweight='bold',
          color='white', transform=fig3.transFigure, zorder=6)
 fig3.text(0.5, 0.938, 'LifeProfiling® から導く「最も力を発揮できる役割と関わり方のポイント」',
@@ -588,7 +607,7 @@ def draw_card(fig, left, bottom, width, height, member):
                 fontsize=6.5, color='#333333')
         y -= 0.062
 
-# レイアウト: 4列 × 3行（最後の行は3名中央寄せ）
+# レイアウト: 4列 × 3行（杉山先生が行1左上トップ）
 card_w  = 0.228
 card_h  = 0.270
 gap_x   = 0.015
@@ -596,7 +615,7 @@ gap_y   = 0.020
 left0   = 0.015
 top_row = 0.655  # 行1の下端
 
-# 行1: 4名
+# 行1: 4名（杉山先生が左上）
 for i, m in enumerate(MAPPING_MEMBERS[:4]):
     l = left0 + i * (card_w + gap_x)
     draw_card(fig3, l, top_row, card_w, card_h, m)
@@ -607,12 +626,10 @@ for i, m in enumerate(MAPPING_MEMBERS[4:8]):
     l = left0 + i * (card_w + gap_x)
     draw_card(fig3, l, mid_row, card_w, card_h, m)
 
-# 行3: 3名（中央寄せ）
+# 行3: 4名
 bot_row = mid_row - card_h - gap_y
-total_w3 = 3 * card_w + 2 * gap_x
-left3   = (1.0 - total_w3) / 2
 for i, m in enumerate(MAPPING_MEMBERS[8:]):
-    l = left3 + i * (card_w + gap_x)
+    l = left0 + i * (card_w + gap_x)
     draw_card(fig3, l, bot_row, card_w, card_h, m)
 
 fig3.text(0.5, 0.015,
