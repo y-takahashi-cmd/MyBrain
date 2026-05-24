@@ -39,9 +39,10 @@ Ask before:
 
 1. Run `date` to confirm today's date (do not guess)
 2. `git pull` to sync latest changes
-3. If files exist in `00_Inbox/`, sort them and report
-4. Read the latest conversation log from `10_Journal/`
-5. Resume naturally from the previous session
+3. **`MyBrain/タスク管理.md` を読んで未完了タスクを把握・報告する**
+4. If files exist in `00_Inbox/`, sort them and report
+5. Read the latest conversation log from `10_Journal/`
+6. Resume naturally from the previous session
 
 ## Session End
 
