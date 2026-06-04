@@ -39,10 +39,14 @@ Ask before:
 
 1. Run `date` to confirm today's date (do not guess)
 2. `git pull` to sync latest changes
-3. **`MyBrain/タスク管理.md` を読んで未完了タスクを把握・報告する**
-4. If files exist in `00_Inbox/`, sort them and report
-5. Read the latest conversation log from `10_Journal/`
-6. Resume naturally from the previous session
+3. **けんけんからのお手紙フォルダを確認する**
+   - フォルダ: `C:\Users\y-takahashi\LLC株式会社\企業のオンライン保健室のコーチのページ - letter`
+   - `letter_to_yucchi_` で始まるファイルが未読の手紙
+   - 「けんけんからお手紙が○通来ています。開けますか？」と由香さんに確認してから開ける
+4. **`MyBrain/タスク管理.md` を読んで未完了タスクを把握・報告する**
+5. If files exist in `00_Inbox/`, sort them and report
+6. Read the latest conversation log from `10_Journal/`
+7. Resume naturally from the previous session
 
 ## Session End
 
