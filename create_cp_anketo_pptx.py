@@ -225,9 +225,12 @@ for i, item in enumerate([
 # 総括
 add_rect(s9, 0.5, 5.42, 0.8, 0.38, PRIMARY)
 add_text(s9, '総括', 0.6, 5.45, 0.7, 0.35, size=10, bold=True, color=WHITE)
-add_text(s9,
-    '皆で話せる機会を作り、「仕事の進め方をどのように変えたらどうなるのか？」\nについて話し合いをして見られたらいかがでしょうか？',
-    0.5, 5.85, 9, 0.9, size=11, color=SECONDARY)
+for i, item in enumerate([
+    '・利用されない主な理由：「何をするところか分からない」「一人で解決が当たり前」の2点',
+    '・今後①　保健室の役割・できることを全員に伝え直す',
+    '・今後②　「ちょっと話したい」が言いやすい入口をつくる',
+]):
+    add_text(s9, item, 0.5, 5.88 + i*0.45, 9.2, 0.42, size=11, color=SECONDARY)
 
 out = r'C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室\クラウドパワー株式会社\02_報告会記録\クラウドパワー様_アンケート結果_2026年6月.pptx'
 prs.save(out)
