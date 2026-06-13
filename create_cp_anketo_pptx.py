@@ -197,19 +197,37 @@ add_rect(s9, 0, 0, 10, 7.5, WHITE)
 add_rect(s9, 0, 0, 10, 0.9, SECONDARY)
 add_text(s9, 'Q7　自由記述 ／ 総括', 0.3, 0.1, 9.4, 0.7, size=18, bold=True, color=WHITE)
 
-add_rect(s9, 0.5, 1.1, 9, 1.7, LIGHT)
-add_text(s9, 'Q7　自由記述（1名の声）', 0.7, 1.15, 8, 0.45, size=12, bold=True, color=SECONDARY)
-add_text(s9, '「社長の意見が絶対になってしまうため、\n社長のいない会話の場を設ける必要があると考えている」',
-         0.7, 1.6, 8.5, 1.0, size=12, color=SECONDARY)
+# Q7ボックス
+add_rect(s9, 0.5, 1.0, 9, 1.4, LIGHT)
+add_text(s9, 'Q7　自由記述（1名の声）', 0.7, 1.05, 8, 0.38, size=11, bold=True, color=SECONDARY)
+add_text(s9, '「社長の意見が絶対になってしまうため、社長のいない会話の場を設ける必要があると考えている」',
+         0.7, 1.43, 8.5, 0.8, size=11, color=SECONDARY)
 
-add_text(s9, '総括', 0.5, 3.0, 9, 0.45, size=14, bold=True, color=SECONDARY)
+# 事実
+add_rect(s9, 0.5, 2.55, 2.2, 0.38, PRIMARY)
+add_text(s9, '事実：データが示していること', 0.6, 2.58, 2.1, 0.35, size=10, bold=True, color=WHITE)
 for i, item in enumerate([
-    '・保健室への期待はあるが、「自分で解決する」文化が根強く相談のハードルが高い状態',
-    '・Q3「仕事の進め方」の背景確認が今後の関わり方の鍵',
-    '・「特に必要ない」40%を踏まえ、押しつけにならない関わり方の設計が重要',
-    '・Q7は1名の個人意見として参考情報に留める',
+    '・保健室への期待は高い（健康・ストレス相談 各60%）',
+    '・困った時は「自分で解決」が80%、「専門家」は0%',
+    '・変えたいことのトップは「仕事の進め方」60%',
 ]):
-    add_text(s9, item, 0.5, 3.55 + i*0.65, 9, 0.6, size=11, color='#333333')
+    add_text(s9, item, 0.5, 3.0 + i*0.38, 9, 0.38, size=10, color='#333333')
+
+# 考察
+add_rect(s9, 0.5, 4.16, 2.2, 0.38, PRIMARY)
+add_text(s9, '考察：データから言えること', 0.6, 4.19, 2.1, 0.35, size=10, bold=True, color=WHITE)
+for i, item in enumerate([
+    '・相談したい気持ちはあるが、相談できる場や文化がまだ育っていない',
+    '・「仕事の進め方を変えたい」背景は何か　→　直接確認が必要',
+]):
+    add_text(s9, item, 0.5, 4.6 + i*0.38, 9, 0.38, size=10, color='#333333')
+
+# 総括
+add_rect(s9, 0.5, 5.42, 0.8, 0.38, PRIMARY)
+add_text(s9, '総括', 0.6, 5.45, 0.7, 0.35, size=10, bold=True, color=WHITE)
+add_text(s9,
+    '皆で話せる機会を作り、「仕事の進め方をどのように変えたらどうなるのか？」\nについて話し合いをして見られたらいかがでしょうか？',
+    0.5, 5.85, 9, 0.9, size=11, color=SECONDARY)
 
 out = r'C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室\クラウドパワー株式会社\02_報告会記録\クラウドパワー様_アンケート結果_2026年6月.pptx'
 prs.save(out)
