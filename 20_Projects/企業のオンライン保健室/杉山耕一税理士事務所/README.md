@@ -7,7 +7,6 @@
 - **月額：** 42,000円（元30,000円＋追加3名×4,000円）
 - **契約開始：** 2026年4月〜（12ヶ月）
 - **フォームURL：** https://entry.kokorocare.business/sugiyama/
-- **担当サブエージェント：** hokenshitsu-sugiyama-chan
 
 ## メンバー一覧
 
