@@ -13,18 +13,29 @@ main_path = r'C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン�
 shutil.copy(template_path, output_path)
 doc = Document(output_path)
 
-def set_cell_text(cell, text, size=10):
-    cell.paragraphs[0].clear()
-    run = cell.paragraphs[0].add_run(text)
+def set_cell_text(cell, text, size=9):
+    # 既存段落を全削除（最後の1つだけ残す）
+    for p in list(cell.paragraphs)[1:]:
+        p._element.getparent().remove(p._element)
+    # 最初の段落をクリア
+    p0 = cell.paragraphs[0]
+    p0.clear()
+    # \nで分割して段落ごとに追加
+    lines = text.split('\n')
+    run = p0.add_run(lines[0])
     run.font.size = Pt(size)
+    for line in lines[1:]:
+        new_p = cell.add_paragraph()
+        r = new_p.add_run(line)
+        r.font.size = Pt(size)
 
 # ===== ヘッダーテーブル変更 =====
 t0 = doc.tables[0]
-set_cell_text(t0.rows[0].cells[1], '杉山耕一税理士事務所　様')
-set_cell_text(t0.rows[1].cells[1], '2026年6月30日')
-set_cell_text(t0.rows[1].cells[3], '2026年4月〜6月（3ヶ月間）')
-set_cell_text(t0.rows[2].cells[1], '髙橋　由香')
-set_cell_text(t0.rows[2].cells[3], '全員との出会いと健康の土台づくりの3ヶ月')
+set_cell_text(t0.rows[0].cells[1], '杉山耕一税理士事務所　様', size=10)
+set_cell_text(t0.rows[1].cells[1], '2026年6月30日', size=10)
+set_cell_text(t0.rows[1].cells[3], '2026年4月〜6月（3ヶ月間）', size=10)
+set_cell_text(t0.rows[2].cells[1], '髙橋　由香', size=10)
+set_cell_text(t0.rows[2].cells[3], '全員との出会いと健康の土台づくりの3ヶ月', size=10)
 
 # ===== 総評本文変更 =====
 doc.paragraphs[4].clear()
@@ -43,7 +54,7 @@ r.font.size = Pt(10)
 members = [
     {
         'name': '塩澤 裕己永さん',
-        'dates': '第1回：4月17日　第2回：5月14日（計2回）',
+        'dates': '第1回：4月17日\n第2回：5月14日（計2回）',
         'status': 'モチベーション：高\nホルモンバランス：要注意\n体力・エネルギー：低調',
         'summary': (
             '【見立て】\n「もっとパワフルになりたい」という内発的な意欲が確認されており、変化への動機は十分にある。'
@@ -56,7 +67,7 @@ members = [
     },
     {
         'name': '王 宝梁さん',
-        'dates': '第1回：4月18日　第2回：4月25日（計2回）',
+        'dates': '第1回：4月18日\n第2回：4月25日（計2回）',
         'status': '健康状態：良好\nモチベーション：高\n体調自己評価：90%',
         'summary': (
             '【見立て】\n11名中最も健康状態が良好で、問診票全カテゴリ良好。35歳までの税理士資格取得という明確な目標に向けて'
@@ -67,7 +78,7 @@ members = [
     },
     {
         'name': '佐々木 麻衣さん',
-        'dates': '第1回：4月23日　第2回：5月8日（計2回）',
+        'dates': '第1回：4月23日\n第2回：5月8日（計2回）',
         'status': 'モチベーション：高\nストレス：中\n睡眠・甲状腺：要注意',
         'summary': (
             '【見立て】\n「決めたらブレない」強みがある一方、体からのサインを「甘え」と捉えがちな傾向を確認。'
@@ -80,18 +91,18 @@ members = [
     },
     {
         'name': '石渡 美紀さん',
-        'dates': '第1回：4月27日　第2回：5月21日（計2回）',
+        'dates': '第1回：4月27日\n第2回：5月21日（計2回）',
         'status': '睡眠：改善傾向\nストレス：中\n心理的強さ：高',
         'summary': (
             '【見立て】\n第2回で「睡眠が少し改善した」との報告があった。感謝・過去の手放し・自己管理という心理的強みが'
             '3点満点で土台が安定しており、回復力が期待できる。アマルガム・更年期移行期への中長期的フォローが必要。\n\n'
             '【セッション概要】\n第1回：初回ヒアリング。「子供の咳では起きなくていい」と伝えるなど日常の安心感の提供を実施。\n'
-            '第2回：睡眠改善を確認（「少し改善」と本人が報告）・プロファイリング詳細説明。家族プロファイリングへの関心が出てきた。'
+            '第2回：睡眠改善を確認・プロファイリング詳細説明。家族プロファイリングへの関心が出てきた。'
         ),
     },
     {
         'name': '松崎 幸さん',
-        'dates': '第1回：5月12日　第2回：5月13日（計2回）',
+        'dates': '第1回：5月12日\n第2回：5月13日（計2回）',
         'status': 'モチベーション：高\nストレス：低\n心理的安定度：高（94%）',
         'summary': (
             '【見立て】\n心理状態94%は全メンバー中トップクラスで、変化への柔軟性が高い。'
@@ -103,7 +114,7 @@ members = [
     },
     {
         'name': '楠本 耕大さん',
-        'dates': '第1回：5月13日　第2回：5月22日（計2回）',
+        'dates': '第1回：5月13日\n第2回：5月22日（計2回）',
         'status': 'ストレス：中\n心理状態：良好（77%）\n腸内環境：要注意',
         'summary': (
             '【見立て】\n歯ぎしり→副腎疲労→男性ホルモン低下という体内連鎖が判明。8月の試験に向けて「パフォーマンスを'
@@ -116,7 +127,7 @@ members = [
     },
     {
         'name': '梅田 和さん',
-        'dates': '第1回：5月11日　第2回：5月14日（計2回）',
+        'dates': '第1回：5月11日\n第2回：5月14日（計2回）',
         'status': '月経周期の波あり\n毒素：要注意\nホルモンバランス：要注意',
         'summary': (
             '【見立て】\nエストロゲン優位傾向があり、月経周期に連動した体調の波が見られる。'
@@ -128,7 +139,7 @@ members = [
     },
     {
         'name': '富永 春菜さん',
-        'dates': '第1回：5月21日　第2回：5月27日（計2回）',
+        'dates': '第1回：5月21日\n第2回：5月27日（計2回）',
         'status': 'ストレス：高\n疲労感：強\n心理状態：低調（42%）',
         'summary': (
             '【見立て】\n複数カテゴリで要注意レベルが重なっており、今期の中で最もケアが急がれるメンバー。'
@@ -141,7 +152,7 @@ members = [
     },
     {
         'name': '中尾 玲沙さん',
-        'dates': '第1回：5月21日　第2回：6月18日（計2回）',
+        'dates': '第1回：5月21日\n第2回：6月18日（計2回）',
         'status': 'ストレス：高\n身体的疲労：強\n二重負荷（大学院＋仕事）',
         'summary': (
             '【見立て】\n「今が一番きつい」という言葉が第2回で出た。律儀で責任感が強く、限界まで一人で抱え込みやすい'
@@ -152,7 +163,7 @@ members = [
     },
     {
         'name': '澤田 香織さん',
-        'dates': '第1回：5月25日　第2回：6月3日（計2回）',
+        'dates': '第1回：5月25日\n第2回：6月3日（計2回）',
         'status': 'モチベーション：良好\nストレス：中',
         'summary': (
             '【見立て】\n信頼構築に時間が必要なタイプで、丁寧に関係を積み上げることが大切。'
@@ -178,39 +189,43 @@ members = [
 # ===== 個別テーブル変更 =====
 t1 = doc.tables[1]
 
-# 既存5行（行1〜5）を変更、残り6名は行をコピーして追加
-for i, member in enumerate(members):
-    if i < 5:
-        row = t1.rows[i + 1]
-        set_cell_text(row.cells[0], member['name'], size=9)
-        set_cell_text(row.cells[1], member['dates'], size=9)
-        set_cell_text(row.cells[2], member['status'], size=9)
-        set_cell_text(row.cells[3], member['summary'], size=9)
-    else:
-        # 既存行をコピーして追加
-        template_row = t1.rows[1]
-        new_tr = copy.deepcopy(template_row._tr)
-        t1._tbl.append(new_tr)
-        new_row = t1.rows[-1]
-        set_cell_text(new_row.cells[0], member['name'], size=9)
-        set_cell_text(new_row.cells[1], member['dates'], size=9)
-        set_cell_text(new_row.cells[2], member['status'], size=9)
-        set_cell_text(new_row.cells[3], member['summary'], size=9)
+# 既存5行（行1〜5）を書き換え
+for i in range(5):
+    row = t1.rows[i + 1]
+    set_cell_text(row.cells[0], members[i]['name'])
+    set_cell_text(row.cells[1], members[i]['dates'])
+    set_cell_text(row.cells[2], members[i]['status'])
+    set_cell_text(row.cells[3], members[i]['summary'])
+
+# 残り6名（6〜10）は行をコピーして追加
+for i in range(5, 11):
+    template_row = t1.rows[1]
+    new_tr = copy.deepcopy(template_row._tr)
+    t1._tbl.append(new_tr)
+    new_row = t1.rows[-1]
+    set_cell_text(new_row.cells[0], members[i]['name'])
+    set_cell_text(new_row.cells[1], members[i]['dates'])
+    set_cell_text(new_row.cells[2], members[i]['status'])
+    set_cell_text(new_row.cells[3], members[i]['summary'])
 
 # ===== 全体傾向と提言変更 =====
-doc.paragraphs[9].clear()
-r2 = doc.paragraphs[9].add_run(
-    '　3ヶ月を通じて、11名全員と保健室との信頼関係の土台が整いました。現時点で早急な対応が必要な状態の'
-    'メンバーはおりませんが、富永さんの心理状態・太田さんの腎機能・中尾さんの慢性疲労については引き続き'
-    '注視が必要と判断しています。\n'
-    '　今期を通じて感じたこととして、「仕事への熱意の高さ」と「自分の体を後回しにする」という構造が共通して'
-    '見られます。資格取得を目指すメンバーが複数いることもあり、次期は試験後のリセットと体のメンテナンスを'
-    '共通テーマとして取り上げてまいります。\n'
-    '　また、2028年4月から中小企業にも拡大されるストレスチェック義務化に先駆け、次期よりストレスチェックの'
-    '導入と保健室による高リスク者への継続フォローを組み合わせた支援体制のご提案を申し上げます。'
-    '引き続きよろしくお願いいたします。'
-)
-r2.font.size = Pt(10)
+# 段落インデックスを確認して正しい段落を更新
+for i, p in enumerate(doc.paragraphs):
+    if '4ヶ月のモニター期間' in p.text or '3ヶ月を通じて' in p.text:
+        p.clear()
+        r2 = p.add_run(
+            '　3ヶ月を通じて、11名全員と保健室との信頼関係の土台が整いました。現時点で早急な対応が必要な状態の'
+            'メンバーはおりませんが、富永さんの心理状態・太田さんの腎機能・中尾さんの慢性疲労については引き続き'
+            '注視が必要と判断しています。\n'
+            '　今期を通じて感じたこととして、「仕事への熱意の高さ」と「自分の体を後回しにする」という構造が共通して'
+            '見られます。資格取得を目指すメンバーが複数いることもあり、次期は試験後のリセットと体のメンテナンスを'
+            '共通テーマとして取り上げてまいります。\n'
+            '　また、2028年4月から中小企業にも拡大されるストレスチェック義務化に先駆け、次期よりストレスチェックの'
+            '導入と保健室による高リスク者への継続フォローを組み合わせた支援体制のご提案を申し上げます。'
+            '引き続きよろしくお願いいたします。'
+        )
+        r2.font.size = Pt(10)
+        break
 
 doc.save(output_path)
 shutil.copy(output_path, main_path)
