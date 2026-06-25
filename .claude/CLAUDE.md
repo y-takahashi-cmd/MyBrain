@@ -222,10 +222,12 @@ When user says "done!" or equivalent:
 ① テンプレートWordをコピーする
 ② Wordを編集する（文字の差し替えのみ）
 ③ Wordを保存する
-④ WordをPDFに変換する（Word COMを使用）
-⑤ PDFの全ページを画像に変換してチャットに表示する
+④ WordをStart-Processで開く（由香さんがWordで直接確認する）
 
-由香さんはPDF画像でレイアウト・内容を確認する。
+由香さんはWordを開いてレイアウト・内容を確認する。
+
+⚠️ Readツールで画像を表示しても由香さんのチャット画面には見えない（2026-06-26確認）
+⚠️ PDFや画像に変換してチャットに出すことは禁止
 
 **編集してよいもの：**
 文章・表現・言い回し・専門用語・ビジネス用語への変換
@@ -247,10 +249,8 @@ When user says "done!" or equivalent:
 - 勝手に改善する
 - 新しいWordを作成する
 
-**PDF変換方法（確認済み）：**
-- Word→PDF：PowerShell + Word COMオブジェクト（SaveAs wdFormatPDF=17）
-- PDF→画像：Python pdf2image（インストール済み）、dpi=150
-- 画像表示：Readツールで表示
+**Wordを開く方法：**
+- Start-Process "{Wordファイルのフルパス}" をPowerShellで実行する
 
 ### 許可されていること
 
