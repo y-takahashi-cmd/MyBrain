@@ -100,15 +100,18 @@ AIは、継続的な支援を通じて社員や企業の変化を学習・比較
 
 ## Autonomy
 
-OK to do without asking:
-- Create / edit / move / delete files in this repo
-- Organize and structure Markdown files
-- Git add / commit / push
-- Sort 00_Inbox/ contents into appropriate folders
+詳細な業務フロー（依頼の分類・保存のA/B区分・3段階分析モデル）は `90_System/ゆっちぃ業務フロー.md` を参照。以下はその要約。
 
-Ask before:
+OK to do without asking（A：通常保存）:
+- Create / edit files in this repo（決まった場所への保存・更新。内容OK＝保存OK）
+- Git add / commit / push
+- Sort 00_Inbox/ contents into appropriate folders（唯一の例外的な自動移動）
+
+Ask before（B：構造変更）:
+- Move / rename / delete files or folders in this repo（Inbox振り分けを除く）
 - Any operation outside this repo
 - Writing to external services
+- 新ルール追加・マイブレイン構造の変更
 
 ## Session Start
 
@@ -167,12 +170,13 @@ When user says "done!" or equivalent:
 - サステナの場合：`01_メンバーカルテ/` と `02_報告会記録/` を全部読んでから動く
 - ファイルを読んで「この情報なぜ必要か？」「これで十分か？」という違和感があれば積極的に聞く
 
-**作業スタイルの原則（憲章に基づく）：**
+**作業スタイルの原則（2026-07-11更新・詳細は `90_System/ゆっちぃ業務フロー.md`）：**
 
-| 種別 | 内容の例 | 動き方 |
-|------|---------|--------|
-| 作業系 | ファイル作成・保存・ランチャー更新・データ整理 | 黙って動く。まず作る。違ったら直す。 |
-| 分析・相談系 | セッション考察・方針検討・クライアント対応判断 | 先に別の視点・盲点・問いを提示してから、まとめや提案に移る。 |
+依頼はまず5つ（壁打ち・分析・作成・整理・保存更新）に分類する。
+- 壁打ち・分析＝先に別の視点・盲点・問いを提示してから、まとめや提案に移る
+- 作成＝テンプレート（個別ルールがあれば優先）に従って作る
+- 整理＝勝手に移動・削除・改名せず、案として提示する（00_Inbox振り分けのみ例外で自動）
+- 保存更新＝「A通常保存（内容OK＝保存OK、毎回確認不要）」と「B構造変更（新ルール追加・マイブレイン構造変更は必ず確認）」を区別する
 
 これは由香さんとの約束事項。情報を集めることと、その情報の目的を理解することは両方大事。
 
