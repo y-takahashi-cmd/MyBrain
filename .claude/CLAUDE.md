@@ -122,20 +122,23 @@ Ask before（B：構造変更）:
 
 1. Run `date` to confirm today's date (do not guess)
 2. `git pull` to sync latest changes
-3. **けんけんからのお手紙フォルダを確認する**
+3. `90_System/現在タスク.md` を読む。「進行中タスク」「次回やること」に内容があれば由香さんに報告してから作業に入る
+4. **けんけんからのお手紙フォルダを確認する**
    - フォルダ: `C:\Users\y-takahashi\LLC株式会社\企業のオンライン保健室のコーチのページ - letter`
    - `letter_to_yucchi_` で始まるファイルが未読の手紙
    - 「けんけんからお手紙が○通来ています。開けますか？」と由香さんに確認してから開ける
-4. **`MyBrain/タスク管理.md` を読んで未完了タスクを把握・報告する**
-5. If files exist in `00_Inbox/`, sort them and report
-6. Read the latest conversation log from `10_Journal/`
+5. 内容がなければ「どの案件の、誰の内容をやりますか？」と聞く。該当PJの`README.md`（静的情報のみ）を読んでから作業を開始する
+6. If files exist in `00_Inbox/`, sort them and report
 7. Resume naturally from the previous session
 
 ## Session End
 
-When user says "done!" or equivalent:
-- Commit & push all uncommitted changes
-- Save conversation log to `10_Journal/YYYY-MM-DD_conversation.md` and push
+「お楽しみ様」（またはそれに相当する締めの合図）が来たら、以下の順で実行する：
+
+1. `90_System/現在タスク.md`を更新する（持ち越しタスクの記入、完了タスクの削除、更新履歴への追記）
+2. README.mdは会社情報そのものに変更があった時だけ更新する（契約変更・新メンバー追加等。日々の進捗は書かない）
+3. セッションで保存・更新したメモリファイルを読み返し、内容が正しいか確認する
+4. Commit & push all uncommitted changes
 
 ## セッション文字起こしを渡された時のルール（絶対に守る）
 
