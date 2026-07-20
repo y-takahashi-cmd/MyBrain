@@ -922,8 +922,37 @@ function decisionCellHtml(it, st){
   return '<input type="text" value="' + escapeHtml(st.decision||"").replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
 }
 
-function completeCellHtml(it, st){
-  return '<input type="checkbox" onclick="event.stopPropagation()" onchange="toggleCompleteInline(\'' + it.id + '\', this)" ' + (st.status==="完了"?"checked":"") + ' style="width:1.2em; height:1.2em; accent-color:var(--success-700); cursor:pointer;">';
+var SIMPLE_STATUS = ["未着手","保留中","完了"];
+
+function simpleStatus(st){
+  if (st.status === "完了") return "完了";
+  if (st.status === "保留" || st.status === "保留中") return "保留中";
+  return "未着手";
+}
+
+function statusCellHtml(it, st){
+  var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; font-family:var(--font-body); background:var(--card-bg); color:var(--text-heading);";
+  var current = simpleStatus(st);
+  var html = '<select onclick="event.stopPropagation()" onchange="setStatusInline(\'' + it.id + '\', this.value, this)" style="' + boxStyle + '">';
+  SIMPLE_STATUS.forEach(function(s){
+    html += '<option ' + (s===current?"selected":"") + '>' + s + '</option>';
+  });
+  html += '</select>';
+  return html;
+}
+
+function ownerCellHtml(it, st){
+  var locked = st.status === "完了";
+  var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.3rem .4rem; font-size:.8rem; font-family:var(--font-body);" +
+    (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
+  return '<input type="text" value="' + escapeHtml(st.owner||"").replace(/"/g,"&quot;") + '" placeholder="未定" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'owner\', this.value)" ' + (locked?"disabled":"") + ' style="' + boxStyle + '">';
+}
+
+function dateCellHtml(it, st, key){
+  var locked = st.status === "完了";
+  var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.26rem .3rem; font-size:.76rem; font-family:var(--font-body);" +
+    (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
+  return '<input type="date" value="' + (st[key]||"") + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + key + '\', this.value)" ' + (locked?"disabled":"") + ' style="' + boxStyle + '">';
 }
 
 window.setDecisionInline = function(id, value){
@@ -935,18 +964,26 @@ window.setDecisionInline = function(id, value){
   renderNav(); updateHeaderStats(); renderMain();
 };
 
-window.toggleCompleteInline = function(id, checkboxEl){
+window.setFieldInline = function(id, key, value){
+  STATE[id][key] = value;
+  persistItems();
+  renderNav(); updateHeaderStats(); renderMain();
+};
+
+window.setStatusInline = function(id, value, selectEl){
   var item = itemById(id);
   var st = STATE[id];
-  if (checkboxEl.checked){
+  if (value === "完了"){
     if (!isReqMet(item)){
-      checkboxEl.checked = false;
+      selectEl.value = simpleStatus(st);
       alert("「" + item.name + "」を完了にするには、決定内容・確認結果の入力が必要です。");
       return;
     }
     st.status = "完了";
+  } else if (value === "保留中"){
+    st.status = "保留";
   } else {
-    st.status = "確認待ち";
+    st.status = "未着手";
   }
   persistItems();
   renderNav(); updateHeaderStats(); renderMain();
@@ -980,20 +1017,18 @@ function renderOverview(){
   });
 
   html += '<table class="item-table"><thead><tr>' +
-    '<th class="col-done">完了</th><th>章</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>状態</th><th></th>' +
+    '<th>状態</th><th>章</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th>' +
     '</tr></thead><tbody>';
   all.forEach(function(x){
     var it = x.item, st = STATE[it.id];
     var chap = CHAPTERS.find(function(c){ return String(c.no) === String(x.chapNo); });
     html += '<tr class="' + (st.status==="完了" ? "is-done" : "") + '">' +
-      '<td class="col-done">' + completeCellHtml(it, st) + '</td>' +
+      '<td>' + statusCellHtml(it, st) + '</td>' +
       '<td class="muted">' + String(x.chapNo).padStart(2,"0") + ' ' + chap.title + '</td>' +
       '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
       '<td>' + decisionCellHtml(it, st) + '</td>' +
-      '<td><span class="owner-tag">' + st.ownerGroup + '</span><br>' + (st.owner||"（未定）") + '</td>' +
-      '<td>' + (st.plan||"—") + '</td>' +
-      '<td><span class="status-pill st-' + st.status + '">' + st.status + '</span></td>' +
-      '<td class="col-detail" onclick="openDrawer(\'' + it.id + '\')" style="cursor:pointer;">詳細 ›</td>' +
+      '<td>' + ownerCellHtml(it, st) + '</td>' +
+      '<td>' + dateCellHtml(it, st, "plan") + '</td>' +
     '</tr>';
   });
   html += '</tbody></table>';
@@ -1105,20 +1140,18 @@ function renderMain(){
   '</div>';
 
   html += '<table class="item-table"><thead><tr>' +
-    '<th class="col-done">完了</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>実施日</th><th>状態</th><th></th>' +
+    '<th>状態</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>実施日</th>' +
     '</tr></thead><tbody>';
 
   items.forEach(function(it){
     var st = STATE[it.id];
     html += '<tr class="' + (st.status==="完了" ? "is-done" : "") + '">' +
-      '<td class="col-done">' + completeCellHtml(it, st) + '</td>' +
+      '<td>' + statusCellHtml(it, st) + '</td>' +
       '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
       '<td>' + decisionCellHtml(it, st) + '</td>' +
-      '<td><span class="owner-tag">' + st.ownerGroup + '</span><br>' + (st.owner||"（未定）") + '</td>' +
-      '<td>' + (st.plan||"—") + '</td>' +
-      '<td>' + (st.done||"—") + '</td>' +
-      '<td><span class="status-pill st-' + st.status + '">' + st.status + '</span></td>' +
-      '<td class="col-detail" onclick="openDrawer(\'' + it.id + '\')" style="cursor:pointer;">詳細 ›</td>' +
+      '<td>' + ownerCellHtml(it, st) + '</td>' +
+      '<td>' + dateCellHtml(it, st, "plan") + '</td>' +
+      '<td>' + dateCellHtml(it, st, "done") + '</td>' +
     '</tr>';
   });
   html += '</tbody></table>';
