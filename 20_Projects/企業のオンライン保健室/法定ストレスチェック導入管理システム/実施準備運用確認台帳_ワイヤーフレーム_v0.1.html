@@ -601,38 +601,51 @@ var ITEMS = {
   3: [
     { id:"c3-1", name:"会社責任者の決定", type:"決定する項目", ownerGroup:"会社責任者",
       purpose:"ストレスチェック制度の実施責任を負う会社側の最終責任者を明確にする。",
-      check:"誰が会社責任者か。人事権・経営権を持つ立場か。",
-      options:"代表取締役／役員／人事担当役員 など",
-      law:"法令上必要", required:["decision","done"] },
+      check:"代表取締役＝会社の最終意思決定者として選任するのが基本。取締役／人事担当役員＝経営に関与し人事権を持つ立場から選任する場合。",
+      law:"法令上必要", required:["role","name"],
+      fields:[
+        { key:"role", label:"役職", options:["代表取締役","取締役","人事担当役員","その他の役員"] },
+        { key:"name", label:"担当者名" },
+        { key:"contact", label:"連絡先" }
+      ] },
     { id:"c3-2", name:"会社管理者の決定", type:"決定する項目", ownerGroup:"会社責任者",
       purpose:"受検対象者の登録・受検状況の確認・社員への案内を行う会社側担当者を決める。",
-      check:"会社責任者と兼任か、別に立てるか。", options:"兼任／別担当者を置く",
-      law:"契約上必要", required:["decision","done"] },
+      check:"会社責任者と兼任か、総務・人事部門の担当者を別に立てるかを決める。",
+      law:"契約上必要", required:["role","name"],
+      fields:[
+        { key:"role", label:"役職", options:["総務担当","人事担当","会社責任者と兼任","その他"] },
+        { key:"name", label:"担当者名" },
+        { key:"contact", label:"連絡先" }
+      ] },
     { id:"c3-3", name:"実施者の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"ストレスチェックの評価・高ストレス者の選定基準への関与・面接指導要否の判断を行う専門職を決める。当社内では、保健師（無条件で実施者可）または所定研修修了予定者を実施者候補として想定している。",
-      check:"医師／保健師／所定研修修了の看護師／精神保健福祉士／公認心理師のいずれかであることを確認する。（社内候補者について：人事権の有無・保有資格の最終確認が必要）",
-      options:"外部委託の医師等／社内産業医／保健師",
-      law:"法令上必要", required:["decision","done","confirmer"] },
+      purpose:"ストレスチェックの評価・高ストレス者の選定基準への関与・面接指導要否の判断を行う専門職を決める。",
+      check:"医師／保健師／所定研修修了の看護師／精神保健福祉士／公認心理師のいずれかであることを確認する。社内候補者は人事権の有無・保有資格の最終確認が必要。",
+      law:"法令上必要", required:["category","person"],
+      fields:[
+        { key:"category", label:"役職", options:["社内担当","外部委託"] },
+        { key:"person", label:"担当者（入力または候補から選択）", options:["沢村古都","髙橋由香"], combo:true }
+      ] },
     { id:"c3-4", name:"実施者の資格確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施者が法令上認められた資格（医師・保健師・所定研修修了看護師等）を満たしているかを確認する。",
-      check:"資格証・研修修了証の確認。", options:"確認済み／確認中／要再確認",
+      purpose:"実施者が法令上認められた資格を満たしているかを確認する。",
+      check:"資格証・研修修了証の確認。",
+      options:"産業医／保健師／厚生労働大臣が定める研修を修了した看護師／厚生労働大臣が定める研修を修了した精神保健福祉士",
       law:"法令上必要", required:["decision","confirmDone","confirmer"] },
     { id:"c3-5", name:"実施事務従事者の選任", type:"決定する項目", ownerGroup:"会社管理者",
-      purpose:"受検者登録・調査票回収・結果保存等の実務を担う担当者を選ぶ。",
-      check:"人事権・異動権を持つ「監督的地位にある者」でないことを確認する。",
-      options:"社内担当者／企業のオンライン保健室代行",
-      law:"法令上必要", required:["decision","done"] },
+      purpose:"受検者登録・調査票回収・結果保存等の実務を担う担当者を選ぶ。会社側の人であり、システム上に氏名を登録する。",
+      check:"人事権・異動権を持つ「監督的地位にある者」でないことを確認する（次の項目でチェック）。",
+      law:"法令上必要", required:["name"],
+      fields:[ { key:"name", label:"担当者名（会社側）" } ] },
     { id:"c3-6", name:"実施事務従事者の監督的地位チェック", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"実施事務従事者が対象者の解雇・異動等の権限を持つ立場でないかを確認する。",
-      check:"人事評価権・異動権の有無。", options:"問題なし／要確認／交代が必要",
-      law:"法令上必要", required:["decision","confirmDone"] },
+      check:"実施事務従事者は、人事権・監督権を有する立場ではありませんか？",
+      options:"いいえ（人事権・監督権なし）／はい（人事権・監督権あり）",
+      warnIfDecision:"はい（人事権・監督権あり）",
+      warnText:"⚠️ 人事権・監督権を有する方は、実施事務従事者になれません（安衛則52-10②）。担当者の変更をご検討ください。",
+      law:"法令上必要", required:["decision"] },
     { id:"c3-8", name:"守秘義務の説明", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"個人結果等の秘密を扱う関係者に守秘義務を説明する。",
       check:"説明資料・同意書の有無。", options:"実施済み／未実施",
-      law:"法令上必要", required:["done"] },
-    { id:"c3-9", name:"企業のオンライン保健室担当者の登録", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"当社側の窓口担当者を記録する。", check:"—", options:"—",
-      law:"契約上必要", required:["decision"] }
+      law:"法令上必要", required:["done"] }
   ],
   4: [
     { id:"c4-shingi", name:"必須審議事項の調査審議", type:"決定する項目", ownerGroup:"会社責任者",
@@ -968,8 +981,36 @@ window.setTemplateInline = function(id, idxStr){
   renderNav(); updateHeaderStats(); renderMain();
 };
 
+function multiFieldCellHtml(it, st, locked){
+  var html = '<div style="display:flex; flex-direction:column; gap:.35rem;">';
+  it.fields.forEach(function(fd){
+    var val = st[fd.key] || "";
+    var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.24rem .4rem; font-size:.78rem; font-family:var(--font-body);" +
+      (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
+    var disabledAttr = locked ? "disabled" : "";
+    html += '<div style="display:flex; align-items:center; gap:.4rem;">';
+    html += '<span style="font-size:.66rem; color:var(--text-sub); flex:0 0 auto; min-width:3.6em;">' + escapeHtml(fd.label) + '</span>';
+    if (fd.options && fd.combo){
+      var listId = "mf-" + it.id + "-" + fd.key + "-list";
+      html += '<input type="text" list="' + listId + '" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">' +
+        '<datalist id="' + listId + '">' + fd.options.map(function(o){ return '<option value="' + escapeHtml(o) + '">'; }).join("") + '</datalist>';
+    } else if (fd.options){
+      html += '<select onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
+      html += '<option value="">選択</option>';
+      fd.options.forEach(function(o){ html += '<option ' + (o===val?"selected":"") + '>' + escapeHtml(o) + '</option>'; });
+      html += '</select>';
+    } else {
+      html += '<input type="text" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
 function decisionCellHtml(it, st){
   var locked = st.status === "完了";
+  if (it.fields) return multiFieldCellHtml(it, st, locked);
   if (it.textOptions) return templateCellHtml(it, st, locked);
   var opts = (it.options && it.options !== "—") ? it.options.split(/[／\/]/).map(function(s){ return s.trim(); }).filter(Boolean) : null;
   var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; font-family:var(--font-body);" +
@@ -982,6 +1023,9 @@ function decisionCellHtml(it, st){
       html += '<option ' + (o === st.decision ? "selected" : "") + '>' + escapeHtml(o) + '</option>';
     });
     html += '</select>';
+    if (it.warnIfDecision && st.decision === it.warnIfDecision){
+      html += '<div style="margin-top:.35rem; font-size:.74rem; font-weight:700; color:var(--error-700); background:var(--error-50); border-radius:6px; padding:.35rem .5rem;">' + escapeHtml(it.warnText||"この選択は要注意です。") + '</div>';
+    }
     return html;
   }
   return '<input type="text" value="' + escapeHtml(st.decision||"").replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
@@ -1204,12 +1248,15 @@ function renderMain(){
     '<span><span class="dot turn-doctor"></span>医師対応待ち</span>' +
   '</div>';
 
-  var simpleChapter = items.every(function(it){
+  var hasCustomFields = items.some(function(it){ return !!it.fields; });
+  var simpleChapter = !hasCustomFields && items.every(function(it){
     return it.required && it.required.length === 1 && it.required[0] === "decision";
   });
 
   html += '<table class="item-table"><thead><tr>' +
-    (simpleChapter
+    (hasCustomFields
+      ? '<th>状態</th><th>確認項目</th><th>決定内容・確認結果</th>'
+      : simpleChapter
       ? '<th>状態</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th>'
       : '<th>状態</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>実施日</th>') +
     '</tr></thead><tbody>';
@@ -1220,8 +1267,7 @@ function renderMain(){
       '<td>' + statusCellHtml(it, st) + '</td>' +
       '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
       '<td>' + decisionCellHtml(it, st) + '</td>' +
-      '<td>' + ownerCellHtml(it, st) + '</td>' +
-      (simpleChapter ? '' : '<td>' + dateCellHtml(it, st, "plan") + '</td><td>' + dateCellHtml(it, st, "done") + '</td>') +
+      (hasCustomFields ? '' : '<td>' + ownerCellHtml(it, st) + '</td>' + (simpleChapter ? '' : '<td>' + dateCellHtml(it, st, "plan") + '</td><td>' + dateCellHtml(it, st, "done") + '</td>')) +
     '</tr>';
   });
   html += '</tbody></table>';
@@ -1260,7 +1306,7 @@ function openDrawer(id){
   if (isCustom){
     showFields.forEach(function(fd){
       fieldKeys.push(fd.key);
-      body += fieldHTML(id, fd.key, fd.label, st[fd.key], isReqEmpty(item, fd.key), fd.options || null, fd.type || null, locked);
+      body += fieldHTML(id, fd.key, fd.label, st[fd.key], isReqEmpty(item, fd.key), fd.options || null, fd.type || null, locked, fd.combo);
     });
   } else {
     var FIELD_DEFS = {
@@ -1372,11 +1418,15 @@ function renderCompleteBox(item){
   });
 }
 
-function fieldHTML(itemId, key, label, value, isEmpty, options, type, locked){
+function fieldHTML(itemId, key, label, value, isEmpty, options, type, locked, combo){
   var id = "d-" + itemId + "-" + key;
   var disabledAttr = locked ? "disabled" : "";
   var inner;
-  if (options){
+  if (options && combo){
+    var listId = id + "-list";
+    inner = '<input id="' + id + '" list="' + listId + '" type="text" value="' + (value||"").replace(/"/g,"&quot;") + '" placeholder="入力または候補から選択" ' + disabledAttr + '>' +
+      '<datalist id="' + listId + '">' + options.map(function(o){ return '<option value="' + o + '">'; }).join("") + '</datalist>';
+  } else if (options){
     inner = '<select id="' + id + '" ' + disabledAttr + '>' + '<option value="">選択してください</option>' +
       options.map(function(o){ return '<option ' + (o===value?"selected":"") + '>' + o + '</option>'; }).join("") + '</select>';
   } else {
