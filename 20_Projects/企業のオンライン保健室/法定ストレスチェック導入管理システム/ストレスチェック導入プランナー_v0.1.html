@@ -1,0 +1,593 @@
+<title>ストレスチェック導入プランナー</title>
+<style>
+  :root{
+    --brand:#74B2E0; --brand-deep:#2E6BA6; --brand-deeper:#1A3A5C; --brand-soft:#A3CDE8; --brand-line:#C5DDE9;
+    --page-bg:#F2F8FC; --card-bg:#FFFFFF; --card-bg-tint:#F8FBFE;
+    --text-heading:#1A3A5C; --text-body:#4A4A4A; --text-sub:#666666;
+    --border:#E0E0E0; --border-soft:#D6E9F5;
+    --success-50:#E6F5EB; --success-700:#1B7D3A;
+    --warning-50:#FFF8E1; --warning-700:#C68A00;
+    --info-50:#F2F8FC;
+    --header-gradient: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 100%);
+    --font-head:"Hiragino Sans","Yu Gothic UI","Segoe UI",system-ui,sans-serif;
+    --font-body:"Hiragino Kaku Gothic ProN","Yu Gothic","Segoe UI",system-ui,sans-serif;
+    --shadow-card: 0 1px 2px rgba(26,58,92,.06), 0 8px 24px rgba(26,58,92,.07);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --page-bg:#0F1B2A; --card-bg:#1A2940; --card-bg-tint:#192538;
+      --text-heading:#A3CDE8; --text-body:#CCDDEE; --text-sub:#8899AA;
+      --border:#2A3950; --border-soft:#233350; --brand-line:#2A3950;
+      --header-gradient: linear-gradient(135deg, #1A3A5C 0%, #2E6BA6 100%);
+      --success-50:#12271B; --success-700:#7DD39B; --warning-50:#2A2311; --warning-700:#FFD666;
+      --info-50:#12233A;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --page-bg:#0F1B2A; --card-bg:#1A2940; --card-bg-tint:#192538;
+    --text-heading:#A3CDE8; --text-body:#CCDDEE; --text-sub:#8899AA;
+    --border:#2A3950; --border-soft:#233350; --brand-line:#2A3950;
+    --header-gradient: linear-gradient(135deg, #1A3A5C 0%, #2E6BA6 100%);
+    --success-50:#12271B; --success-700:#7DD39B; --warning-50:#2A2311; --warning-700:#FFD666;
+    --info-50:#12233A;
+    color-scheme: dark;
+  }
+  :root[data-theme="light"]{
+    --page-bg:#F2F8FC; --card-bg:#FFFFFF; --card-bg-tint:#F8FBFE;
+    --text-heading:#1A3A5C; --text-body:#4A4A4A; --text-sub:#666666;
+    --border:#E0E0E0; --border-soft:#D6E9F5; --brand-line:#C5DDE9;
+    --header-gradient: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 100%);
+    --success-50:#E6F5EB; --success-700:#1B7D3A; --warning-50:#FFF8E1; --warning-700:#C68A00;
+    --info-50:#F2F8FC;
+    color-scheme: light;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--page-bg); color:var(--text-body);
+    font-family:var(--font-body); line-height:1.7; font-size:15.5px;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:var(--font-head); color:var(--text-heading); text-wrap:balance; }
+
+  .topbar{ background:var(--header-gradient); color:#fff; padding:1.9rem clamp(1.2rem,4vw,3rem) 1.7rem; }
+  .topbar .eyebrow{ font-size:.72rem; letter-spacing:.14em; font-weight:700; text-transform:uppercase; color:#EAF4FC; opacity:.9; margin:0 0 .5rem; }
+  .topbar h1{ margin:0 0 .35rem; font-size:clamp(1.4rem,2.4vw,1.85rem); font-weight:800; color:#fff; letter-spacing:-.01em; }
+  .topbar p.sub{ margin:0; font-size:.94rem; color:#EAF4FC; opacity:.95; max-width:52em; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:2rem clamp(1.2rem,4vw,3rem) 4rem; }
+
+  /* ---- company info bar ---- */
+  .company-bar{
+    background:var(--card-bg); border:1.5px dashed var(--brand-line); border-radius:14px;
+    padding:1.1rem 1.3rem; margin:0 0 2rem; display:grid; grid-template-columns:2fr 1.2fr 1fr; gap:1rem;
+    box-shadow:var(--shadow-card);
+  }
+  @media (max-width:700px){ .company-bar{ grid-template-columns:1fr; } }
+  .company-bar .cfield label{ display:block; font-size:.7rem; font-weight:700; letter-spacing:.04em; color:var(--text-sub); text-transform:uppercase; margin-bottom:.3rem; }
+  .company-bar input[type=text], .company-bar input[type=date]{
+    width:100%; border:none; border-bottom:1.5px solid var(--border); background:transparent;
+    font-family:var(--font-head); font-size:1.05rem; font-weight:700; color:var(--text-heading);
+    padding:.2rem .1rem; outline:none;
+  }
+  .company-bar input::placeholder{ color:var(--text-sub); font-weight:500; }
+  .company-bar input:focus{ border-bottom-color:var(--brand); }
+  .save-indicator{ font-size:.72rem; color:var(--text-sub); display:flex; align-items:center; gap:.4em; margin-top:.4rem; grid-column:1/-1; }
+  .save-indicator .dot{ width:6px; height:6px; border-radius:50%; background:var(--success-700); opacity:0; transition:opacity .2s; }
+  .save-indicator.show .dot{ opacity:1; }
+
+  /* ---- section heading ---- */
+  .sec-head{ display:flex; align-items:baseline; gap:.6rem; margin:0 0 1.1rem; }
+  .sec-head .idx{ font-variant-numeric:tabular-nums; color:var(--brand); font-size:.85rem; font-weight:800; background:var(--info-50); border:1px solid var(--brand-line); border-radius:8px; padding:.1rem .5rem; }
+  .sec-head h2{ margin:0; font-size:1.2rem; font-weight:800; }
+  .sec-note{ color:var(--text-sub); font-size:.85rem; margin:-.6rem 0 1.3rem; }
+
+  /* ================= CALCULATOR ================= */
+  .calc-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:1.4rem; align-items:start; }
+  @media (max-width:860px){ .calc-grid{ grid-template-columns:1fr; } }
+
+  .panel{ background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:1.5rem 1.6rem; box-shadow:var(--shadow-card); }
+
+  .field{ margin:0 0 1.4rem; }
+  .field:last-child{ margin-bottom:0; }
+  .field label.field-label{ display:block; font-size:.82rem; font-weight:700; color:var(--text-heading); margin-bottom:.5rem; }
+  .num-input{
+    display:flex; align-items:center; gap:.6rem;
+    border:1.5px solid var(--border); border-radius:10px; padding:.5rem .7rem; background:var(--card-bg-tint);
+  }
+  .num-input input[type=number]{
+    border:none; background:transparent; font-size:1.3rem; font-weight:800; color:var(--text-heading);
+    width:100%; font-variant-numeric:tabular-nums; outline:none; font-family:var(--font-head);
+  }
+  .num-input .unit{ color:var(--text-sub); font-size:.85rem; white-space:nowrap; }
+
+  .plan-choices{ display:grid; grid-template-columns:repeat(3,1fr); gap:.7rem; }
+  @media (max-width:600px){ .plan-choices{ grid-template-columns:1fr; } }
+  .plan-choice{ position:relative; }
+  .plan-choice input{ position:absolute; opacity:0; inset:0; width:100%; height:100%; cursor:pointer; margin:0; }
+  .plan-choice .card{
+    border:1.5px solid var(--border); border-radius:12px; padding:.9rem 1rem; height:100%;
+    display:flex; flex-direction:column; gap:.3rem; transition:border-color .15s, box-shadow .15s;
+  }
+  .plan-choice .card .pname{ font-weight:800; color:var(--text-heading); font-size:.95rem; display:flex; justify-content:space-between; align-items:center; }
+  .plan-choice .card .pname .reco{ font-size:.62rem; font-weight:700; background:var(--brand); color:#fff; border-radius:999px; padding:.1rem .5rem; }
+  .plan-choice .card .pdesc{ font-size:.76rem; color:var(--text-sub); line-height:1.5; min-height:2.4em; }
+  .plan-choice .card .punit{ font-size:.85rem; font-weight:700; color:var(--brand-deep); font-variant-numeric:tabular-nums; }
+  :root[data-theme="dark"] .plan-choice .card .punit, [data-theme="dark"] .plan-choice .card .punit{ color:var(--brand-soft); }
+  .plan-choice input:checked + .card{ border-color:var(--brand); box-shadow:0 0 0 2px var(--brand) inset; background:var(--card-bg-tint); }
+  .plan-choice input:focus-visible + .card{ outline:2px solid var(--brand-deep); outline-offset:2px; }
+
+  .opt-list{ display:flex; flex-direction:column; gap:.6rem; }
+  .opt-row{
+    display:flex; align-items:center; gap:.7rem;
+    border:1px solid var(--border); border-radius:10px; padding:.65rem .85rem;
+    background:var(--card-bg-tint);
+  }
+  .opt-row.is-disabled{ opacity:.55; }
+  .opt-row input[type=checkbox]{ width:1.2em; height:1.2em; accent-color:var(--brand-deep); flex:0 0 auto; }
+  .opt-row .opt-text{ flex:1; min-width:0; }
+  .opt-row .opt-name{ font-size:.88rem; font-weight:700; color:var(--text-heading); }
+  .opt-row .opt-price{ font-size:.76rem; color:var(--text-sub); }
+  .opt-row .opt-tag{ font-size:.66rem; font-weight:700; background:var(--info-50); color:var(--brand-deep); border:1px solid var(--brand-line); border-radius:999px; padding:.12rem .5rem; white-space:nowrap; }
+
+  .pool-note{
+    margin-top:.9rem; font-size:.82rem; padding:.7rem .9rem; border-radius:10px;
+    background:var(--info-50); border:1px solid var(--brand-line); color:var(--text-body);
+  }
+  .pool-note b{ color:var(--text-heading); font-variant-numeric:tabular-nums; }
+
+  /* ---- result panel ---- */
+  .result{ position:sticky; top:1.2rem; }
+  .result .headline{ font-size:.78rem; font-weight:700; letter-spacing:.06em; color:var(--text-sub); text-transform:uppercase; margin-bottom:.3rem; }
+  .result .total{ font-family:var(--font-head); font-size:2.5rem; font-weight:800; color:var(--brand-deep); font-variant-numeric:tabular-nums; line-height:1.15; }
+  :root[data-theme="dark"] .result .total, [data-theme="dark"] .result .total{ color:var(--brand-soft); }
+  .result .total small{ font-size:.4em; font-weight:700; color:var(--text-sub); margin-left:.2em; }
+  .result .permonth{ font-size:.85rem; color:var(--text-sub); margin:.15rem 0 1.1rem; }
+
+  .breakdown{ display:flex; flex-direction:column; gap:0; border-top:1px solid var(--border); margin-top:.4rem; }
+  .breakdown .row{ display:flex; justify-content:space-between; gap:1rem; padding:.55rem 0; border-bottom:1px solid var(--border); font-size:.86rem; }
+  .breakdown .row .k{ color:var(--text-body); }
+  .breakdown .row .v{ font-variant-numeric:tabular-nums; font-weight:700; color:var(--text-heading); white-space:nowrap; }
+  .breakdown .row.sub .k{ color:var(--text-sub); padding-left:1em; font-size:.82rem; }
+  .breakdown .row.sub .v{ color:var(--text-sub); font-weight:600; font-size:.82rem; }
+  .breakdown .row.init .v{ color:var(--warning-700); }
+
+  .disclaimer{ font-size:.74rem; color:var(--text-sub); margin-top:1rem; padding-top:.9rem; border-top:1px dashed var(--border); }
+
+  /* ================= FLOW ================= */
+  .flow-track{ display:flex; flex-direction:column; gap:.8rem; margin:0; }
+  .flow-step{
+    background:var(--card-bg); border:1.5px solid var(--border);
+    border-radius:14px; padding:1rem 1.2rem; box-shadow:var(--shadow-card);
+    display:grid; grid-template-columns:auto 1fr auto; gap:.9rem; align-items:start;
+  }
+  @media (max-width:700px){ .flow-step{ grid-template-columns:auto 1fr; } .flow-step .who{ grid-column:2; } }
+  .flow-step.done{ border-color:var(--success-700); background:var(--success-50); }
+  .flow-step .num{
+    width:2em; height:2em; border-radius:50%; background:var(--info-50); border:1px solid var(--brand-line);
+    color:var(--brand-deep); font-weight:800; font-size:.88rem; display:flex; align-items:center; justify-content:center;
+    font-variant-numeric:tabular-nums; flex:0 0 auto;
+  }
+  .flow-step.done .num{ background:var(--success-700); border-color:var(--success-700); color:#fff; }
+  .flow-step .body{ min-width:0; }
+  .flow-step .title-row{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .flow-step .title{ font-weight:800; color:var(--text-heading); font-size:.95rem; margin:0; }
+  .flow-step .desc{ font-size:.82rem; color:var(--text-sub); line-height:1.55; margin:.25rem 0 .6rem; }
+  .flow-step .who{ font-size:.68rem; font-weight:700; padding:.15rem .55rem; border-radius:999px; background:var(--info-50); color:var(--brand-deep); border:1px solid var(--brand-line); white-space:nowrap; flex:0 0 auto; }
+  .flow-step .who.company{ background:var(--warning-50); color:var(--warning-700); border-color:transparent; }
+  .flow-step .who.staff{ background:var(--card-bg-tint); color:var(--text-sub); border-color:var(--border); }
+  .flow-step .check-col{ display:flex; align-items:flex-start; padding-top:.15rem; }
+  .flow-step input[type=checkbox]{ width:1.25em; height:1.25em; accent-color:var(--success-700); }
+  .flow-step textarea{
+    width:100%; min-height:2.4em; resize:vertical; border:1px solid var(--border); border-radius:8px;
+    background:var(--card-bg-tint); color:var(--text-body); font-family:var(--font-body); font-size:.83rem;
+    padding:.5rem .65rem; outline:none;
+  }
+  .flow-step textarea:focus{ border-color:var(--brand); }
+  .flow-step textarea::placeholder{ color:var(--text-sub); }
+
+  .progress-bar{ height:6px; border-radius:999px; background:var(--border-soft); overflow:hidden; margin:0 0 1.1rem; }
+  .progress-bar .fill{ height:100%; background:var(--brand); border-radius:999px; transition:width .25s ease; width:0%; }
+  @media (prefers-reduced-motion: reduce){ .progress-bar .fill{ transition:none; } }
+  .progress-label{ display:flex; justify-content:space-between; font-size:.8rem; color:var(--text-sub); margin-bottom:.5rem; }
+  .progress-label b{ color:var(--text-heading); font-variant-numeric:tabular-nums; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 clamp(1.2rem,4vw,3rem) 3rem; color:var(--text-sub); font-size:.78rem; }
+</style>
+
+<div class="topbar">
+  <p class="eyebrow">企業のオンライン保健室</p>
+  <h1>ストレスチェック導入プランナー</h1>
+  <p class="sub">人数とプランを選ぶと年間費用の目安がその場で出ます。下の8ステップは、会社の担当者ご自身でチェック・メモを書き込みながら進捗管理いただけます（入力内容はこのブラウザに自動保存されます）。</p>
+</div>
+
+<div class="wrap">
+
+  <div class="company-bar">
+    <div class="cfield">
+      <label for="company-name">会社名</label>
+      <input type="text" id="company-name" placeholder="◯◯株式会社">
+    </div>
+    <div class="cfield">
+      <label for="company-contact">ご担当者名</label>
+      <input type="text" id="company-contact" placeholder="山田 太郎 様">
+    </div>
+    <div class="cfield">
+      <label for="company-date">ご契約予定日</label>
+      <input type="date" id="company-date">
+    </div>
+    <div class="save-indicator" id="save-indicator"><span class="dot"></span><span id="save-text">このブラウザに自動保存されます</span></div>
+  </div>
+
+  <section aria-labelledby="calc-h">
+    <div class="sec-head"><span class="idx">1</span><h2 id="calc-h">料金シミュレーター</h2></div>
+    <p class="sec-note">対象人数・プラン・オプションを選ぶと、右側の見積りがリアルタイムで更新されます。</p>
+
+    <div class="calc-grid">
+      <div class="panel">
+
+        <div class="field">
+          <label class="field-label" for="headcount">対象人数</label>
+          <div class="num-input">
+            <input type="number" id="headcount" value="20" min="1" max="2000" step="1">
+            <span class="unit">名</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">プラン</label>
+          <div class="plan-choices" id="plan-choices">
+            <label class="plan-choice">
+              <input type="radio" name="plan" value="light">
+              <span class="card">
+                <span class="pname">ライト</span>
+                <span class="pdesc">自社運営（システム貸与のみ）</span>
+                <span class="punit">2,600円 × 人数 / 年</span>
+              </span>
+            </label>
+            <label class="plan-choice">
+              <input type="radio" name="plan" value="standard">
+              <span class="card">
+                <span class="pname">スタンダード</span>
+                <span class="pdesc">丸投げ・ストレスチェックのみ</span>
+                <span class="punit">5,400円 × 人数 / 年</span>
+              </span>
+            </label>
+            <label class="plan-choice">
+              <input type="radio" name="plan" value="premium" checked>
+              <span class="card">
+                <span class="pname">プレミアム<span class="reco">推奨</span></span>
+                <span class="pdesc">丸投げ＋産業医連携＋面談・相談まで</span>
+                <span class="punit">14,400円 × 人数 / 年</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">オプション</label>
+          <div class="opt-list">
+            <label class="opt-row">
+              <input type="checkbox" id="opt-chat">
+              <span class="opt-text">
+                <span class="opt-name">チャット相談（会社契約）</span>
+                <span class="opt-price">窓口は会社担当者・10,000円/月</span>
+              </span>
+            </label>
+            <label class="opt-row" id="row-newsletter">
+              <input type="checkbox" id="opt-newsletter">
+              <span class="opt-text">
+                <span class="opt-name">保健室便り</span>
+                <span class="opt-price" id="newsletter-price">1,000円/月（年間12,000円）</span>
+              </span>
+              <span class="opt-tag" id="newsletter-tag" hidden>プレミアムは標準搭載</span>
+            </label>
+          </div>
+
+          <div class="field" style="margin-top:1rem;">
+            <label class="field-label" for="sessions">面談・相談の想定利用回数（年間）</label>
+            <div class="num-input">
+              <input type="number" id="sessions" value="0" min="0" max="500" step="1">
+              <span class="unit">回（補足的面談／生活指導／産業医仲介の合計）</span>
+            </div>
+          </div>
+          <div class="pool-note" id="pool-note"></div>
+        </div>
+
+      </div>
+
+      <div class="panel result">
+        <p class="headline">年間費用の目安</p>
+        <p class="total" id="total-year">¥0</p>
+        <p class="permonth" id="permonth">月あたり目安 ¥0</p>
+
+        <div class="breakdown" id="breakdown"></div>
+
+        <p class="disclaimer">この金額は概算シミュレーターによる目安です。実際のご契約時には、対象人数の確定人数やオプション内容にもとづき正式にお見積りします。</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="flow-h" style="margin-top:2.6rem;">
+    <div class="sec-head"><span class="idx">2</span><h2 id="flow-h">導入までの流れ</h2></div>
+    <p class="sec-note">大きな流れは8ステップです。完了したらチェックを、進み具合や気になる点はメモ欄に書き込んでください。</p>
+
+    <div class="progress-label"><span>進捗</span><span><b id="progress-count">0</b> / 8 完了</span></div>
+    <div class="progress-bar"><div class="fill" id="progress-fill"></div></div>
+
+    <div class="flow-track" id="flow-track"></div>
+  </section>
+
+</div>
+
+<footer class="page-foot">企業のオンライン保健室 — ストレスチェック導入プランナー v0.1（このページの入力内容はご覧になっているブラウザにのみ保存されます）</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var PLANS = {
+    light:    { name:"ライト",      unit:2600,  init:50000, pool:false },
+    standard: { name:"スタンダード", unit:5400,  init:50000, pool:false },
+    premium:  { name:"プレミアム",   unit:14400, init:50000, pool:true, poolPer10:6 }
+  };
+  var SESSION_RATE = 15000;
+  var CHAT_YEAR = 10000 * 12;
+  var NEWSLETTER_YEAR = 1000 * 12;
+
+  var STEPS = [
+    { title:"ご契約・プランのご確定", who:"当社と会社", whoClass:"", desc:"人数・プラン・オプションを確定し、契約書を締結します。" },
+    { title:"実施体制・対象者の決定", who:"会社にご対応いただく", whoClass:"company", desc:"会社責任者・会社管理者を決め、対象となる社員の名簿を確定します。" },
+    { title:"社員への周知", who:"会社にご対応いただく", whoClass:"company", desc:"制度の目的・実施期間・不利益取扱いをしないことを社員へ案内します（案内文は当社がサポート）。" },
+    { title:"ストレスチェック受検", who:"社員", whoClass:"staff", desc:"社員一人ひとりがオンラインで受検します。" },
+    { title:"結果通知・高ストレス者対応", who:"当社が対応", whoClass:"", desc:"本人へ結果を直接通知。高ストレス者には面談・産業医連携をご案内します。" },
+    { title:"会社への報告", who:"当社が対応", whoClass:"", desc:"受検率など、個人情報を含まない実施状況報告書をお渡しします。" },
+    { title:"行政報告（対象企業のみ）", who:"当社が対応", whoClass:"", desc:"常時50人以上の事業場は、労基署への報告が必要です。" },
+    { title:"振り返り・次年度への引き継ぎ", who:"当社と会社", whoClass:"", desc:"今年度の実施状況を振り返り、次年度の計画につなげます。" }
+  ];
+
+  var yen = function(n){ return "¥" + Math.round(n).toLocaleString("ja-JP"); };
+
+  var headcountEl = document.getElementById("headcount");
+  var sessionsEl = document.getElementById("sessions");
+  var chatEl = document.getElementById("opt-chat");
+  var newsletterEl = document.getElementById("opt-newsletter");
+  var newsletterRow = document.getElementById("row-newsletter");
+  var newsletterTag = document.getElementById("newsletter-tag");
+  var newsletterPrice = document.getElementById("newsletter-price");
+  var poolNote = document.getElementById("pool-note");
+  var breakdownEl = document.getElementById("breakdown");
+  var totalYearEl = document.getElementById("total-year");
+  var permonthEl = document.getElementById("permonth");
+  var companyNameEl = document.getElementById("company-name");
+  var companyContactEl = document.getElementById("company-contact");
+  var companyDateEl = document.getElementById("company-date");
+  var saveIndicator = document.getElementById("save-indicator");
+
+  function currentPlanKey(){
+    var checked = document.querySelector('input[name="plan"]:checked');
+    return checked ? checked.value : "premium";
+  }
+  function setPlanKey(key){
+    var el = document.querySelector('input[name="plan"][value="' + key + '"]');
+    if (el) el.checked = true;
+  }
+
+  function addRow(label, value, opts){
+    opts = opts || {};
+    var row = document.createElement("div");
+    row.className = "row" + (opts.sub ? " sub" : "") + (opts.init ? " init" : "");
+    var k = document.createElement("span"); k.className = "k"; k.textContent = label;
+    var v = document.createElement("span"); v.className = "v"; v.textContent = value;
+    row.appendChild(k); row.appendChild(v);
+    breakdownEl.appendChild(row);
+  }
+
+  function recalc(){
+    var headcount = Math.max(1, parseInt(headcountEl.value, 10) || 1);
+    var planKey = currentPlanKey();
+    var plan = PLANS[planKey];
+    var sessions = Math.max(0, parseInt(sessionsEl.value, 10) || 0);
+
+    var isPremium = planKey === "premium";
+    newsletterRow.classList.toggle("is-disabled", isPremium);
+    newsletterEl.disabled = isPremium;
+    newsletterTag.hidden = !isPremium;
+    if (isPremium){
+      newsletterEl.checked = true;
+      newsletterPrice.textContent = "プレミアムに標準搭載（追加費用なし）";
+    } else {
+      newsletterPrice.textContent = "1,000円/月（年間12,000円）";
+    }
+
+    var basePlanYear = plan.unit * headcount;
+    var initFee = plan.init;
+
+    var freePool = 0;
+    var extraSessions = sessions;
+    if (plan.pool){
+      freePool = Math.ceil(headcount / 10) * plan.poolPer10;
+      extraSessions = Math.max(0, sessions - freePool);
+      poolNote.hidden = false;
+      poolNote.innerHTML = "プレミアムの無料枠：対象人数 " + headcount + " 名 → 年間 <b>" + freePool + " 回</b>まで無料（補足的面談・生活指導・産業医仲介を含む）。想定利用 " + sessions + " 回のうち、無料枠超過分 <b>" + extraSessions + " 回</b>が都度課金されます。";
+    } else {
+      poolNote.hidden = false;
+      poolNote.innerHTML = "ライト・スタンダードには無料の面談枠は付いていません（後からオプション追加可）。想定利用 " + sessions + " 回はすべて都度課金です。";
+    }
+
+    var sessionCost = extraSessions * SESSION_RATE;
+    var chatCost = chatEl.checked ? CHAT_YEAR : 0;
+    var newsletterCost = (!isPremium && newsletterEl.checked) ? NEWSLETTER_YEAR : 0;
+
+    var totalYear = basePlanYear + sessionCost + chatCost + newsletterCost;
+    var totalFirstYear = totalYear + initFee;
+
+    totalYearEl.innerHTML = yen(totalFirstYear) + "<small>（初年度・初期費用込）</small>";
+    permonthEl.textContent = "2年目以降の年額目安 " + yen(totalYear) + "（月あたり約 " + yen(totalYear/12) + "）";
+
+    breakdownEl.innerHTML = "";
+    addRow(plan.name + "プラン基本料（" + headcount + "名 × " + plan.unit.toLocaleString("ja-JP") + "円）", yen(basePlanYear));
+    if (sessionCost > 0) addRow("面談・相談の超過分（" + extraSessions + "回 × 15,000円）", yen(sessionCost));
+    if (chatCost > 0) addRow("チャット相談オプション", yen(chatCost));
+    if (newsletterCost > 0) addRow("保健室便りオプション", yen(newsletterCost));
+    addRow("初期費用（初年度のみ）", yen(initFee), { init:true });
+
+    persist();
+  }
+
+  // ---------------- Flow steps ----------------
+  var track = document.getElementById("flow-track");
+  var progressFill = document.getElementById("progress-fill");
+  var progressCount = document.getElementById("progress-count");
+  var stepEls = [];
+
+  function updateProgress(){
+    var done = 0;
+    stepEls.forEach(function(s){ if (s.checkbox.checked) done++; });
+    progressCount.textContent = done;
+    progressFill.style.width = (done / STEPS.length * 100) + "%";
+  }
+
+  STEPS.forEach(function(step, i){
+    var card = document.createElement("div");
+    card.className = "flow-step";
+
+    var num = document.createElement("span");
+    num.className = "num";
+    num.textContent = i + 1;
+
+    var body = document.createElement("div");
+    body.className = "body";
+
+    var titleRow = document.createElement("div");
+    titleRow.className = "title-row";
+    var title = document.createElement("p");
+    title.className = "title";
+    title.textContent = step.title;
+    titleRow.appendChild(title);
+
+    var desc = document.createElement("p");
+    desc.className = "desc";
+    desc.textContent = step.desc;
+
+    var note = document.createElement("textarea");
+    note.placeholder = "メモ・進捗コメントを書き込めます";
+    note.setAttribute("aria-label", (i+1) + "番目のステップのメモ");
+
+    body.appendChild(titleRow);
+    body.appendChild(desc);
+    body.appendChild(note);
+
+    var who = document.createElement("span");
+    who.className = "who" + (step.whoClass ? " " + step.whoClass : "");
+    who.textContent = step.who;
+
+    var checkCol = document.createElement("div");
+    checkCol.className = "check-col";
+    var cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.setAttribute("aria-label", (i+1) + "番目のステップ完了");
+    checkCol.appendChild(cb);
+
+    card.appendChild(num);
+    card.appendChild(body);
+    card.appendChild(who);
+    card.appendChild(checkCol);
+    track.appendChild(card);
+
+    stepEls.push({ card: card, checkbox: cb, note: note });
+
+    cb.addEventListener("change", function(){
+      card.classList.toggle("done", cb.checked);
+      updateProgress();
+      persist();
+    });
+    note.addEventListener("input", persist);
+  });
+
+  // ---------------- Persistence (per browser, keyed by company name) ----------------
+  var saveTimer = null;
+  function storageKey(){
+    var name = (companyNameEl.value || "default").trim().toLowerCase();
+    var slug = name.replace(/[^a-z0-9぀-ヿ一-龯]+/g, "-") || "default";
+    return "sc_planner_v1_" + slug;
+  }
+
+  function persist(){
+    try{
+      var data = {
+        companyName: companyNameEl.value,
+        companyContact: companyContactEl.value,
+        companyDate: companyDateEl.value,
+        headcount: headcountEl.value,
+        plan: currentPlanKey(),
+        chat: chatEl.checked,
+        newsletter: newsletterEl.checked,
+        sessions: sessionsEl.value,
+        steps: stepEls.map(function(s){ return { done: s.checkbox.checked, note: s.note.value }; })
+      };
+      localStorage.setItem(storageKey(), JSON.stringify(data));
+      showSaved();
+    } catch(e){ /* localStorage unavailable: silently skip persistence */ }
+  }
+
+  function showSaved(){
+    saveIndicator.classList.add("show");
+    document.getElementById("save-text").textContent = "保存しました";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      saveIndicator.classList.remove("show");
+      document.getElementById("save-text").textContent = "このブラウザに自動保存されます";
+    }, 1600);
+  }
+
+  function restore(){
+    try{
+      var raw = localStorage.getItem(storageKey());
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      if (data.companyContact) companyContactEl.value = data.companyContact;
+      if (data.companyDate) companyDateEl.value = data.companyDate;
+      if (data.headcount) headcountEl.value = data.headcount;
+      if (data.plan) setPlanKey(data.plan);
+      chatEl.checked = !!data.chat;
+      if (typeof data.sessions !== "undefined") sessionsEl.value = data.sessions;
+      if (data.steps){
+        data.steps.forEach(function(s, i){
+          if (!stepEls[i]) return;
+          stepEls[i].checkbox.checked = !!s.done;
+          stepEls[i].card.classList.toggle("done", !!s.done);
+          stepEls[i].note.value = s.note || "";
+        });
+      }
+    } catch(e){ /* ignore corrupt state */ }
+  }
+
+  // restore company name first (used as storage key), then the rest under that key
+  (function(){
+    try{
+      var lastCompany = localStorage.getItem("sc_planner_last_company");
+      if (lastCompany) companyNameEl.value = lastCompany;
+    } catch(e){}
+  })();
+  restore();
+  updateProgress();
+  recalc();
+
+  headcountEl.addEventListener("input", recalc);
+  sessionsEl.addEventListener("input", recalc);
+  chatEl.addEventListener("change", recalc);
+  newsletterEl.addEventListener("change", recalc);
+  document.querySelectorAll('input[name="plan"]').forEach(function(el){ el.addEventListener("change", recalc); });
+  companyContactEl.addEventListener("input", persist);
+  companyDateEl.addEventListener("input", persist);
+  companyNameEl.addEventListener("change", function(){
+    try{ localStorage.setItem("sc_planner_last_company", companyNameEl.value); } catch(e){}
+    restore();
+    updateProgress();
+    recalc();
+  });
+})();
+</script>
