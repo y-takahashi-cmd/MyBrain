@@ -915,13 +915,17 @@ var ITEMS = {
     { id:"c7-handover", name:"引き継ぎ内容の確認", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
       section:"実施者へ引き継ぐ", sectionDesc:"社員名簿の登録が完了したら、企業側の準備は完了です。以降の受検案内・配信設定は、実施者が行います。",
       purpose:"企業側の準備が整ったことを、実施者へ引き継ぎます。",
+      referenceNote:"実施者が他社（外部委託）の場合は、引き継ぎ後に他社へ連絡してください。実施者が企業のオンライン保健室（社内担当）の場合は、面談日程取得URL（現在準備中）から日程を取得してください。",
       doneWhen:"実施者への引き継ぎが済み、状態を「完了」にしたら完了です。",
       check:"—", law:"契約上必要", required:["date"],
       fields:[
         { key:"companySide", label:"会社側準備担当者", autoFrom:"c3-5", autoKey:"name" },
         { key:"jisshisha", label:"実施者", autoFrom:"c3-3", autoKey:"person" },
         { key:"date", label:"引継日", type:"date" },
-        { key:"content", label:"引継内容", type:"textarea" }
+        { key:"content", label:"引継内容", type:"textarea" },
+        { key:"otherCompanyContact", label:"他社（実施者）への連絡", options:["未連絡","連絡済み"], showIf:{ itemId:"c3-3", key:"category", equals:"外部委託" } },
+        { key:"meetingUrlStatus", label:"面談日程取得URLの受け取り状況", options:["未受け取り","受け取った"], showIf:{ itemId:"c3-3", key:"category", equals:"社内担当" } },
+        { key:"meetingUrl", label:"面談日程取得URL", showIf:{ key:"meetingUrlStatus", equals:"受け取った" } }
       ] }
   ],
   8: [
@@ -1221,7 +1225,8 @@ function multiFieldCellHtml(it, st, locked){
   var html = '<div style="display:flex; flex-direction:column; gap:.35rem;">';
   it.fields.forEach(function(fd){
     if (fd.showIf){
-      var sv = st[fd.showIf.key];
+      var refSt2 = fd.showIf.itemId ? (STATE[fd.showIf.itemId] || {}) : st;
+      var sv = refSt2[fd.showIf.key];
       if (fd.showIf.equals !== undefined && sv !== fd.showIf.equals) return;
       if (fd.showIf.in && fd.showIf.in.indexOf(sv) === -1) return;
     }
@@ -1689,7 +1694,8 @@ function openDrawer(id){
   if (isCustom){
     showFields.forEach(function(fd){
       if (fd.showIf){
-        var sv = st[fd.showIf.key];
+        var refSt2 = fd.showIf.itemId ? (STATE[fd.showIf.itemId] || {}) : st;
+        var sv = refSt2[fd.showIf.key];
         if (fd.showIf.equals !== undefined && sv !== fd.showIf.equals) return;
         if (fd.showIf.in && fd.showIf.in.indexOf(sv) === -1) return;
       }
