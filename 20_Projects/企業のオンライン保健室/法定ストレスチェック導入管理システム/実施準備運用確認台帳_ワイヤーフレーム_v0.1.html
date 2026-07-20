@@ -648,6 +648,10 @@ var ITEMS = {
       law:"法令上必要", required:["done"] }
   ],
   4: [
+    { id:"c4-upload", name:"自社規程を取り込む", type:"実施する項目", ownerGroup:"会社担当者",
+      purpose:"すでに自社の実施規程・関連規程（Word・PDF）がある場合は、取り込んで審議の参考にする。",
+      check:"—", law:"会社運用ルール", required:["file"],
+      fields:[ { key:"file", label:"ファイル（Word・PDF）", type:"file" } ] },
     { id:"c4-umu", name:"衛生委員会等の有無", type:"確認する項目", ownerGroup:"会社責任者",
       purpose:"審議の場として衛生委員会等があるかを確認する。ない場合は代替の協議者を決める。",
       check:"常時50人未満等で衛生委員会がない場合は、代替の協議者を決める。",
@@ -708,49 +712,30 @@ var ITEMS = {
       ] }
   ],
   5: [
-    { id:"c5-upload", name:"自社規程を取り込む", type:"実施する項目", ownerGroup:"会社担当者",
-      purpose:"すでに自社の実施規程（Word・PDF）がある場合は、取り込んで内容を確認する。ない場合は、下の各項目をひとつずつ決めて新規に作成する。",
-      check:"—", law:"会社運用ルール", required:["file"],
-      fields:[ { key:"file", label:"ファイル（Word・PDF）", type:"file" } ] },
-    { id:"c5-topic-1", name:"規程反映：ストレスチェック制度の導入", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-2", name:"規程反映：実施時期", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-3", name:"規程反映：実施者", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-4", name:"規程反映：実施事務従事者", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-5", name:"規程反映：受検対象者", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-6", name:"規程反映：使用する調査票", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-7", name:"規程反映：高ストレス者の選定方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-8", name:"規程反映：面接指導体制", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-9", name:"規程反映：集団分析の実施", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-10", name:"規程反映：個人情報保護・結果の取扱い", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-11", name:"規程反映：結果の保存方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-12", name:"規程反映：労働者への周知方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] },
-    { id:"c5-topic-13", name:"規程反映：苦情処理窓口・プライバシー保護ルール", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
-      law:"指針（実施規程の作成を求める）", noLock:true, required:["decision"] }
+    { id:"c5-kitei-create", name:"実施規程（L2規程）の作成", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"「書く」のではなく「選ぶ」だけで規程を完成させる。AIで自動作成を選ぶと、これまでに入力した内容（実施者・対象者・実施時期・周知方法など）を反映して規程を自動生成する。",
+      check:"—", law:"指針（実施規程の作成を求める）", required:["decision"],
+      textOptions:[
+        { label:"AIで自動作成（おすすめ）", text: generateRegulationDraft },
+        { label:"厚労省標準テンプレートを使用", text:"厚生労働省のモデル実施規程をそのまま使用する。" },
+        { label:"前年度をコピー", text:"（前年度の実施規程をコピー。変更箇所は個別に見直してください）" },
+        { label:"自社規程を取り込む", text:"（04章でアップロードした自社規程ファイルの内容を使用）" },
+        { label:"自由作成", text:null }
+      ] },
+    { id:"c5-shuchi-kujou", name:"周知方法・苦情受付・プライバシー保護", type:"決定する項目", ownerGroup:"会社担当者",
+      purpose:"実施規程に記載する、労働者への周知方法・苦情受付窓口・プライバシー保護方針を選ぶ（文章は書かない）。",
+      check:"—", law:"指針", required:["method","window"],
+      fields:[
+        { key:"method", label:"周知方法（複数選択）", type:"checkboxes", options:["メール","イントラネット","掲示板","朝礼","Teams／Slack","書面配布"] },
+        { key:"window", label:"苦情受付窓口", options:["人事","総務","産業医","企業のオンライン保健室","外部相談窓口","その他"] },
+        { key:"privacy", label:"プライバシー保護（複数選択）", type:"checkboxes", options:["厚労省標準","個人情報保護規程に準拠","自社規程に準拠","AIで文章作成"] }
+      ] },
+    { id:"c5-custom", name:"会社独自に変更する箇所", type:"決定する項目", ownerGroup:"会社担当者",
+      purpose:"どこを会社独自に変更しますか？該当する箇所を選ぶ。",
+      check:"—", law:"会社運用ルール", required:["items"],
+      fields:[
+        { key:"items", label:"カスタム範囲（複数選択）", type:"checkboxes", options:["実施時期","実施方法","周知方法","苦情処理","保存期間","面接指導","集団分析","その他"] }
+      ] }
   ],
   6: [
     { id:"c6-chousahyou", name:"調査票の選定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
@@ -1044,7 +1029,7 @@ function templateCellHtml(it, st, locked){
   if (isFree){
     html += '<textarea onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" ' + disabledAttr + ' placeholder="自由入力" rows="2" style="width:100%; border:1px solid var(--border); border-radius:6px; padding:.3rem .4rem; font-size:.78rem; font-family:var(--font-body); resize:vertical;">' + escapeHtml(st.decision||"") + '</textarea>';
   } else if (chosen > -1 && st.decision){
-    html += '<div style="font-size:.72rem; color:var(--text-sub); line-height:1.4;">' + escapeHtml(st.decision.length > 70 ? st.decision.slice(0,70) + "…" : st.decision) + '</div>';
+    html += '<div style="font-size:.75rem; color:var(--text-body); line-height:1.6; white-space:pre-wrap; max-height:9em; overflow-y:auto; background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.45rem .6rem;">' + escapeHtml(st.decision) + '</div>';
   }
   html += '</div>';
   return html;
@@ -1057,7 +1042,8 @@ window.setTemplateInline = function(id, idxStr){
   var idx = parseInt(idxStr, 10);
   var opt = item.textOptions[idx];
   st.templateChoice = idx;
-  st.decision = (opt.text === null) ? "" : opt.text;
+  if (typeof opt.text === "function") st.decision = opt.text();
+  else st.decision = (opt.text === null) ? "" : opt.text;
   if (st.status === "完了" && !isReqMet(item)) st.status = "確認待ち";
   persistItems();
   renderNav(); updateHeaderStats(); renderMain();
@@ -1087,6 +1073,15 @@ function multiFieldCellHtml(it, st, locked){
     } else if (fd.type === "file"){
       html += '<input type="file" accept=".doc,.docx,.pdf" onclick="event.stopPropagation()" onchange="handleFileInline(\'' + it.id + '\',\'' + fd.key + '\', this)" ' + disabledAttr + ' style="' + boxStyle + ' padding:.12rem;">';
       if (val) html += '<span style="font-size:.7rem; color:var(--brand-deep); white-space:nowrap;">📎 ' + escapeHtml(val) + '</span>';
+    } else if (fd.type === "checkboxes"){
+      var selected = val ? val.split("、") : [];
+      html += '<div style="display:flex; flex-wrap:wrap; gap:.3rem;">';
+      fd.options.forEach(function(o){
+        var checked = selected.indexOf(o) > -1;
+        html += '<label onclick="event.stopPropagation()" style="display:inline-flex; align-items:center; gap:.3em; font-size:.74rem; border:1px solid ' + (checked?"var(--brand)":"var(--border)") + '; border-radius:999px; padding:.18rem .6rem; background:' + (checked?"var(--info-50)":"var(--card-bg)") + '; color:' + (checked?"var(--brand-deep)":"var(--text-body)") + '; cursor:' + (locked?"not-allowed":"pointer") + ';">' +
+          '<input type="checkbox" onchange="toggleCheckboxField(\'' + it.id + '\',\'' + fd.key + '\',\'' + o + '\', this.checked)" ' + (checked?"checked":"") + ' ' + disabledAttr + ' style="width:.9em; height:.9em; margin:0;">' + escapeHtml(o) + '</label>';
+      });
+      html += '</div>';
     } else {
       html += '<input type="text" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     }
@@ -1173,6 +1168,36 @@ window.handleFileInline = function(id, key, inputEl){
   persistItems();
   renderNav(); updateHeaderStats(); renderMain();
 };
+
+window.toggleCheckboxField = function(id, key, optionValue, isChecked){
+  var current = STATE[id][key] ? STATE[id][key].split("、") : [];
+  var idx = current.indexOf(optionValue);
+  if (isChecked && idx === -1) current.push(optionValue);
+  if (!isChecked && idx > -1) current.splice(idx, 1);
+  STATE[id][key] = current.join("、");
+  persistItems();
+  renderNav(); updateHeaderStats(); renderMain();
+};
+
+function generateRegulationDraft(){
+  var companyName = (document.getElementById("f-company") && document.getElementById("f-company").value) || "当社";
+  var responsible = (STATE["c3-1"] && STATE["c3-1"].name) || "（未定）";
+  var manager = (STATE["c3-2"] && STATE["c3-2"].name) || "（未定）";
+  var jisshisha = (STATE["c3-3"] && STATE["c3-3"].person) || "（未定）";
+  var taisho = (STATE["c7-1"] && STATE["c7-1"].decision) || "（未定）";
+  var chousahyou = (STATE["c6-chousahyou"] && STATE["c6-chousahyou"].decision) || "（未定）";
+  var shuchi = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].method) || "（未定）";
+  var kujou = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].window) || "（未定）";
+  return "（AI自動生成・要レビュー）\n" +
+    "1．目的\n" + companyName + "は、労働者のメンタルヘルス不調を未然に防止することを目的として、本規程に基づきストレスチェックを実施する。\n\n" +
+    "2．実施体制\n会社責任者：" + responsible + "　会社管理者：" + manager + "\n\n" +
+    "3．実施者\n" + jisshisha + "を実施者として選任する。\n\n" +
+    "4．対象者\n" + taisho + "\n\n" +
+    "5．使用する調査票\n" + chousahyou + "\n\n" +
+    "6．労働者への周知方法\n" + shuchi + "\n\n" +
+    "7．苦情受付窓口\n" + kujou + "\n\n" +
+    "8．その他\n本規程に定めのない事項は、衛生委員会等の審議結果（第4章）による。";
+}
 
 window.bulkSetDecision = function(prefix, decisionValue, statusValue){
   if (!confirm('この章の「' + prefix + '」項目すべてを「' + decisionValue + '」にしますか？')) return;
