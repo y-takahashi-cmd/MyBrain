@@ -269,6 +269,7 @@
       <div><span class="k">会社責任者</span><input type="text" id="f-owner" placeholder="氏名"></div>
       <div><span class="k">会社管理者</span><input type="text" id="f-manager" placeholder="氏名"></div>
       <div><span class="k">実施者</span><input type="text" id="f-jisshi" placeholder="氏名・未定なら空欄"></div>
+      <div><span class="k">産業医</span><input type="text" id="f-doctor" placeholder="事業場ごとに違う場合は事業場名も併記"></div>
       <div><span class="k">企業のオンライン保健室担当者</span><input type="text" id="f-us" placeholder="氏名"></div>
     </div>
     <div class="stat-strip">
@@ -339,13 +340,13 @@ var TURN = { "会社責任者":"turn-company","会社管理者":"turn-company","
 var ITEMS = {
   2: [
     { id:"c2-1", name:"会社責任者の決定", type:"決定する項目", owner:"会社責任者", ownerGroup:"会社責任者",
-      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"大関謙吾（代表取締役）",
+      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"山田太郎（代表取締役・例）",
       purpose:"ストレスチェック制度の実施責任を負う会社側の最終責任者を明確にする。",
       check:"誰が会社責任者か。人事権・経営権を持つ立場か。",
       options:"代表取締役／役員／人事担当役員 など",
       law:"法令上必要", note:"", requiredFor:["決定内容","決定日","決定者"], filled:{decision:true, done:true, owner:true} },
     { id:"c2-2", name:"会社管理者の決定", type:"決定する項目", owner:"会社責任者", ownerGroup:"会社責任者",
-      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"大関謙吾（会社責任者と兼任）",
+      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"山田太郎（会社責任者と兼任・例）",
       purpose:"受検対象者の登録・受検状況の確認・社員への案内を行う会社側担当者を決める。",
       check:"会社責任者と兼任か、別に立てるか。", options:"兼任／別担当者を置く",
       law:"契約上必要", note:"", requiredFor:["決定内容","決定日"], filled:{decision:true, done:true} },
@@ -362,7 +363,7 @@ var ITEMS = {
       check:"資格証・研修修了証の確認。", options:"確認済み／確認中／要再確認",
       law:"法令上必要", note:"", requiredFor:["確認結果","確認日","確認者"], filled:{} },
     { id:"c2-5", name:"実施事務従事者の選任", type:"決定する項目", owner:"会社管理者", ownerGroup:"会社管理者",
-      plan:"2026-07-10", done:"2026-07-09", status:"完了", decision:"大関謙吾（実施事務兼任・監督的地位ではないことを確認済み）",
+      plan:"2026-07-10", done:"2026-07-09", status:"完了", decision:"山田太郎（実施事務兼任・監督的地位ではないことを確認済み・例）",
       purpose:"受検者登録・調査票回収・結果保存等の実務を担う担当者を選ぶ。",
       check:"人事権・異動権を持つ「監督的地位にある者」でないことを確認する。",
       options:"社内担当者／企業のオンライン保健室代行",
@@ -378,7 +379,7 @@ var ITEMS = {
       check:"説明資料・同意書の有無。", options:"実施済み／未実施",
       law:"法令上必要", note:"実施者未確定のため保留中", requiredFor:["実施日","実施内容"], filled:{} },
     { id:"c2-8", name:"企業のオンライン保健室担当者の登録", type:"記録する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
-      plan:"2026-06-15", done:"2026-06-15", status:"完了", decision:"髙橋由香",
+      plan:"2026-06-15", done:"2026-06-15", status:"完了", decision:"（当社担当者名）",
       purpose:"当社側の窓口担当者を記録する。", check:"—", options:"—",
       law:"契約上必要", note:"", requiredFor:["決定内容"], filled:{decision:true, done:true} }
   ],
@@ -388,7 +389,7 @@ var ITEMS = {
       purpose:"どの雇用区分を対象とするかの基準を決める。", check:"—", options:"—",
       law:"会社運用ルール", note:"", requiredFor:["決定内容","決定日"], filled:{decision:true, done:true} },
     { id:"c7-2", name:"対象者名簿の作成", type:"実施する項目", owner:"会社管理者", ownerGroup:"会社管理者",
-      plan:"2026-06-25", done:"2026-06-25", status:"完了", decision:"6名確定（大関謙吾・藤井和子・文屋伴張・林範世・小藪麗奈・渥美沙弥香）",
+      plan:"2026-06-25", done:"2026-06-25", status:"完了", decision:"6名確定（例：山田太郎・佐藤花子・鈴木一郎・田中次郎・伊藤三郎・渡辺陽子）",
       purpose:"受検対象者の名簿を確定する。", check:"—", options:"—",
       law:"法令上必要", note:"", requiredFor:["決定内容","実施日"], filled:{decision:true, done:true} },
     { id:"c7-3", name:"アルバイト3名の対象区分決定", type:"決定する項目", owner:"会社管理者", ownerGroup:"会社管理者",
@@ -658,12 +659,12 @@ window.openDrawer = openDrawer;
 window.closeDrawer = closeDrawer;
 
 // ---------------- company header: editable + saved per company name ----------------
-var FIELD_IDS = ["f-company","f-worksite","f-year","f-period","f-next","f-owner","f-manager","f-jisshi","f-us"];
+var FIELD_IDS = ["f-company","f-worksite","f-year","f-period","f-next","f-owner","f-manager","f-jisshi","f-doctor","f-us"];
 var DEFAULTS = {
-  "f-company":"有限会社グリットワークス（例・書き換えてください）",
-  "f-worksite":"全社", "f-year":"2026年度", "f-period":"2026/06/25〜2026/07/31",
-  "f-next":"高ストレス者選定基準の会社説明（7/25予定）",
-  "f-owner":"大関謙吾", "f-manager":"大関謙吾", "f-jisshi":"", "f-us":"髙橋由香"
+  "f-company":"",
+  "f-worksite":"", "f-year":"2026年度", "f-period":"",
+  "f-next":"",
+  "f-owner":"", "f-manager":"", "f-jisshi":"", "f-doctor":"", "f-us":"髙橋由香"
 };
 
 function storageKey(){
