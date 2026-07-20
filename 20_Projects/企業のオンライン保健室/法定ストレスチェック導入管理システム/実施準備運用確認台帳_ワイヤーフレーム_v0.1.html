@@ -552,7 +552,7 @@ var ITEMS = {
       check:"—", options:"取組あり／取組なし／検討中", law:"会社運用ルール", required:["decision"] },
     { id:"c2-history", name:"過去のストレスチェック実施歴の確認", type:"確認する項目", ownerGroup:"会社担当者",
       purpose:"過去の実施状況（実施有無、使用ツール、課題）を確認し、今回の設計に活かす。",
-      check:"過去の受検率・高ストレス者対応で困った点等。", options:"—", law:"会社運用ルール", required:["decision"] },
+      check:"過去の受検率・高ストレス者対応で困った点等。", options:"あり／なし／不明", law:"会社運用ルール", required:["decision"] },
     { id:"c2-ichiji", name:"一次予防の目的を方針文に明記", type:"決定する項目", ownerGroup:"会社責任者",
       purpose:"本人の気づき＋セルフケア支援、職場環境改善という一次予防の目的を、会社の方針として明文化する。",
       check:"—", options:"—", law:"安衛法66-10・指針", required:["decision","done"] },
@@ -905,10 +905,13 @@ function renderNav(){
 
 // ---------------- inline row editing: choose from a checklist without opening the drawer ----------------
 function decisionCellHtml(it, st){
+  var locked = st.status === "完了";
   var opts = (it.options && it.options !== "—") ? it.options.split(/[／\/]/).map(function(s){ return s.trim(); }).filter(Boolean) : null;
-  var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; background:var(--card-bg); color:var(--text-heading); font-family:var(--font-body);";
+  var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; font-family:var(--font-body);" +
+    (locked ? "background:var(--card-bg-tint); color:var(--text-sub); cursor:not-allowed;" : "background:var(--card-bg); color:var(--text-heading);");
+  var disabledAttr = locked ? "disabled" : "";
   if (opts && opts.length){
-    var html = '<select onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" style="' + boxStyle + '">';
+    var html = '<select onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     html += '<option value="">選択してください</option>';
     opts.forEach(function(o){
       html += '<option ' + (o === st.decision ? "selected" : "") + '>' + escapeHtml(o) + '</option>';
@@ -916,7 +919,7 @@ function decisionCellHtml(it, st){
     html += '</select>';
     return html;
   }
-  return '<input type="text" value="' + escapeHtml(st.decision||"").replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" style="' + boxStyle + '">';
+  return '<input type="text" value="' + escapeHtml(st.decision||"").replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
 }
 
 function completeCellHtml(it, st){
@@ -1148,23 +1151,24 @@ function openDrawer(id){
   var showFields = item.fields || (isSimpleDecisionOnly ? ["decision"] : allFields);
   var isCustom = showFields.length > 0 && typeof showFields[0] === "object";
   var fieldKeys = [];
+  var locked = st.status === "完了";
 
   body += '<div class="d-block"><div class="d-grid">';
   if (isCustom){
     showFields.forEach(function(fd){
       fieldKeys.push(fd.key);
-      body += fieldHTML(id, fd.key, fd.label, st[fd.key], isReqEmpty(item, fd.key), fd.options || null, fd.type || null);
+      body += fieldHTML(id, fd.key, fd.label, st[fd.key], isReqEmpty(item, fd.key), fd.options || null, fd.type || null, locked);
     });
   } else {
     var FIELD_DEFS = {
-      decision: function(){ return fieldHTML(id, "decision", "決定内容・確認結果", st.decision, isReqEmpty(item,"decision")); },
-      ownerGroup: function(){ return fieldHTML(id, "ownerGroup", "担当区分", st.ownerGroup, false, OWNER_GROUP_OPTIONS); },
-      owner: function(){ return fieldHTML(id, "owner", "担当者（氏名）", st.owner, false); },
-      plan: function(){ return fieldHTML(id, "plan", "予定日", st.plan, false, null, "date"); },
-      done: function(){ return fieldHTML(id, "done", "実施日／決定日", st.done, isReqEmpty(item,"done"), null, "date"); },
-      confirmPlan: function(){ return fieldHTML(id, "confirmPlan", "確認予定日", st.confirmPlan, false, null, "date"); },
-      confirmDone: function(){ return fieldHTML(id, "confirmDone", "確認日", st.confirmDone, isReqEmpty(item,"confirmDone"), null, "date"); },
-      confirmer: function(){ return fieldHTML(id, "confirmer", "確認者", st.confirmer, isReqEmpty(item,"confirmer")); }
+      decision: function(){ return fieldHTML(id, "decision", "決定内容・確認結果", st.decision, isReqEmpty(item,"decision"), null, null, locked); },
+      ownerGroup: function(){ return fieldHTML(id, "ownerGroup", "担当区分", st.ownerGroup, false, OWNER_GROUP_OPTIONS, null, locked); },
+      owner: function(){ return fieldHTML(id, "owner", "担当者（氏名）", st.owner, false, null, null, locked); },
+      plan: function(){ return fieldHTML(id, "plan", "予定日", st.plan, false, null, "date", locked); },
+      done: function(){ return fieldHTML(id, "done", "実施日／決定日", st.done, isReqEmpty(item,"done"), null, "date", locked); },
+      confirmPlan: function(){ return fieldHTML(id, "confirmPlan", "確認予定日", st.confirmPlan, false, null, "date", locked); },
+      confirmDone: function(){ return fieldHTML(id, "confirmDone", "確認日", st.confirmDone, isReqEmpty(item,"confirmDone"), null, "date", locked); },
+      confirmer: function(){ return fieldHTML(id, "confirmer", "確認者", st.confirmer, isReqEmpty(item,"confirmer"), null, null, locked); }
     };
     showFields.forEach(function(key){ fieldKeys.push(key); body += FIELD_DEFS[key](); });
   }
@@ -1172,13 +1176,13 @@ function openDrawer(id){
 
   if (isCustom || showFields.length > 1 || showFields[0] !== "decision"){
     body += '<div class="d-block"><div class="d-label">ステータス</div>';
-    body += '<select id="d-status-select">' + STATUS_OPTIONS.filter(function(s){ return s!=="完了"; }).map(function(s){
+    body += '<select id="d-status-select" ' + (locked?"disabled":"") + '>' + STATUS_OPTIONS.filter(function(s){ return s!=="完了"; }).map(function(s){
       return '<option ' + (s===st.status?"selected":"") + '>' + s + '</option>';
     }).join("") + '</select></div>';
   }
   body += '<div class="d-block"><div class="d-label">法令上の区分</div><div class="d-static">' + item.law + '</div></div>';
   body += '<div class="d-block"><div class="d-label">根拠資料／添付資料</div><div class="d-static">（未添付）</div></div>';
-  body += '<div class="d-block"><div class="d-label">備考</div><textarea id="d-note" rows="2">' + (st.note||"") + '</textarea></div>';
+  body += '<div class="d-block"><div class="d-label">備考</div><textarea id="d-note" rows="2" ' + (locked?"disabled":"") + '>' + (st.note||"") + '</textarea></div>';
 
   document.getElementById("d-body").innerHTML = body;
 
@@ -1235,7 +1239,7 @@ function renderCompleteBox(item){
   var foot = '<div class="complete-box' + (!met && !(st.status==="完了") ? "" : "") + '">' +
     '<div class="cb-row"><input type="checkbox" id="d-complete-cb" ' + (st.status==="完了" ? "checked" : "") + '><span>完了</span></div>';
   if (st.status === "完了"){
-    foot += '<div class="cb-note" style="color:var(--success-700)">完了になっています。チェックを外すといつでも取り消せます。</div>';
+    foot += '<div class="cb-note" style="color:var(--success-700)">完了になっています（ロック中・編集不可）。チェックを外すといつでも編集を再開できます。</div>';
   } else if (!met){
     foot += '<div class="cb-note">以下が未入力のため「完了」にできません：<ul>' +
       missingLabels.map(function(f){ return "<li>" + f + "</li>"; }).join("") + '</ul></div>';
@@ -1265,14 +1269,15 @@ function renderCompleteBox(item){
   });
 }
 
-function fieldHTML(itemId, key, label, value, isEmpty, options, type){
+function fieldHTML(itemId, key, label, value, isEmpty, options, type, locked){
   var id = "d-" + itemId + "-" + key;
+  var disabledAttr = locked ? "disabled" : "";
   var inner;
   if (options){
-    inner = '<select id="' + id + '">' + '<option value="">選択してください</option>' +
+    inner = '<select id="' + id + '" ' + disabledAttr + '>' + '<option value="">選択してください</option>' +
       options.map(function(o){ return '<option ' + (o===value?"selected":"") + '>' + o + '</option>'; }).join("") + '</select>';
   } else {
-    inner = '<input id="' + id + '" type="' + (type||"text") + '" value="' + (value||"").replace(/"/g,"&quot;") + '" placeholder="未入力">';
+    inner = '<input id="' + id + '" type="' + (type||"text") + '" value="' + (value||"").replace(/"/g,"&quot;") + '" placeholder="未入力" ' + disabledAttr + '>';
   }
   return '<div class="d-field' + (isEmpty ? " empty" : "") + '"><label>' + label + (isEmpty ? ' <span class="req">*未入力</span>' : '') + '</label>' + inner + '</div>';
 }
