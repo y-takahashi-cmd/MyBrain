@@ -345,8 +345,18 @@ var CHAPTERS = [
   {no:3, title:"担当者・実施体制"},
   {no:4, title:"衛生委員会等での審議"},
   {no:5, title:"実施規程"},
-  {no:6, title:"システム準備"},
-  {no:7, title:"受検対象者登録"},
+  {no:6, title:"受検対象者の確定", intro:{
+    why:"誰を受検対象にするかを最初に決めておかないと、名簿・システム登録・案内文の対象範囲がすべて曖昧になります。",
+    who:"会社管理者",
+    done:"受検対象者の名簿と、アルバイト等・派遣労働者の扱いの考え方が確定します。",
+    next:"次は07 運営開始準備で、この名簿をもとにシステムへ登録していきます。"
+  }},
+  {no:7, title:"運営開始準備", intro:{
+    why:"ストレスチェックを配信する前に、システム側の初期設定と対象者登録を済ませておく必要があります。",
+    who:"03章で登録した実施事務従事者（会社側）",
+    done:"会社側の準備がすべて整い、実施者へ引き継げる状態になります。",
+    next:"次は09 ストレスチェック実施で、実施者が配信を行います。"
+  }, completeMessage:"会社側準備が完了しました。\n次は09 ストレスチェック実施で実施者が配信を行います。"},
   {no:8, title:"社員への事前案内"},
   {no:9, title:"ストレスチェック実施"},
   {no:10, title:"結果通知"},
@@ -744,17 +754,6 @@ var ITEMS = {
       ] }
   ],
   6: [
-    { id:"c6-chousahyou", name:"調査票の選定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"職業性ストレス簡易調査票（領域A仕事のストレス要因／B心身のストレス反応／C周囲のサポート／D満足度）の項目数を選ぶ。",
-      check:"—", options:"57項目（推奨・MVP）／23項目", law:"安衛則52-10・実施マニュアル", required:["decision"] },
-    { id:"c6-uketsuke", name:"オンライン受検システムの準備", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"受検リンク・回答画面を準備する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c6-kengen", name:"アクセス権限設計の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"事業者が本人同意なしに個票（要配慮個人情報）を見られない設計になっているかを確認する。",
-      check:"—", options:"確認済み／要修正", law:"安衛則52-10・実施マニュアル", required:["decision","confirmDone"] }
-  ],
-  7: [
     { id:"c7-1", name:"対象者の判断基準の決定", type:"決定する項目", ownerGroup:"会社管理者",
       purpose:"どの雇用区分を対象とするかの基準を決める。", check:"—", options:"—",
       law:"会社運用ルール", required:["decision","done"] },
@@ -764,18 +763,44 @@ var ITEMS = {
     { id:"c7-3", name:"アルバイト等の対象区分決定", type:"決定する項目", ownerGroup:"会社管理者",
       purpose:"アルバイト従業員を対象に含めるかを決める。", check:"—", options:"対象／対象外／確認中",
       law:"会社運用ルール", required:["decision"] },
-    { id:"c7-4", name:"対象者のシステム登録", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"対象者を実施システムへ登録する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-5", name:"メールアドレスの登録", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"個人結果通知に使うメールアドレスを登録する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-6", name:"登録完了の確認", type:"確認する項目", ownerGroup:"会社管理者",
-      purpose:"登録内容に漏れ・誤りがないかを会社側が最終確認する。", check:"氏名・メール・部署の一致確認。",
-      options:"確認済み／要修正", law:"会社運用ルール", required:["decision","confirmDone","confirmer"] },
     { id:"c7-haken", name:"派遣労働者の扱いの整理", type:"確認する項目", ownerGroup:"会社管理者",
       purpose:"派遣労働者は派遣元が実施することを整理・確認する。", check:"—", options:"—",
       law:"安衛則52-9・実施マニュアル", required:["decision"] }
+  ],
+  7: [
+    { id:"c7-chousahyou", name:"調査票の選定", type:"決定する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"職業性ストレス簡易調査票（領域A仕事のストレス要因／B心身のストレス反応／C周囲のサポート／D満足度）の項目数を選ぶ。",
+      check:"—", options:"57項目／57項目＋追加質問", law:"安衛則52-10・実施マニュアル", required:["decision"] },
+    { id:"c7-ms-account", name:"Microsoftアカウント確認", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"システム利用に必要なMicrosoftアカウントを確認する。", check:"—", options:"—",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-sc-login", name:"ストレスチェックアプリへログイン", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"ストレスチェックアプリへログインできることを確認する。", check:"—", options:"—",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-csvapp-dl", name:"対象者登録アプリ（CSV）ダウンロード", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"対象者登録用のCSVアプリを入手する。", check:"—", options:"—",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-csvapp-login", name:"対象者登録アプリへログイン", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"対象者登録アプリへログインできることを確認する。", check:"—", options:"—",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-setup-done", name:"初期設定完了", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"システム側の初期設定が完了したことを確認する。", check:"—", options:"—",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-csv-prep", name:"CSV準備", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"06章で確定した対象者名簿をもとに、登録用CSVを準備する。", check:"—", options:"—",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-csv-check", name:"CSV形式確認", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"氏名・メールアドレス・部署等、CSVの形式に不備がないかを確認する。", check:"—", options:"確認済み／要修正",
+      law:"契約上必要", required:["decision"] },
+    { id:"c7-csv-upload", name:"CSVアップロード", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"対象者登録アプリへCSVをアップロードする。", check:"—", options:"—",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-toroku-done", name:"対象社員登録完了", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"対象社員の登録内容に漏れ・誤りがないかを最終確認する。", check:"氏名・メール・部署の一致確認。", options:"確認済み／要修正",
+      law:"会社運用ルール", required:["decision","confirmDone"] },
+    { id:"c7-handover", name:"実施者への引き継ぎ", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      purpose:"担当実施者へ、対象者登録が完了したことを引き継ぐ。", check:"—", options:"—",
+      law:"契約上必要", required:["done"] }
   ],
   8: [
     { id:"c8-mokuteki", name:"受検の目的・任意性・秘密保持の案内", type:"通知する項目", ownerGroup:"企業のオンライン保健室",
@@ -1157,7 +1182,9 @@ function ownerCellHtml(it, st){
   var locked = st.status === "完了";
   var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.3rem .4rem; font-size:.8rem; font-family:var(--font-body);" +
     (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
-  return '<input type="text" value="' + escapeHtml(st.owner||"").replace(/"/g,"&quot;") + '" placeholder="未定" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'owner\', this.value)" ' + (locked?"disabled":"") + ' style="' + boxStyle + '">';
+  var autoName = (it.autoOwner && STATE["c3-5"] && STATE["c3-5"].name) || "";
+  var displayVal = st.owner || autoName;
+  return '<input type="text" value="' + escapeHtml(displayVal).replace(/"/g,"&quot;") + '" placeholder="未定" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'owner\', this.value)" ' + (locked?"disabled":"") + ' style="' + boxStyle + '">';
 }
 
 function dateCellHtml(it, st, key){
@@ -1205,7 +1232,7 @@ function generateRegulationDraft(){
   var manager = (STATE["c3-2"] && STATE["c3-2"].name) || "（未定）";
   var jisshisha = (STATE["c3-3"] && STATE["c3-3"].person) || "（未定）";
   var taisho = (STATE["c7-1"] && STATE["c7-1"].decision) || "（未定）";
-  var chousahyou = (STATE["c6-chousahyou"] && STATE["c6-chousahyou"].decision) || "（未定）";
+  var chousahyou = (STATE["c7-chousahyou"] && STATE["c7-chousahyou"].decision) || "（未定）";
   var shuchi = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].method) || "（未定）";
   var kujou = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].window) || "（未定）";
   return "（AI自動生成・要レビュー）\n" +
@@ -1405,6 +1432,15 @@ function renderMain(){
 
   var html = '<div class="chap-head"><span class="no">' + String(chap.no).padStart(2,"0") + '</span><h2>' + chap.title + '</h2></div>';
 
+  if (chap.intro){
+    html += '<div style="background:var(--info-50); border:1px solid var(--brand-line); border-radius:10px; padding:.7rem 1rem; margin-bottom:1rem; display:flex; flex-direction:column; gap:.3rem; font-size:.8rem; color:var(--text-body); line-height:1.6;">' +
+      '<div><b style="color:var(--brand-deep);">🎯 なぜ必要か：</b>' + escapeHtml(chap.intro.why) + '</div>' +
+      '<div><b style="color:var(--brand-deep);">👤 誰がやるか：</b>' + escapeHtml(chap.intro.who) + '</div>' +
+      '<div><b style="color:var(--brand-deep);">✅ 終わるとどうなるか：</b>' + escapeHtml(chap.intro.done) + '</div>' +
+      '<div><b style="color:var(--brand-deep);">➡️ 次にやること：</b>' + escapeHtml(chap.intro.next) + '</div>' +
+    '</div>';
+  }
+
   if (!items){
     html += '<div class="placeholder-chap">この章の確認項目はまだワイヤーフレームに入れていません。<br>章2・章7の構成でよければ、他の章にも同じ形式で項目を追加していきます。</div>';
     main.innerHTML = html;
@@ -1448,6 +1484,11 @@ function renderMain(){
     '</tr>';
   });
   html += '</tbody></table>';
+
+  if (chap.completeMessage && items.every(function(it){ return STATE[it.id].status === "完了"; })){
+    html += '<div style="margin-top:1rem; background:var(--success-50, #eafaf1); border:1px solid var(--success-line, #b7e4c7); border-radius:10px; padding:.8rem 1rem; font-size:.85rem; font-weight:700; color:var(--success-700, #1e7e45); white-space:pre-line; line-height:1.7;">✅ ' + escapeHtml(chap.completeMessage) + '</div>';
+  }
+
   main.innerHTML = html;
 }
 
