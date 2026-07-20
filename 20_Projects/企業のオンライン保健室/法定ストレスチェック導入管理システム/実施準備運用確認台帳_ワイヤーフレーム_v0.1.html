@@ -555,19 +555,48 @@ var ITEMS = {
       check:"過去の受検率・高ストレス者対応で困った点等。", options:"あり／なし／不明", law:"会社運用ルール", required:["decision"] },
     { id:"c2-ichiji", name:"一次予防の目的を方針文に明記", type:"決定する項目", ownerGroup:"会社責任者",
       purpose:"本人の気づき＋セルフケア支援、職場環境改善という一次予防の目的を、会社の方針として明文化する。",
-      check:"—", options:"—", law:"安衛法66-10・指針", required:["decision","done"] },
+      check:"—", law:"安衛法66-10・指針", required:["decision"],
+      textOptions:[
+        { label:"厚労省標準文を使用", text:"当社は、労働者自身のストレスへの気付きを促し、メンタルヘルス不調を未然に防止することを目的としてストレスチェックを実施します。" },
+        { label:"健康経営を盛り込んだ文章を使用", text:"当社は、労働者自身のストレスへの気付きを促し、メンタルヘルス不調を未然に防止するとともに、健康経営の観点から従業員の心身の健康保持・増進に取り組むことを目的としてストレスチェックを実施します。" },
+        { label:"離職予防を重視した文章を使用", text:"当社は、労働者自身のストレスへの気付きを促すとともに、働きやすい職場づくりを通じた離職の防止を目的としてストレスチェックを実施します。" },
+        { label:"職場環境改善を重視した文章を使用", text:"当社は、労働者自身のストレスへの気付きを促すとともに、集団分析の結果を活用した職場環境の改善につなげることを目的としてストレスチェックを実施します。" },
+        { label:"AIで会社向けに自動作成（下書き）", text:"（AI下書き・要確認）当社は、従業員一人ひとりが自らのストレス状態に気づき、心身の健康を維持しながら安心して働き続けられる職場づくりを目的として、ストレスチェックを実施します。" },
+        { label:"自由入力", text:null }
+      ] },
     { id:"c2-hyoumei", name:"経営層による実施方針表明", type:"実施する項目", ownerGroup:"会社責任者",
       purpose:"社内周知のため、経営層がストレスチェック制度実施の方針を表明する。",
-      check:"—", options:"—", law:"安衛法66-10・指針", required:["done"] },
+      check:"—", law:"安衛法66-10・指針", required:["decision"],
+      textOptions:[
+        { label:"厚労省標準文を使用", text:"代表取締役は、ストレスチェック制度の実施方針を表明し、全従業員へ周知する。" },
+        { label:"健康経営を盛り込んだ文章を使用", text:"代表取締役は、健康経営の一環としてストレスチェック制度の実施方針を表明し、全従業員へ周知する。" },
+        { label:"離職予防を重視した文章を使用", text:"代表取締役は、働きやすい職場づくりと離職防止の観点から、ストレスチェック制度の実施方針を表明し、全従業員へ周知する。" },
+        { label:"AIで会社向けに自動作成（下書き）", text:"（AI下書き・要確認）代表取締役より、従業員の心身の健康を第一に考え、安心して働ける職場を共につくっていきたいという思いから、ストレスチェック制度を導入する旨のメッセージを発信する。" },
+        { label:"自由入力", text:null }
+      ] },
     { id:"c2-furieki", name:"不利益取扱いの禁止を方針に明記", type:"決定する項目", ownerGroup:"会社責任者",
       purpose:"受検しないこと・結果提供に同意しないこと等を理由とした不利益取扱いを行わないことを方針に明記する。",
-      check:"—", options:"—", law:"安衛法66-10・指針", required:["decision"] },
+      check:"—", law:"安衛法66-10・指針", required:["decision"],
+      textOptions:[
+        { label:"厚労省標準文を使用", text:"ストレスチェックを受けないこと、面接指導を申し出ないこと等を理由として、労働者に対し不利益な取扱いを行わない。" },
+        { label:"就業規則に準拠", text:"就業規則に定める不利益取扱い禁止規定に基づき、ストレスチェックの受検有無等を理由とした不利益な取扱いは行わない。" },
+        { label:"社内規程に準拠", text:"ストレスチェック実施規程に定めるとおり、受検有無・結果提供の同意有無等を理由とした不利益な取扱いは行わない。" },
+        { label:"AIで自動作成（下書き）", text:"（AI下書き・要確認）従業員が安心してストレスチェックを受けられるよう、受検や結果提供への同意の有無を理由に不利益な扱いを行うことはありません。" },
+        { label:"自由入力", text:null }
+      ] },
     { id:"c2-shuchi", name:"方針の周知方法の決定", type:"決定する項目", ownerGroup:"会社担当者",
       purpose:"決定した基本方針をどう社員へ周知するかを決める。",
       check:"—", options:"掲示／イントラ／説明会／その他", law:"会社運用ルール", required:["decision"] },
     { id:"c2-doc", name:"基本方針書（📄L1文書）の作成", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"事業者名を明記したストレスチェック実施 基本方針書を作成・保存する。文書体系ではL1方針（改定管理）に位置づく。",
-      check:"—", options:"—", law:"安衛法66-10・指針", required:["done"] }
+      check:"—", law:"安衛法66-10・指針", required:["decision"],
+      textOptions:[
+        { label:"AIで自動作成", text:"①〜③の決定内容をもとに、AIが基本方針書の下書きを自動作成（要レビュー）" },
+        { label:"厚労省テンプレートを使用", text:"厚労省の基本方針書テンプレートをそのまま使用" },
+        { label:"前年度の内容をコピー", text:"前年度の基本方針書をコピーして使用" },
+        { label:"自社オリジナルで作成", text:"自社オリジナルで作成" },
+        { label:"自由入力", text:null }
+      ] }
   ],
   3: [
     { id:"c3-1", name:"会社責任者の決定", type:"決定する項目", ownerGroup:"会社責任者",
@@ -904,8 +933,44 @@ function renderNav(){
 }
 
 // ---------------- inline row editing: choose from a checklist without opening the drawer ----------------
+function templateCellHtml(it, st, locked){
+  var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; font-family:var(--font-body);" +
+    (locked ? "background:var(--card-bg-tint); color:var(--text-sub); cursor:not-allowed;" : "background:var(--card-bg); color:var(--text-heading);");
+  var disabledAttr = locked ? "disabled" : "";
+  var chosen = (typeof st.templateChoice === "number") ? st.templateChoice : -1;
+  var isFree = chosen > -1 && it.textOptions[chosen] && it.textOptions[chosen].text === null;
+  var html = '<div style="display:flex; flex-direction:column; gap:.3rem;">';
+  html += '<select onclick="event.stopPropagation()" onchange="setTemplateInline(\'' + it.id + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
+  html += '<option value="">テンプレートを選択</option>';
+  it.textOptions.forEach(function(opt, i){
+    html += '<option value="' + i + '" ' + (i===chosen?"selected":"") + '>' + escapeHtml(opt.label) + '</option>';
+  });
+  html += '</select>';
+  if (isFree){
+    html += '<textarea onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" ' + disabledAttr + ' placeholder="自由入力" rows="2" style="width:100%; border:1px solid var(--border); border-radius:6px; padding:.3rem .4rem; font-size:.78rem; font-family:var(--font-body); resize:vertical;">' + escapeHtml(st.decision||"") + '</textarea>';
+  } else if (chosen > -1 && st.decision){
+    html += '<div style="font-size:.72rem; color:var(--text-sub); line-height:1.4;">' + escapeHtml(st.decision.length > 70 ? st.decision.slice(0,70) + "…" : st.decision) + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+window.setTemplateInline = function(id, idxStr){
+  var item = itemById(id);
+  var st = STATE[id];
+  if (idxStr === "") return;
+  var idx = parseInt(idxStr, 10);
+  var opt = item.textOptions[idx];
+  st.templateChoice = idx;
+  st.decision = (opt.text === null) ? "" : opt.text;
+  if (st.status === "完了" && !isReqMet(item)) st.status = "確認待ち";
+  persistItems();
+  renderNav(); updateHeaderStats(); renderMain();
+};
+
 function decisionCellHtml(it, st){
   var locked = st.status === "完了";
+  if (it.textOptions) return templateCellHtml(it, st, locked);
   var opts = (it.options && it.options !== "—") ? it.options.split(/[／\/]/).map(function(s){ return s.trim(); }).filter(Boolean) : null;
   var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; font-family:var(--font-body);" +
     (locked ? "background:var(--card-bg-tint); color:var(--text-sub); cursor:not-allowed;" : "background:var(--card-bg); color:var(--text-heading);");
@@ -1139,8 +1204,14 @@ function renderMain(){
     '<span><span class="dot turn-doctor"></span>医師対応待ち</span>' +
   '</div>';
 
+  var simpleChapter = items.every(function(it){
+    return it.required && it.required.length === 1 && it.required[0] === "decision";
+  });
+
   html += '<table class="item-table"><thead><tr>' +
-    '<th>状態</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>実施日</th>' +
+    (simpleChapter
+      ? '<th>状態</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th>'
+      : '<th>状態</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>実施日</th>') +
     '</tr></thead><tbody>';
 
   items.forEach(function(it){
@@ -1150,8 +1221,7 @@ function renderMain(){
       '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
       '<td>' + decisionCellHtml(it, st) + '</td>' +
       '<td>' + ownerCellHtml(it, st) + '</td>' +
-      '<td>' + dateCellHtml(it, st, "plan") + '</td>' +
-      '<td>' + dateCellHtml(it, st, "done") + '</td>' +
+      (simpleChapter ? '' : '<td>' + dateCellHtml(it, st, "plan") + '</td><td>' + dateCellHtml(it, st, "done") + '</td>') +
     '</tr>';
   });
   html += '</tbody></table>';
