@@ -537,18 +537,7 @@ var TURN = { "会社責任者":"turn-company","会社管理者":"turn-company","
 // Fully worked-out chapters for the wireframe. Others show a placeholder.
 // "required" lists which STATE fields must be non-empty before the 完了 checkbox can be turned on.
 var ITEMS = {
-  1: [
-    { id:"c1-company", name:"企業名の確認・確定", type:"決定する項目", ownerGroup:"会社担当者",
-      purpose:"契約書・請求書等に使う正式な企業名（法人名）を確認・確定する。",
-      check:"登記上の正式名称と、普段使っている屋号が異なっていないか。",
-      options:"—", law:"契約上必要", required:["decision"], fields:["decision"] },
-    { id:"c1-industry", name:"業種の確認", type:"確認する項目", ownerGroup:"会社担当者",
-      purpose:"業種特有のリスク（労働時間・シフト制・現場作業等）を把握する。",
-      check:"—", options:"—", law:"会社運用ルール", required:["decision"] },
-    { id:"c1-contact", name:"会社担当者の確認", type:"決定する項目", ownerGroup:"会社担当者",
-      purpose:"当社との日常的な連絡窓口となる会社側担当者を確認する。",
-      check:"連絡先（メール・電話）も合わせて確認する。", options:"—", law:"契約上必要", required:["decision"] }
-  ],
+  1: [],
   2: [
     { id:"c2-pain", name:"一番困っていることのヒアリング", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"導入前に、会社が組織として一番困っていることをヒアリングし、提案・運用に反映する。",
@@ -904,21 +893,31 @@ function openDrawer(id){
 
   var allFields = ["decision","ownerGroup","owner","plan","done","confirmPlan","confirmDone","confirmer"];
   var showFields = item.fields || allFields;
-  var FIELD_DEFS = {
-    decision: function(){ return fieldHTML(id, "decision", "決定内容・確認結果", st.decision, isReqEmpty(item,"decision")); },
-    ownerGroup: function(){ return fieldHTML(id, "ownerGroup", "担当区分", st.ownerGroup, false, OWNER_GROUP_OPTIONS); },
-    owner: function(){ return fieldHTML(id, "owner", "担当者（氏名）", st.owner, false); },
-    plan: function(){ return fieldHTML(id, "plan", "予定日", st.plan, false, null, "date"); },
-    done: function(){ return fieldHTML(id, "done", "実施日／決定日", st.done, isReqEmpty(item,"done"), null, "date"); },
-    confirmPlan: function(){ return fieldHTML(id, "confirmPlan", "確認予定日", st.confirmPlan, false, null, "date"); },
-    confirmDone: function(){ return fieldHTML(id, "confirmDone", "確認日", st.confirmDone, isReqEmpty(item,"confirmDone"), null, "date"); },
-    confirmer: function(){ return fieldHTML(id, "confirmer", "確認者", st.confirmer, isReqEmpty(item,"confirmer")); }
-  };
+  var isCustom = showFields.length > 0 && typeof showFields[0] === "object";
+  var fieldKeys = [];
+
   body += '<div class="d-block"><div class="d-grid">';
-  showFields.forEach(function(key){ body += FIELD_DEFS[key](); });
+  if (isCustom){
+    showFields.forEach(function(fd){
+      fieldKeys.push(fd.key);
+      body += fieldHTML(id, fd.key, fd.label, st[fd.key], isReqEmpty(item, fd.key), fd.options || null, fd.type || null);
+    });
+  } else {
+    var FIELD_DEFS = {
+      decision: function(){ return fieldHTML(id, "decision", "決定内容・確認結果", st.decision, isReqEmpty(item,"decision")); },
+      ownerGroup: function(){ return fieldHTML(id, "ownerGroup", "担当区分", st.ownerGroup, false, OWNER_GROUP_OPTIONS); },
+      owner: function(){ return fieldHTML(id, "owner", "担当者（氏名）", st.owner, false); },
+      plan: function(){ return fieldHTML(id, "plan", "予定日", st.plan, false, null, "date"); },
+      done: function(){ return fieldHTML(id, "done", "実施日／決定日", st.done, isReqEmpty(item,"done"), null, "date"); },
+      confirmPlan: function(){ return fieldHTML(id, "confirmPlan", "確認予定日", st.confirmPlan, false, null, "date"); },
+      confirmDone: function(){ return fieldHTML(id, "confirmDone", "確認日", st.confirmDone, isReqEmpty(item,"confirmDone"), null, "date"); },
+      confirmer: function(){ return fieldHTML(id, "confirmer", "確認者", st.confirmer, isReqEmpty(item,"confirmer")); }
+    };
+    showFields.forEach(function(key){ fieldKeys.push(key); body += FIELD_DEFS[key](); });
+  }
   body += '</div></div>';
 
-  if (showFields.length > 1 || showFields[0] !== "decision"){
+  if (isCustom || showFields.length > 1 || showFields[0] !== "decision"){
     body += '<div class="d-block"><div class="d-label">ステータス</div>';
     body += '<select id="d-status-select">' + STATUS_OPTIONS.filter(function(s){ return s!=="完了"; }).map(function(s){
       return '<option ' + (s===st.status?"selected":"") + '>' + s + '</option>';
@@ -931,7 +930,7 @@ function openDrawer(id){
   document.getElementById("d-body").innerHTML = body;
 
   // wire up field inputs
-  showFields.forEach(function(key){
+  fieldKeys.forEach(function(key){
     var el = document.getElementById("d-" + id + "-" + key);
     if (!el) return;
     el.addEventListener("input", function(){ onFieldChange(item, key, el.value); });
@@ -974,7 +973,11 @@ function onFieldChange(item, key, value){
 function renderCompleteBox(item){
   var st = STATE[item.id];
   var met = isReqMet(item);
-  var missingLabels = (item.required||[]).filter(function(k){ return !(st[k] && String(st[k]).trim()); }).map(function(k){ return FIELD_LABEL[k]; });
+  var customLabels = {};
+  if (item.fields && item.fields.length && typeof item.fields[0] === "object"){
+    item.fields.forEach(function(fd){ customLabels[fd.key] = fd.label; });
+  }
+  var missingLabels = (item.required||[]).filter(function(k){ return !(st[k] && String(st[k]).trim()); }).map(function(k){ return customLabels[k] || FIELD_LABEL[k] || k; });
 
   var foot = '<div class="complete-box' + (!met && !(st.status==="完了") ? "" : "") + '">' +
     '<div class="cb-row"><input type="checkbox" id="d-complete-cb" ' + (st.status==="完了" ? "checked" : "") + '><span>完了</span></div>';
@@ -1092,137 +1095,136 @@ function loadItemState(){
   STATE = fresh;
 }
 
-// ---------------- Chapter 1: repeatable worksites (店舗が増えたら追加できる) ----------------
-function makeWorksiteItems(wid){
-  return [
-    { id:"c1-w-"+wid+"-addr", name:"現住所の確認", type:"確認する項目", ownerGroup:"会社担当者",
-      purpose:"この事業場の現住所を確認する。", check:"—", options:"—", law:"会社運用ルール", required:["decision"], fields:["decision"] },
-    { id:"c1-w-"+wid+"-emp", name:"従業員数の確認", type:"確認する項目", ownerGroup:"会社担当者",
-      purpose:"この事業場の従業員数を確認する。ストレスチェック対象人数の見積りに使う。", check:"—", options:"—", law:"会社運用ルール", required:["decision"], fields:["decision"] },
-    { id:"c1-w-"+wid+"-doctor", name:"産業医指定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"この事業場を担当する産業医を確定する。契約中の産業医がいる場合は氏名・連絡先を記入する。いない場合は、企業のオンライン保健室に手配を任せるか、地域産業保健センター（地さんぽ）から候補を探す。（今後、都道府県別に産業医を無料で探せる一覧を案内できるとなおよい）",
-      check:"契約中の産業医の有無。", options:"契約中の産業医あり（氏名・連絡先を記入）／企業のオンライン保健室に任せる／地域産業保健センターから探す",
-      law:"法令上必要（常時50人以上の事業場は選任義務）", required:["decision"] }
-  ];
+// ---------------- Chapter 1: repeatable "拠点情報" cards ----------------
+// 企業名・所在地・業種・産業医・担当者を1件のカードにまとめる。部署や店舗が複数ある場合はカードを追加する。
+var DOCTOR_OPTIONS = ["契約中の産業医あり","企業のオンライン保健室に任せる","地域産業保健センターから探す","未定"];
+
+function makeSiteItem(sid){
+  return {
+    id: "c1-site-" + sid,
+    name: "拠点情報",
+    type: "決定する項目",
+    ownerGroup: "会社担当者",
+    purpose: "企業名・所在地・業種・産業医・担当者の情報を1件にまとめて確認する。複数の部署や店舗がある場合は、拠点ごとにカードを追加する。",
+    check: "産業医が未契約の場合は、企業のオンライン保健室に任せるか、地域産業保健センター（地さんぽ）から候補を探す。（今後、都道府県別に産業医を無料で探せる一覧を案内できるとなおよい）",
+    options: "—",
+    law: "契約上必要",
+    required: ["companyName","address","industry","doctorStatus","contactName","contactPhone"],
+    fields: [
+      { key:"companyName", label:"企業名" },
+      { key:"address", label:"所在地" },
+      { key:"industry", label:"業種" },
+      { key:"doctorStatus", label:"産業医", options: DOCTOR_OPTIONS },
+      { key:"doctorDetail", label:"産業医名・連絡先（いる場合）" },
+      { key:"contactName", label:"担当者氏名" },
+      { key:"contactPhone", label:"担当者連絡先" }
+    ]
+  };
 }
 
-var WORKSITES = [];
+var SITES = [];
 
-function worksiteItemIds(wid){
-  return ["addr","emp","doctor"].map(function(s){ return "c1-w-"+wid+"-"+s; });
+function blankSiteState(it){
+  var st = { status:"未着手", ownerGroup:it.ownerGroup, note:"" };
+  it.fields.forEach(function(fd){ st[fd.key] = ""; });
+  return st;
 }
 
-function persistWorksites(){
-  try{ localStorage.setItem(storageKey() + "_worksites", JSON.stringify(WORKSITES)); } catch(e){}
+function persistSites(){
+  try{ localStorage.setItem(storageKey() + "_sites", JSON.stringify(SITES)); } catch(e){}
 }
 
-function loadWorksites(){
-  ITEMS[1] = ITEMS[1].filter(function(it){ return it.id.indexOf("c1-w-") !== 0; });
-  WORKSITES = [];
+function loadSites(){
+  ITEMS[1] = ITEMS[1].filter(function(it){ return it.id.indexOf("c1-site-") !== 0; });
+  SITES = [];
   try{
-    var raw = localStorage.getItem(storageKey() + "_worksites");
-    if (raw) WORKSITES = JSON.parse(raw);
+    var raw = localStorage.getItem(storageKey() + "_sites");
+    if (raw) SITES = JSON.parse(raw);
   } catch(e){}
-  WORKSITES.forEach(function(w){
-    var newItems = makeWorksiteItems(w.id);
-    ITEMS[1] = ITEMS[1].concat(newItems);
-    newItems.forEach(function(it){
-      if (!SEED[it.id]) SEED[it.id] = { status:"未着手", decision:"", ownerGroup:it.ownerGroup, owner:"", plan:"", done:"", confirmPlan:"", confirmDone:"", confirmer:"", note:"" };
-    });
+  SITES.forEach(function(s){
+    var it = makeSiteItem(s.id);
+    ITEMS[1].push(it);
+    if (!SEED[it.id]) SEED[it.id] = blankSiteState(it);
   });
 }
 
-function addWorksite(){
-  var wid = "ws" + Date.now();
-  WORKSITES.push({ id:wid, label:"事業場" + (WORKSITES.length + 1) });
-  var newItems = makeWorksiteItems(wid);
-  ITEMS[1] = ITEMS[1].concat(newItems);
-  newItems.forEach(function(it){
-    SEED[it.id] = { status:"未着手", decision:"", ownerGroup:it.ownerGroup, owner:"", plan:"", done:"", confirmPlan:"", confirmDone:"", confirmer:"", note:"" };
-    STATE[it.id] = JSON.parse(JSON.stringify(SEED[it.id]));
-  });
-  persistWorksites(); persistItems(); renderAll();
+function addSite(){
+  var sid = "s" + Date.now();
+  SITES.push({ id:sid, label:"拠点" + (SITES.length + 1) });
+  var it = makeSiteItem(sid);
+  ITEMS[1].push(it);
+  SEED[it.id] = blankSiteState(it);
+  STATE[it.id] = JSON.parse(JSON.stringify(SEED[it.id]));
+  persistSites(); persistItems(); renderAll();
 }
-window.addWorksite = addWorksite;
+window.addSite = addSite;
 
-function removeWorksite(wid){
-  if (!confirm("この事業場を削除しますか？入力済みの内容も削除されます。")) return;
-  WORKSITES = WORKSITES.filter(function(w){ return w.id !== wid; });
-  var ids = worksiteItemIds(wid);
-  ITEMS[1] = ITEMS[1].filter(function(it){ return ids.indexOf(it.id) === -1; });
-  ids.forEach(function(id){ delete STATE[id]; delete SEED[id]; });
-  persistWorksites(); persistItems(); renderAll();
+function removeSite(sid){
+  if (!confirm("この拠点情報を削除しますか？入力済みの内容も削除されます。")) return;
+  SITES = SITES.filter(function(s){ return s.id !== sid; });
+  var id = "c1-site-" + sid;
+  ITEMS[1] = ITEMS[1].filter(function(it){ return it.id !== id; });
+  delete STATE[id]; delete SEED[id];
+  persistSites(); persistItems(); renderAll();
 }
-window.removeWorksite = removeWorksite;
+window.removeSite = removeSite;
 
-function renameWorksite(wid, label){
-  var w = WORKSITES.find(function(w){ return w.id === wid; });
-  if (w){ w.label = label; persistWorksites(); }
+function renameSite(sid, label){
+  var s = SITES.find(function(s){ return s.id === sid; });
+  if (s){ s.label = label; persistSites(); }
 }
-window.renameWorksite = renameWorksite;
+window.renameSite = renameSite;
 
 function renderChapter1(){
   var main = document.getElementById("chapMain");
   var chap = CHAPTERS.find(function(c){ return c.no === 1; });
-  var fixedItems = ITEMS[1].filter(function(it){ return it.id.indexOf("c1-w-") !== 0; });
 
   var html = '<div class="chap-head"><span class="no">01</span><h2>' + chap.title + '</h2></div>';
-  html += itemTableHtml(fixedItems);
+  html += '<p class="chap-desc">企業名・所在地・業種・産業医・担当者をまとめた「拠点情報」です。部署や店舗が複数ある場合は、拠点ごとにカードを追加してください。</p>';
 
-  html += '<div class="ov-divider" style="margin-top:1.8rem;">事業場情報（店舗・拠点ごとに追加できます）</div>';
-
-  WORKSITES.forEach(function(w){
-    var wItems = ITEMS[1].filter(function(it){ return it.id.indexOf("c1-w-"+w.id+"-") === 0; });
-    html += '<div class="card" style="margin-top:.9rem;">';
-    html += '<div style="display:flex; align-items:center; gap:.6rem; margin-bottom:.7rem;">' +
-      '<input type="text" value="' + escapeHtml(w.label) + '" data-wid="' + w.id + '" class="ws-label-input" style="font-weight:800; font-size:.95rem; color:var(--text-heading); border:none; border-bottom:1.5px solid var(--border); background:transparent; padding:.15rem 0; flex:1; outline:none;">' +
-      '<button onclick="removeWorksite(\'' + w.id + '\')" style="border:1px solid var(--border); background:var(--card-bg-tint); color:var(--text-sub); border-radius:8px; padding:.3rem .7rem; font-size:.76rem;">✕ 削除</button>' +
+  SITES.forEach(function(s){
+    var id = "c1-site-" + s.id;
+    var it = itemById(id);
+    var st = STATE[id];
+    html += '<div class="card" style="margin:0 0 .9rem;">';
+    html += '<div style="display:flex; align-items:center; gap:.6rem; margin-bottom:.6rem;">' +
+      '<input type="text" value="' + escapeHtml(s.label) + '" data-sid="' + s.id + '" class="site-label-input" style="font-weight:800; font-size:.95rem; color:var(--text-heading); border:none; border-bottom:1.5px solid var(--border); background:transparent; padding:.15rem 0; flex:1; outline:none;">' +
+      '<span class="status-pill st-' + st.status + '">' + st.status + '</span>' +
+      '<button onclick="removeSite(\'' + s.id + '\')" style="border:1px solid var(--border); background:var(--card-bg-tint); color:var(--text-sub); border-radius:8px; padding:.3rem .7rem; font-size:.76rem;">✕ 削除</button>' +
     '</div>';
-    html += itemTableHtml(wItems);
+    html += '<div style="font-size:.85rem; color:var(--text-body); display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.5rem .9rem; margin-bottom:.7rem;">';
+    it.fields.forEach(function(fd){
+      var v = st[fd.key];
+      html += '<div><span style="color:var(--text-sub); font-size:.72rem; display:block;">' + fd.label + '</span>' + (v ? escapeHtml(v) : '<span class="muted">未入力</span>') + '</div>';
+    });
+    html += '</div>';
+    html += '<button onclick="openDrawer(\'' + id + '\')" style="font-size:.8rem; font-weight:700; color:var(--brand-deep); background:var(--info-50); border:1px solid var(--brand-line); border-radius:8px; padding:.4rem .9rem;">詳細を開く・編集する ›</button>';
     html += '</div>';
   });
 
-  html += '<button onclick="addWorksite()" class="add-company" style="margin-top:1rem; width:100%; border-radius:12px; cursor:pointer;">＋ 事業場（店舗）を追加する</button>';
+  if (!SITES.length){
+    html += '<div class="placeholder-chap">まだ拠点情報が登録されていません。下のボタンから追加してください。</div>';
+  }
+
+  html += '<button onclick="addSite()" class="add-company" style="margin-top:.6rem; width:100%; border-radius:12px; cursor:pointer;">＋ 拠点情報を追加する（部署・店舗が複数ある場合）</button>';
 
   main.innerHTML = html;
 
-  document.querySelectorAll(".ws-label-input").forEach(function(inp){
-    inp.addEventListener("change", function(){ renameWorksite(inp.dataset.wid, inp.value); });
+  document.querySelectorAll(".site-label-input").forEach(function(inp){
+    inp.addEventListener("change", function(){ renameSite(inp.dataset.sid, inp.value); });
   });
-}
-
-function itemTableHtml(items){
-  if (!items.length) return '<div class="placeholder-chap">項目がありません。</div>';
-  var html = '<table class="item-table"><thead><tr>' +
-    '<th class="col-done">完了</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>実施日</th><th>状態</th><th></th>' +
-    '</tr></thead><tbody>';
-  items.forEach(function(it){
-    var st = STATE[it.id];
-    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (st.status==="完了" ? "is-done" : "") + '">' +
-      '<td class="col-done"><span class="check ' + (st.status==="完了" ? "on" : "") + '"></span></td>' +
-      '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
-      '<td class="' + (st.decision ? "" : "muted") + '">' + (st.decision || "未入力") + '</td>' +
-      '<td><span class="owner-tag">' + st.ownerGroup + '</span><br>' + (st.owner||"（未定）") + '</td>' +
-      '<td>' + (st.plan||"—") + '</td>' +
-      '<td>' + (st.done||"—") + '</td>' +
-      '<td><span class="status-pill st-' + st.status + '">' + st.status + '</span></td>' +
-      '<td class="col-detail">詳細 ›</td>' +
-    '</tr>';
-  });
-  html += '</tbody></table>';
-  return html;
 }
 
 document.getElementById("f-company").value = DEFAULTS["f-company"];
 restoreHeader(true);
-loadWorksites();
+loadSites();
 loadItemState();
 FIELD_IDS.forEach(function(id){
   document.getElementById(id).addEventListener("input", persistHeader);
 });
 document.getElementById("f-company").addEventListener("change", function(){
   restoreHeader(false);
-  loadWorksites();
+  loadSites();
   loadItemState();
   renderAll();
 });
