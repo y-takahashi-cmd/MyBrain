@@ -728,7 +728,13 @@ var ITEMS = {
       fields:[
         { key:"method", label:"周知方法（複数選択）", type:"checkboxes", options:["メール","イントラネット","掲示板","朝礼","Teams／Slack","書面配布"] },
         { key:"window", label:"苦情受付窓口", options:["人事","総務","産業医","その他"] },
-        { key:"privacy", label:"プライバシー保護（複数選択）", type:"checkboxes", options:["厚労省標準","個人情報保護規程に準拠","自社規程に準拠","AIで文章作成"] }
+        { key:"privacy", label:"プライバシー保護（複数選択）", type:"checkboxes", options:["厚労省標準","個人情報保護規程に準拠","自社規程に準拠","AIで文章作成"],
+          definitions:{
+            "厚労省標準":"個人情報保護法及び厚生労働省の関連指針を遵守し、ストレスチェックにより取得した情報（受検状況・個人結果とも）を、目的外に利用しない。",
+            "個人情報保護規程に準拠":"自社の個人情報保護規程に基づき、ストレスチェック結果を含む健康情報を、規程に定める保存期間・アクセス権限のもとで管理する。",
+            "自社規程に準拠":"自社の情報管理規程（就業規則等を含む）に基づき、取得した情報を管理する。",
+            "AIで文章作成":"（AI下書き・要確認）ストレスチェックで取得した個人情報は、本人の同意なく第三者へ提供せず、業務上必要な範囲でのみ利用します。"
+          } }
       ] },
     { id:"c5-custom", name:"会社独自に変更する箇所", type:"決定する項目", ownerGroup:"会社担当者",
       purpose:"どこを会社独自に変更しますか？該当する箇所を選ぶ。",
@@ -785,8 +791,13 @@ var ITEMS = {
       purpose:"案内の配信方法と、未受検者への督促方針を決める。", check:"—",
       options:"メール／掲示／説明会／その他", law:"会社運用ルール", required:["decision"] },
     { id:"c8-doc", name:"受検案内文・受検マニュアル（📄L3様式）の作成", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"社員向け受検案内文・受検マニュアルを作成する。", check:"—", options:"—",
-      law:"指針", required:["done"] }
+      purpose:"社員向け受検案内文を作成する。5章で決めた周知方法・苦情窓口・プライバシー保護方針を反映して自動生成できる。",
+      check:"—", law:"指針", required:["decision"],
+      textOptions:[
+        { label:"AIで自動作成（5章の内容を反映）", text: generateAnnouncementDraft },
+        { label:"企業のオンライン保健室のおすすめ案内を使用", text:"（企業のオンライン保健室が用意する案内パンフレットを使用します。実際のパンフレットデータは準備中）" },
+        { label:"自由作成", text:null }
+      ] }
   ],
   9: [
     { id:"c9-monitor", name:"受検状況モニタリング・未受検者への再勧奨", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
@@ -1082,6 +1093,15 @@ function multiFieldCellHtml(it, st, locked){
           '<input type="checkbox" onchange="toggleCheckboxField(\'' + it.id + '\',\'' + fd.key + '\',\'' + o + '\', this.checked)" ' + (checked?"checked":"") + ' ' + disabledAttr + ' style="width:.9em; height:.9em; margin:0;">' + escapeHtml(o) + '</label>';
       });
       html += '</div>';
+      if (fd.definitions && selected.length){
+        html += '<div style="margin-top:.35rem; display:flex; flex-direction:column; gap:.25rem;">';
+        selected.forEach(function(o){
+          if (fd.definitions[o]){
+            html += '<div style="font-size:.72rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.35rem .55rem; line-height:1.6;"><b style="color:var(--text-heading);">' + escapeHtml(o) + '</b>：' + escapeHtml(fd.definitions[o]) + '</div>';
+          }
+        });
+        html += '</div>';
+      }
     } else {
       html += '<input type="text" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     }
@@ -1197,6 +1217,24 @@ function generateRegulationDraft(){
     "6．労働者への周知方法\n" + shuchi + "\n\n" +
     "7．苦情受付窓口\n" + kujou + "\n\n" +
     "8．その他\n本規程に定めのない事項は、衛生委員会等の審議結果（第4章）による。";
+}
+
+function generateAnnouncementDraft(){
+  var companyName = (document.getElementById("f-company") && document.getElementById("f-company").value) || "当社";
+  var purpose = (STATE["c2-ichiji"] && STATE["c2-ichiji"].decision) || "労働者のメンタルヘルス不調を未然に防止すること";
+  var method = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].method) || "（未定・5章で選択してください）";
+  var kujou = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].window) || "（未定・5章で選択してください）";
+  var privacy = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].privacy) || "（未定・5章で選択してください）";
+  return "（AI自動生成・要レビュー）\n" +
+    "件名：ストレスチェックの実施について\n\n" +
+    "社員各位\n\n" +
+    companyName + "では、" + purpose + "を目的として、ストレスチェックを実施します。\n\n" +
+    "・受検は任意ですが、ご自身の心身の健康を確認する機会としてぜひ受検してください。\n" +
+    "・受検しないことによる不利益な取扱いは一切ありません。\n" +
+    "・結果は実施者から本人へ直接通知され、ご本人の同意なく会社へ提供されることはありません（" + privacy + "）。\n" +
+    "・案内は" + method + "でお送りします。\n" +
+    "・ご不明点・ご相談は" + kujou + "までお問い合わせください。\n\n" +
+    "企業のオンライン保健室";
 }
 
 window.bulkSetDecision = function(prefix, decisionValue, statusValue){
