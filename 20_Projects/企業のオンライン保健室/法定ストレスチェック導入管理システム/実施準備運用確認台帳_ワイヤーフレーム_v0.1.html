@@ -708,15 +708,49 @@ var ITEMS = {
       ] }
   ],
   5: [
-    { id:"c5-bunshoka", name:"実施規程（📄L2規程・中核文書）の文書化", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"衛生委員会等の審議事項を、社内規程（実施規程）として文書化する。全章の根拠となる中核文書。",
-      check:"—", options:"—", law:"指針（実施規程の作成を求める）", required:["done"] },
-    { id:"c5-kitei", name:"周知方法・苦情処理窓口・プライバシー保護ルールの規定", type:"決定する項目", ownerGroup:"会社責任者",
-      purpose:"実施規程に、労働者への周知方法・苦情処理窓口・プライバシー保護ルールを明記する。",
-      check:"—", options:"—", law:"指針", required:["decision"] },
-    { id:"c5-hinagata", name:"規程ひな型のカスタム範囲の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"厚労省モデル準拠のひな型を、顧客企業ごとにどこまでカスタムするかを決める。",
-      check:"—", options:"—", law:"会社運用ルール", required:["decision"] }
+    { id:"c5-upload", name:"自社規程を取り込む", type:"実施する項目", ownerGroup:"会社担当者",
+      purpose:"すでに自社の実施規程（Word・PDF）がある場合は、取り込んで内容を確認する。ない場合は、下の各項目をひとつずつ決めて新規に作成する。",
+      check:"—", law:"会社運用ルール", required:["file"],
+      fields:[ { key:"file", label:"ファイル（Word・PDF）", type:"file" } ] },
+    { id:"c5-topic-1", name:"規程反映：ストレスチェック制度の導入", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-2", name:"規程反映：実施時期", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-3", name:"規程反映：実施者", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-4", name:"規程反映：実施事務従事者", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-5", name:"規程反映：受検対象者", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-6", name:"規程反映：使用する調査票", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-7", name:"規程反映：高ストレス者の選定方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-8", name:"規程反映：面接指導体制", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-9", name:"規程反映：集団分析の実施", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-10", name:"規程反映：個人情報保護・結果の取扱い", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-11", name:"規程反映：結果の保存方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-12", name:"規程反映：労働者への周知方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] },
+    { id:"c5-topic-13", name:"規程反映：苦情処理窓口・プライバシー保護ルール", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施規程にこの項目が反映されているかを確認する。", check:"—", options:"反映済み／未反映／要修正／対象外",
+      law:"指針（実施規程の作成を求める）", required:["decision"] }
   ],
   6: [
     { id:"c6-chousahyou", name:"調査票の選定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
@@ -1050,6 +1084,9 @@ function multiFieldCellHtml(it, st, locked){
       html += '</select>';
     } else if (fd.type === "date"){
       html += '<input type="date" value="' + val + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
+    } else if (fd.type === "file"){
+      html += '<input type="file" accept=".doc,.docx,.pdf" onclick="event.stopPropagation()" onchange="handleFileInline(\'' + it.id + '\',\'' + fd.key + '\', this)" ' + disabledAttr + ' style="' + boxStyle + ' padding:.12rem;">';
+      if (val) html += '<span style="font-size:.7rem; color:var(--brand-deep); white-space:nowrap;">📎 ' + escapeHtml(val) + '</span>';
     } else {
       html += '<input type="text" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     }
@@ -1128,6 +1165,25 @@ window.setFieldInline = function(id, key, value){
   STATE[id][key] = value;
   persistItems();
   renderNav(); updateHeaderStats(); renderMain();
+};
+
+window.handleFileInline = function(id, key, inputEl){
+  var f = inputEl.files && inputEl.files[0];
+  STATE[id][key] = f ? f.name : "";
+  persistItems();
+  renderNav(); updateHeaderStats(); renderMain();
+};
+
+window.bulkSetDecision = function(prefix, decisionValue, statusValue){
+  if (!confirm('この章の「' + prefix + '」項目すべてを「' + decisionValue + '」にしますか？')) return;
+  Object.keys(STATE).forEach(function(id){
+    if (id.indexOf(prefix) === 0){
+      STATE[id].decision = decisionValue;
+      STATE[id].status = statusValue;
+    }
+  });
+  persistItems();
+  renderAll();
 };
 
 window.setStatusInline = function(id, value, selectEl){
@@ -1303,6 +1359,13 @@ function renderMain(){
   var simpleChapter = !hasCustomFields && items.every(function(it){
     return it.required && it.required.length === 1 && it.required[0] === "decision";
   });
+
+  if (currentChap === 4){
+    html += '<button onclick="bulkSetDecision(\'c4-topic-\',\'承認\',\'完了\')" style="margin-bottom:1rem; border:1px solid var(--brand-line); background:var(--info-50); color:var(--brand-deep); font-weight:700; font-size:.82rem; border-radius:8px; padding:.5rem 1rem; cursor:pointer;">☑ 審議事項をすべて「承認」で一括処理する</button>';
+  }
+  if (currentChap === 5){
+    html += '<button onclick="bulkSetDecision(\'c5-topic-\',\'反映済み\',\'完了\')" style="margin-bottom:1rem; border:1px solid var(--brand-line); background:var(--info-50); color:var(--brand-deep); font-weight:700; font-size:.82rem; border-radius:8px; padding:.5rem 1rem; cursor:pointer;">☑ 反映確認項目をすべて「反映済み」で一括処理する</button>';
+  }
 
   html += '<table class="item-table"><thead><tr>' +
     (hasCustomFields
