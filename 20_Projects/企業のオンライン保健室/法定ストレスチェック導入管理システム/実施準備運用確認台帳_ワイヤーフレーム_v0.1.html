@@ -207,7 +207,7 @@
   .item-table{ width:100%; border-collapse:collapse; background:var(--card-bg); border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-card); }
   .item-table thead th{ background:var(--info-50); color:var(--text-heading); font-size:.72rem; font-weight:700; text-align:left; padding:.6rem .75rem; white-space:nowrap; }
   .item-table tbody td{ padding:.62rem .75rem; border-top:1px solid var(--border); font-size:.83rem; vertical-align:top; }
-  .item-table tbody tr{ cursor:pointer; }
+  .item-table tbody tr{ }
   .item-table tbody tr:hover{ background:var(--card-bg-tint); }
   .item-table tbody tr.is-done{ }
   .item-table .col-done{ width:2.2rem; text-align:center; }
@@ -902,6 +902,52 @@ function renderNav(){
   });
 }
 
+// ---------------- inline row editing: choose from a checklist without opening the drawer ----------------
+function decisionCellHtml(it, st){
+  var opts = (it.options && it.options !== "—") ? it.options.split(/[／\/]/).map(function(s){ return s.trim(); }).filter(Boolean) : null;
+  var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; background:var(--card-bg); color:var(--text-heading); font-family:var(--font-body);";
+  if (opts && opts.length){
+    var html = '<select onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" style="' + boxStyle + '">';
+    html += '<option value="">選択してください</option>';
+    opts.forEach(function(o){
+      html += '<option ' + (o === st.decision ? "selected" : "") + '>' + escapeHtml(o) + '</option>';
+    });
+    html += '</select>';
+    return html;
+  }
+  return '<input type="text" value="' + escapeHtml(st.decision||"").replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" style="' + boxStyle + '">';
+}
+
+function completeCellHtml(it, st){
+  return '<input type="checkbox" onclick="event.stopPropagation()" onchange="toggleCompleteInline(\'' + it.id + '\', this)" ' + (st.status==="完了"?"checked":"") + ' style="width:1.2em; height:1.2em; accent-color:var(--success-700); cursor:pointer;">';
+}
+
+window.setDecisionInline = function(id, value){
+  var item = itemById(id);
+  var st = STATE[id];
+  st.decision = value;
+  if (st.status === "完了" && !isReqMet(item)) st.status = "確認待ち";
+  persistItems();
+  renderNav(); updateHeaderStats(); renderMain();
+};
+
+window.toggleCompleteInline = function(id, checkboxEl){
+  var item = itemById(id);
+  var st = STATE[id];
+  if (checkboxEl.checked){
+    if (!isReqMet(item)){
+      checkboxEl.checked = false;
+      alert("「" + item.name + "」を完了にするには、決定内容・確認結果の入力が必要です。");
+      return;
+    }
+    st.status = "完了";
+  } else {
+    st.status = "確認待ち";
+  }
+  persistItems();
+  renderNav(); updateHeaderStats(); renderMain();
+};
+
 function renderOverview(){
   var main = document.getElementById("chapMain");
   var html = '<div class="chap-head"><span class="no">📋</span><h2>全体チェック表 — 何ができていて、何がまだ決まっていないか</h2></div>';
@@ -935,15 +981,15 @@ function renderOverview(){
   all.forEach(function(x){
     var it = x.item, st = STATE[it.id];
     var chap = CHAPTERS.find(function(c){ return String(c.no) === String(x.chapNo); });
-    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (st.status==="完了" ? "is-done" : "") + '">' +
-      '<td class="col-done"><span class="check ' + (st.status==="完了" ? "on" : "") + '"></span></td>' +
+    html += '<tr class="' + (st.status==="完了" ? "is-done" : "") + '">' +
+      '<td class="col-done">' + completeCellHtml(it, st) + '</td>' +
       '<td class="muted">' + String(x.chapNo).padStart(2,"0") + ' ' + chap.title + '</td>' +
       '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
-      '<td class="' + (st.decision ? "" : "muted") + '">' + (st.decision || "未入力") + '</td>' +
+      '<td>' + decisionCellHtml(it, st) + '</td>' +
       '<td><span class="owner-tag">' + st.ownerGroup + '</span><br>' + (st.owner||"（未定）") + '</td>' +
       '<td>' + (st.plan||"—") + '</td>' +
       '<td><span class="status-pill st-' + st.status + '">' + st.status + '</span></td>' +
-      '<td class="col-detail">詳細 ›</td>' +
+      '<td class="col-detail" onclick="openDrawer(\'' + it.id + '\')" style="cursor:pointer;">詳細 ›</td>' +
     '</tr>';
   });
   html += '</tbody></table>';
@@ -1060,15 +1106,15 @@ function renderMain(){
 
   items.forEach(function(it){
     var st = STATE[it.id];
-    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (st.status==="完了" ? "is-done" : "") + '">' +
-      '<td class="col-done"><span class="check ' + (st.status==="完了" ? "on" : "") + '"></span></td>' +
+    html += '<tr class="' + (st.status==="完了" ? "is-done" : "") + '">' +
+      '<td class="col-done">' + completeCellHtml(it, st) + '</td>' +
       '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
-      '<td class="' + (st.decision ? "" : "muted") + '">' + (st.decision || "未入力") + '</td>' +
+      '<td>' + decisionCellHtml(it, st) + '</td>' +
       '<td><span class="owner-tag">' + st.ownerGroup + '</span><br>' + (st.owner||"（未定）") + '</td>' +
       '<td>' + (st.plan||"—") + '</td>' +
       '<td>' + (st.done||"—") + '</td>' +
       '<td><span class="status-pill st-' + st.status + '">' + st.status + '</span></td>' +
-      '<td class="col-detail">詳細 ›</td>' +
+      '<td class="col-detail" onclick="openDrawer(\'' + it.id + '\')" style="cursor:pointer;">詳細 ›</td>' +
     '</tr>';
   });
   html += '</tbody></table>';
