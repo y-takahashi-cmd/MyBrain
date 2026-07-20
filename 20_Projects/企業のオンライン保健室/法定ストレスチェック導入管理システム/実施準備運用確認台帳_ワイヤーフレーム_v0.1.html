@@ -402,24 +402,15 @@ var ITEMS = {
   ]
 };
 
-// initial demo state — kept intentionally consistent with each item's "required" list above
-// (an item is never seeded as 完了 unless its required fields are actually filled)
-var SEED = {
-  "c2-1": { status:"完了", decision:"代表取締役に決定（例）", ownerGroup:"会社責任者", owner:"山田太郎（例）", plan:"2026-06-20", done:"2026-06-18", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c2-2": { status:"完了", decision:"会社責任者と兼任することに決定", ownerGroup:"会社責任者", owner:"山田太郎（例）", plan:"2026-06-20", done:"2026-06-18", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c2-3": { status:"確認待ち", decision:"", ownerGroup:"企業のオンライン保健室", owner:"", plan:"2026-07-22", done:"", confirmPlan:"", confirmDone:"", confirmer:"", note:"看護師を予定しているため、所定研修修了の確認が必要（要確認）" },
-  "c2-4": { status:"未着手", decision:"", ownerGroup:"企業のオンライン保健室", owner:"", plan:"2026-07-22", done:"", confirmPlan:"2026-07-22", confirmDone:"", confirmer:"", note:"" },
-  "c2-5": { status:"完了", decision:"社内担当者を選任（監督的地位ではないことを確認済み）", ownerGroup:"会社管理者", owner:"佐藤花子（例）", plan:"2026-07-10", done:"2026-07-09", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c2-6": { status:"完了", decision:"該当なし（監督的地位ではない）", ownerGroup:"企業のオンライン保健室", owner:"", plan:"2026-07-10", done:"", confirmPlan:"2026-07-10", confirmDone:"2026-07-09", confirmer:"（当社担当者）", note:"" },
-  "c2-7": { status:"期限超過", decision:"", ownerGroup:"企業のオンライン保健室", owner:"", plan:"2026-07-15", done:"", confirmPlan:"", confirmDone:"", confirmer:"", note:"実施者未確定のため保留中" },
-  "c2-8": { status:"完了", decision:"髙橋由香を登録", ownerGroup:"企業のオンライン保健室", owner:"髙橋由香", plan:"2026-06-15", done:"2026-06-15", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c7-1": { status:"完了", decision:"正社員・契約社員を対象、アルバイトは対象外", ownerGroup:"会社管理者", owner:"佐藤花子（例）", plan:"2026-06-20", done:"2026-06-18", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c7-2": { status:"完了", decision:"6名確定（例：山田太郎・佐藤花子・鈴木一郎・田中次郎・伊藤三郎・渡辺陽子）", ownerGroup:"会社管理者", owner:"佐藤花子（例）", plan:"2026-06-25", done:"2026-06-25", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c7-3": { status:"完了", decision:"今回は対象外。必要になれば追加登録可能", ownerGroup:"会社管理者", owner:"佐藤花子（例）", plan:"2026-06-25", done:"2026-06-25", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c7-4": { status:"完了", decision:"6名登録完了", ownerGroup:"企業のオンライン保健室", owner:"髙橋由香", plan:"2026-06-25", done:"2026-06-25", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c7-5": { status:"完了", decision:"正式メールアドレスへ変更・保存済み", ownerGroup:"企業のオンライン保健室", owner:"髙橋由香", plan:"2026-07-09", done:"2026-07-09", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
-  "c7-6": { status:"確認待ち", decision:"", ownerGroup:"会社管理者", owner:"", plan:"2026-07-25", done:"", confirmPlan:"2026-07-25", confirmDone:"", confirmer:"", note:"" }
-};
+// base template state — every item starts blank / 未着手 for any newly duplicated company.
+// (ownerGroup keeps the default responsible role so the table isn't empty, but nothing is
+// pre-filled and nothing starts as 完了)
+var SEED = {};
+Object.keys(ITEMS).forEach(function(chapNo){
+  ITEMS[chapNo].forEach(function(it){
+    SEED[it.id] = { status:"未着手", decision:"", ownerGroup:it.ownerGroup, owner:"", plan:"", done:"", confirmPlan:"", confirmDone:"", confirmer:"", note:"" };
+  });
+});
 
 var STATE = {}; // populated per company by loadItemState()
 var FIELD_LABEL = { decision:"決定内容・確認結果", ownerGroup:"担当区分", owner:"担当者", plan:"予定日", done:"実施日／決定日", confirmPlan:"確認予定日", confirmDone:"確認日", confirmer:"確認者", note:"備考" };
