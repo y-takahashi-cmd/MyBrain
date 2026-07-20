@@ -648,16 +648,64 @@ var ITEMS = {
       law:"法令上必要", required:["done"] }
   ],
   4: [
-    { id:"c4-shingi", name:"必須審議事項の調査審議", type:"決定する項目", ownerGroup:"会社責任者",
-      purpose:"衛生委員会等で、実施体制・実施方法・高ストレス者選定基準・面接指導の申出方法・結果の取扱い・情報管理・苦情処理・不利益取扱い防止を調査審議する。",
-      check:"—", options:"—", law:"安衛法18・安衛則52-9・指針", required:["decision","done"] },
-    { id:"c4-gijiroku", name:"審議結果の議事録化（📄L4記録）", type:"記録する項目", ownerGroup:"会社担当者",
-      purpose:"審議事項を議事録として記録・保存する。", check:"—", options:"—",
-      law:"安衛法18・安衛則52-9", required:["done"] },
-    { id:"c4-daitai", name:"衛生委員会がない場合の代替の決定", type:"決定する項目", ownerGroup:"会社責任者",
-      purpose:"常時50人未満等で衛生委員会がない場合、関係労働者からの意見聴取の機会をどう設けるかを決める。",
-      check:"—", options:"衛生委員会／安全衛生委員会／労働者代表との意見聴取／社内会議",
-      law:"安衛則52-9・指針", required:["decision"] }
+    { id:"c4-umu", name:"衛生委員会等の有無", type:"確認する項目", ownerGroup:"会社責任者",
+      purpose:"審議の場として衛生委員会等があるかを確認する。ない場合は代替の協議者を決める。",
+      check:"常時50人未満等で衛生委員会がない場合は、代替の協議者を決める。",
+      law:"安衛則52-9・指針", required:["exists"],
+      fields:[
+        { key:"exists", label:"衛生委員会等の有無", options:["ある","ない"] },
+        { key:"altBody", label:"代替協議者", options:["安全衛生推進者","衛生推進者","労働者代表","その他"], showIf:{ key:"exists", equals:"ない" } }
+      ] },
+    { id:"c4-topic-1", name:"審議：ストレスチェック制度の導入", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-2", name:"審議：実施時期", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-3", name:"審議：実施者", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-4", name:"審議：実施事務従事者", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-5", name:"審議：受検対象者", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-6", name:"審議：使用する調査票", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-7", name:"審議：高ストレス者の選定方法", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-8", name:"審議：面接指導体制", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-9", name:"審議：集団分析の実施", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-10", name:"審議：個人情報保護・結果の取扱い", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-11", name:"審議：結果の保存方法", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-12", name:"審議：労働者への周知方法", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-topic-13", name:"審議：ストレスチェック実施規程（実施要領）の内容", type:"決定する項目", ownerGroup:"会社責任者",
+      purpose:"必須審議事項の一つ。", check:"—", options:"承認／修正して承認／継続審議／保留",
+      law:"安衛法18・安衛則52-9・指針", required:["decision"] },
+    { id:"c4-gijiroku", name:"議事録の作成方法", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"審議結果を議事録として記録・保存する。", check:"—", options:"AIで作成／前年度コピー／PDF出力",
+      law:"安衛法18・安衛則52-9", required:["decision"] },
+    { id:"c4-shuchi", name:"労働者への周知", type:"通知する項目", ownerGroup:"会社担当者",
+      purpose:"審議結果を労働者へ周知する。", check:"—",
+      law:"指針", required:["method"],
+      fields:[
+        { key:"method", label:"周知方法", options:["メール","イントラネット","掲示板","朝礼","Teams／Slack","書面配布","その他"] },
+        { key:"planDate", label:"周知予定日", type:"date" },
+        { key:"doneDate", label:"周知実施日", type:"date" }
+      ] }
   ],
   5: [
     { id:"c5-bunshoka", name:"実施規程（📄L2規程・中核文書）の文書化", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
@@ -984,6 +1032,7 @@ window.setTemplateInline = function(id, idxStr){
 function multiFieldCellHtml(it, st, locked){
   var html = '<div style="display:flex; flex-direction:column; gap:.35rem;">';
   it.fields.forEach(function(fd){
+    if (fd.showIf && st[fd.showIf.key] !== fd.showIf.equals) return;
     var val = st[fd.key] || "";
     var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.24rem .4rem; font-size:.78rem; font-family:var(--font-body);" +
       (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
@@ -999,6 +1048,8 @@ function multiFieldCellHtml(it, st, locked){
       html += '<option value="">選択</option>';
       fd.options.forEach(function(o){ html += '<option ' + (o===val?"selected":"") + '>' + escapeHtml(o) + '</option>'; });
       html += '</select>';
+    } else if (fd.type === "date"){
+      html += '<input type="date" value="' + val + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     } else {
       html += '<input type="text" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     }
