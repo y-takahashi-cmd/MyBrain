@@ -235,6 +235,11 @@
     font-family:var(--font-body); color:var(--text-heading); background:var(--card-bg);
   }
   .d-field input:focus, .d-field select:focus, .d-field textarea:focus{ outline:none; border-color:var(--brand); }
+  .d-block > select, .d-block > textarea{
+    width:100%; border:1.5px solid var(--border); border-radius:8px; padding:.5rem .65rem; font-size:.87rem;
+    font-family:var(--font-body); color:var(--text-heading); background:var(--card-bg); resize:vertical;
+  }
+  .d-block > select:focus, .d-block > textarea:focus{ outline:none; border-color:var(--brand); }
   .d-field.empty input, .d-field.empty select{ border-color:var(--warning-500); background:var(--warning-50); }
   .d-field .req{ color:var(--error-500); }
 
@@ -337,94 +342,112 @@ var TURN = { "会社責任者":"turn-company","会社管理者":"turn-company","
   "企業のオンライン保健室":"turn-us","システム会社":"turn-us","その他":"turn-none" };
 
 // Fully worked-out chapters for the wireframe. Others show a placeholder.
+// "required" lists which STATE fields must be non-empty before the 完了 checkbox can be turned on.
 var ITEMS = {
   2: [
-    { id:"c2-1", name:"会社責任者の決定", type:"決定する項目", owner:"会社責任者", ownerGroup:"会社責任者",
-      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"山田太郎（代表取締役・例）",
+    { id:"c2-1", name:"会社責任者の決定", type:"決定する項目", ownerGroup:"会社責任者",
       purpose:"ストレスチェック制度の実施責任を負う会社側の最終責任者を明確にする。",
       check:"誰が会社責任者か。人事権・経営権を持つ立場か。",
       options:"代表取締役／役員／人事担当役員 など",
-      law:"法令上必要", note:"", requiredFor:["決定内容","決定日","決定者"], filled:{decision:true, done:true, owner:true} },
-    { id:"c2-2", name:"会社管理者の決定", type:"決定する項目", owner:"会社責任者", ownerGroup:"会社責任者",
-      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"山田太郎（会社責任者と兼任・例）",
+      law:"法令上必要", required:["decision","done"] },
+    { id:"c2-2", name:"会社管理者の決定", type:"決定する項目", ownerGroup:"会社責任者",
       purpose:"受検対象者の登録・受検状況の確認・社員への案内を行う会社側担当者を決める。",
       check:"会社責任者と兼任か、別に立てるか。", options:"兼任／別担当者を置く",
-      law:"契約上必要", note:"", requiredFor:["決定内容","決定日"], filled:{decision:true, done:true} },
-    { id:"c2-3", name:"実施者の決定", type:"決定する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
-      plan:"2026-07-22", done:"", status:"確認待ち", decision:"",
+      law:"契約上必要", required:["decision","done"] },
+    { id:"c2-3", name:"実施者の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"ストレスチェックの評価・高ストレス者の選定基準への関与・面接指導要否の判断を行う専門職を決める。",
       check:"医師／保健師／所定研修修了の看護師／精神保健福祉士／公認心理師のいずれかであることを確認する。",
       options:"外部委託の医師等／社内産業医／保健師",
-      law:"法令上必要", note:"看護師を予定しているため、所定研修修了の確認が必要（要確認）",
-      requiredFor:["実施者氏名","資格区分","決定日","決定者"], filled:{} },
-    { id:"c2-4", name:"実施者の資格確認", type:"確認する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
-      plan:"2026-07-22", done:"", status:"未着手", decision:"",
+      law:"法令上必要", required:["decision","done","confirmer"] },
+    { id:"c2-4", name:"実施者の資格確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"実施者が法令上認められた資格（医師・保健師・所定研修修了看護師等）を満たしているかを確認する。",
       check:"資格証・研修修了証の確認。", options:"確認済み／確認中／要再確認",
-      law:"法令上必要", note:"", requiredFor:["確認結果","確認日","確認者"], filled:{} },
-    { id:"c2-5", name:"実施事務従事者の選任", type:"決定する項目", owner:"会社管理者", ownerGroup:"会社管理者",
-      plan:"2026-07-10", done:"2026-07-09", status:"完了", decision:"山田太郎（実施事務兼任・監督的地位ではないことを確認済み・例）",
+      law:"法令上必要", required:["decision","confirmDone","confirmer"] },
+    { id:"c2-5", name:"実施事務従事者の選任", type:"決定する項目", ownerGroup:"会社管理者",
       purpose:"受検者登録・調査票回収・結果保存等の実務を担う担当者を選ぶ。",
       check:"人事権・異動権を持つ「監督的地位にある者」でないことを確認する。",
       options:"社内担当者／企業のオンライン保健室代行",
-      law:"法令上必要", note:"", requiredFor:["決定内容","決定日","確認結果"], filled:{decision:true, done:true} },
-    { id:"c2-6", name:"実施事務従事者の監督的地位チェック", type:"確認する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
-      plan:"2026-07-10", done:"2026-07-09", status:"完了", decision:"該当なし（監督的地位ではない）",
+      law:"法令上必要", required:["decision","done"] },
+    { id:"c2-6", name:"実施事務従事者の監督的地位チェック", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"実施事務従事者が対象者の解雇・異動等の権限を持つ立場でないかを確認する。",
       check:"人事評価権・異動権の有無。", options:"問題なし／要確認／交代が必要",
-      law:"法令上必要", note:"", requiredFor:["確認結果","確認日","確認者"], filled:{decision:true, done:true} },
-    { id:"c2-7", name:"守秘義務の説明", type:"実施する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
-      plan:"2026-07-15", done:"", status:"期限超過", decision:"",
+      law:"法令上必要", required:["decision","confirmDone"] },
+    { id:"c2-7", name:"守秘義務の説明", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"個人結果等の秘密を扱う関係者に守秘義務を説明する。",
       check:"説明資料・同意書の有無。", options:"実施済み／未実施",
-      law:"法令上必要", note:"実施者未確定のため保留中", requiredFor:["実施日","実施内容"], filled:{} },
-    { id:"c2-8", name:"企業のオンライン保健室担当者の登録", type:"記録する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
-      plan:"2026-06-15", done:"2026-06-15", status:"完了", decision:"（当社担当者名）",
+      law:"法令上必要", required:["done"] },
+    { id:"c2-8", name:"企業のオンライン保健室担当者の登録", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"当社側の窓口担当者を記録する。", check:"—", options:"—",
-      law:"契約上必要", note:"", requiredFor:["決定内容"], filled:{decision:true, done:true} }
+      law:"契約上必要", required:["decision"] }
   ],
   7: [
-    { id:"c7-1", name:"対象者の判断基準の決定", type:"決定する項目", owner:"会社管理者", ownerGroup:"会社管理者",
-      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"正社員・契約社員を対象、アルバイトは対象外",
+    { id:"c7-1", name:"対象者の判断基準の決定", type:"決定する項目", ownerGroup:"会社管理者",
       purpose:"どの雇用区分を対象とするかの基準を決める。", check:"—", options:"—",
-      law:"会社運用ルール", note:"", requiredFor:["決定内容","決定日"], filled:{decision:true, done:true} },
-    { id:"c7-2", name:"対象者名簿の作成", type:"実施する項目", owner:"会社管理者", ownerGroup:"会社管理者",
-      plan:"2026-06-25", done:"2026-06-25", status:"完了", decision:"6名確定（例：山田太郎・佐藤花子・鈴木一郎・田中次郎・伊藤三郎・渡辺陽子）",
+      law:"会社運用ルール", required:["decision","done"] },
+    { id:"c7-2", name:"対象者名簿の作成", type:"実施する項目", ownerGroup:"会社管理者",
       purpose:"受検対象者の名簿を確定する。", check:"—", options:"—",
-      law:"法令上必要", note:"", requiredFor:["決定内容","実施日"], filled:{decision:true, done:true} },
-    { id:"c7-3", name:"アルバイト3名の対象区分決定", type:"決定する項目", owner:"会社管理者", ownerGroup:"会社管理者",
-      plan:"2026-06-25", done:"2026-06-25", status:"完了", decision:"今回は対象外。必要になれば追加登録可能",
+      law:"法令上必要", required:["decision","done"] },
+    { id:"c7-3", name:"アルバイト等の対象区分決定", type:"決定する項目", ownerGroup:"会社管理者",
       purpose:"アルバイト従業員を対象に含めるかを決める。", check:"—", options:"対象／対象外／確認中",
-      law:"会社運用ルール", note:"", requiredFor:["決定内容"], filled:{decision:true, done:true} },
-    { id:"c7-4", name:"対象者のシステム登録", type:"実施する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
-      plan:"2026-06-25", done:"2026-06-25", status:"完了", decision:"6名登録完了",
+      law:"会社運用ルール", required:["decision"] },
+    { id:"c7-4", name:"対象者のシステム登録", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"対象者を実施システムへ登録する。", check:"—", options:"—",
-      law:"契約上必要", note:"", requiredFor:["実施日"], filled:{done:true} },
-    { id:"c7-5", name:"メールアドレスの登録", type:"実施する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
-      plan:"2026-07-09", done:"2026-07-09", status:"完了", decision:"正式メールアドレスへ変更・保存済み",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-5", name:"メールアドレスの登録", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"個人結果通知に使うメールアドレスを登録する。", check:"—", options:"—",
-      law:"契約上必要", note:"", requiredFor:["実施日"], filled:{done:true} },
-    { id:"c7-6", name:"登録完了の確認", type:"確認する項目", owner:"会社管理者", ownerGroup:"会社管理者",
-      plan:"2026-07-25", done:"", status:"確認待ち", decision:"",
+      law:"契約上必要", required:["done"] },
+    { id:"c7-6", name:"登録完了の確認", type:"確認する項目", ownerGroup:"会社管理者",
       purpose:"登録内容に漏れ・誤りがないかを会社側が最終確認する。", check:"氏名・メール・部署の一致確認。",
-      options:"確認済み／要修正", law:"会社運用ルール", note:"", requiredFor:["確認結果","確認日","確認者"], filled:{} }
+      options:"確認済み／要修正", law:"会社運用ルール", required:["decision","confirmDone","confirmer"] }
   ]
 };
+
+// initial demo state — kept intentionally consistent with each item's "required" list above
+// (an item is never seeded as 完了 unless its required fields are actually filled)
+var SEED = {
+  "c2-1": { status:"完了", decision:"代表取締役に決定（例）", ownerGroup:"会社責任者", owner:"山田太郎（例）", plan:"2026-06-20", done:"2026-06-18", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c2-2": { status:"完了", decision:"会社責任者と兼任することに決定", ownerGroup:"会社責任者", owner:"山田太郎（例）", plan:"2026-06-20", done:"2026-06-18", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c2-3": { status:"確認待ち", decision:"", ownerGroup:"企業のオンライン保健室", owner:"", plan:"2026-07-22", done:"", confirmPlan:"", confirmDone:"", confirmer:"", note:"看護師を予定しているため、所定研修修了の確認が必要（要確認）" },
+  "c2-4": { status:"未着手", decision:"", ownerGroup:"企業のオンライン保健室", owner:"", plan:"2026-07-22", done:"", confirmPlan:"2026-07-22", confirmDone:"", confirmer:"", note:"" },
+  "c2-5": { status:"完了", decision:"社内担当者を選任（監督的地位ではないことを確認済み）", ownerGroup:"会社管理者", owner:"佐藤花子（例）", plan:"2026-07-10", done:"2026-07-09", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c2-6": { status:"完了", decision:"該当なし（監督的地位ではない）", ownerGroup:"企業のオンライン保健室", owner:"", plan:"2026-07-10", done:"", confirmPlan:"2026-07-10", confirmDone:"2026-07-09", confirmer:"（当社担当者）", note:"" },
+  "c2-7": { status:"期限超過", decision:"", ownerGroup:"企業のオンライン保健室", owner:"", plan:"2026-07-15", done:"", confirmPlan:"", confirmDone:"", confirmer:"", note:"実施者未確定のため保留中" },
+  "c2-8": { status:"完了", decision:"髙橋由香を登録", ownerGroup:"企業のオンライン保健室", owner:"髙橋由香", plan:"2026-06-15", done:"2026-06-15", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c7-1": { status:"完了", decision:"正社員・契約社員を対象、アルバイトは対象外", ownerGroup:"会社管理者", owner:"佐藤花子（例）", plan:"2026-06-20", done:"2026-06-18", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c7-2": { status:"完了", decision:"6名確定（例：山田太郎・佐藤花子・鈴木一郎・田中次郎・伊藤三郎・渡辺陽子）", ownerGroup:"会社管理者", owner:"佐藤花子（例）", plan:"2026-06-25", done:"2026-06-25", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c7-3": { status:"完了", decision:"今回は対象外。必要になれば追加登録可能", ownerGroup:"会社管理者", owner:"佐藤花子（例）", plan:"2026-06-25", done:"2026-06-25", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c7-4": { status:"完了", decision:"6名登録完了", ownerGroup:"企業のオンライン保健室", owner:"髙橋由香", plan:"2026-06-25", done:"2026-06-25", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c7-5": { status:"完了", decision:"正式メールアドレスへ変更・保存済み", ownerGroup:"企業のオンライン保健室", owner:"髙橋由香", plan:"2026-07-09", done:"2026-07-09", confirmPlan:"", confirmDone:"", confirmer:"", note:"" },
+  "c7-6": { status:"確認待ち", decision:"", ownerGroup:"会社管理者", owner:"", plan:"2026-07-25", done:"", confirmPlan:"2026-07-25", confirmDone:"", confirmer:"", note:"" }
+};
+
+var STATE = {}; // populated per company by loadItemState()
+var FIELD_LABEL = { decision:"決定内容・確認結果", ownerGroup:"担当区分", owner:"担当者", plan:"予定日", done:"実施日／決定日", confirmPlan:"確認予定日", confirmDone:"確認日", confirmer:"確認者", note:"備考" };
+
+function itemById(id){
+  var found = null;
+  Object.keys(ITEMS).forEach(function(k){ ITEMS[k].forEach(function(i){ if (i.id===id) found=i; }); });
+  return found;
+}
+function isReqMet(item){
+  var st = STATE[item.id];
+  return (item.required||[]).every(function(k){ return st[k] && String(st[k]).trim() !== ""; });
+}
 
 var currentChap = "overview";
 
 function counts(chapNo){
   var arr = ITEMS[chapNo];
   if (!arr) return null;
-  var done = arr.filter(function(i){ return i.status === "完了"; }).length;
+  var done = arr.filter(function(i){ return STATE[i.id].status === "完了"; }).length;
   return { done: done, total: arr.length };
 }
 function chapTurnClass(chapNo){
   var arr = ITEMS[chapNo];
   if (!arr) return "turn-none";
-  var pending = arr.find(function(i){ return i.status !== "完了"; });
+  var pending = arr.find(function(i){ return STATE[i.id].status !== "完了"; });
   if (!pending) return "turn-none";
-  return TURN[pending.ownerGroup] || "turn-none";
+  return TURN[STATE[pending.id].ownerGroup || pending.ownerGroup] || "turn-none";
 }
 
 function allItems(){
@@ -437,8 +460,8 @@ function allItems(){
 
 function updateHeaderStats(){
   var all = allItems();
-  var done = all.filter(function(x){ return x.item.status === "完了"; }).length;
-  var overdue = all.filter(function(x){ return x.item.status === "期限超過"; }).length;
+  var done = all.filter(function(x){ return STATE[x.item.id].status === "完了"; }).length;
+  var overdue = all.filter(function(x){ return STATE[x.item.id].status === "期限超過"; }).length;
   var progress = all.length ? Math.round(done / all.length * 100) : 0;
   document.getElementById("stat-progress").textContent = progress + "%";
   document.getElementById("stat-incomplete").textContent = (all.length - done);
@@ -496,7 +519,8 @@ function renderOverview(){
 
   html += '<div class="ov-divider">全項目（完了していないもの・確認が必要なものが上に来ます）</div>';
   var all = allItems().sort(function(a,b){
-    if ((a.item.status==="完了") !== (b.item.status==="完了")) return a.item.status==="完了" ? 1 : -1;
+    var sa = STATE[a.item.id].status, sb = STATE[b.item.id].status;
+    if ((sa==="完了") !== (sb==="完了")) return sa==="完了" ? 1 : -1;
     return Number(a.chapNo) - Number(b.chapNo);
   });
 
@@ -504,16 +528,16 @@ function renderOverview(){
     '<th class="col-done">完了</th><th>章</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>状態</th><th></th>' +
     '</tr></thead><tbody>';
   all.forEach(function(x){
-    var it = x.item;
+    var it = x.item, st = STATE[it.id];
     var chap = CHAPTERS.find(function(c){ return String(c.no) === String(x.chapNo); });
-    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (it.status==="完了" ? "is-done" : "") + '">' +
-      '<td class="col-done"><span class="check ' + (it.status==="完了" ? "on" : "") + '"></span></td>' +
+    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (st.status==="完了" ? "is-done" : "") + '">' +
+      '<td class="col-done"><span class="check ' + (st.status==="完了" ? "on" : "") + '"></span></td>' +
       '<td class="muted">' + String(x.chapNo).padStart(2,"0") + ' ' + chap.title + '</td>' +
       '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
-      '<td class="' + (it.decision ? "" : "muted") + '">' + (it.decision || "未入力") + '</td>' +
-      '<td><span class="owner-tag">' + it.ownerGroup + '</span><br>' + (it.owner||"") + '</td>' +
-      '<td>' + (it.plan||"—") + '</td>' +
-      '<td><span class="status-pill st-' + it.status + '">' + it.status + '</span></td>' +
+      '<td class="' + (st.decision ? "" : "muted") + '">' + (st.decision || "未入力") + '</td>' +
+      '<td><span class="owner-tag">' + st.ownerGroup + '</span><br>' + (st.owner||"（未定）") + '</td>' +
+      '<td>' + (st.plan||"—") + '</td>' +
+      '<td><span class="status-pill st-' + st.status + '">' + st.status + '</span></td>' +
       '<td class="col-detail">詳細 ›</td>' +
     '</tr>';
   });
@@ -548,14 +572,15 @@ function renderMain(){
     '</tr></thead><tbody>';
 
   items.forEach(function(it){
-    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (it.status==="完了" ? "is-done" : "") + '">' +
-      '<td class="col-done"><span class="check ' + (it.status==="完了" ? "on" : "") + '"></span></td>' +
+    var st = STATE[it.id];
+    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (st.status==="完了" ? "is-done" : "") + '">' +
+      '<td class="col-done"><span class="check ' + (st.status==="完了" ? "on" : "") + '"></span></td>' +
       '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
-      '<td class="' + (it.decision ? "" : "muted") + '">' + (it.decision || "未入力") + '</td>' +
-      '<td><span class="owner-tag">' + it.ownerGroup + '</span><br>' + (it.owner||"") + '</td>' +
-      '<td>' + (it.plan||"—") + '</td>' +
-      '<td>' + (it.done||"—") + '</td>' +
-      '<td><span class="status-pill st-' + it.status + '">' + it.status + '</span></td>' +
+      '<td class="' + (st.decision ? "" : "muted") + '">' + (st.decision || "未入力") + '</td>' +
+      '<td><span class="owner-tag">' + st.ownerGroup + '</span><br>' + (st.owner||"（未定）") + '</td>' +
+      '<td>' + (st.plan||"—") + '</td>' +
+      '<td>' + (st.done||"—") + '</td>' +
+      '<td><span class="status-pill st-' + st.status + '">' + st.status + '</span></td>' +
       '<td class="col-detail">詳細 ›</td>' +
     '</tr>';
   });
@@ -563,32 +588,21 @@ function renderMain(){
   main.innerHTML = html;
 }
 
+var STATUS_OPTIONS = ["未着手","準備中","実施中","確認待ち","保留","期限超過","完了"];
+var OWNER_GROUP_OPTIONS = ["会社責任者","会社管理者","会社担当者","人事担当者","実施者","実施事務従事者","産業医または面接指導医","企業のオンライン保健室","システム会社","その他"];
+
 function openDrawer(id){
-  var item = null, chapNo = null;
-  Object.keys(ITEMS).forEach(function(k){
-    ITEMS[k].forEach(function(i){ if (i.id === id){ item = i; chapNo = k; } });
-  });
+  var item = itemById(id);
   if (!item) return;
+  var chapNo = null;
+  Object.keys(ITEMS).forEach(function(k){ if (ITEMS[k].indexOf(item) > -1) chapNo = k; });
   var chap = CHAPTERS.find(function(c){ return String(c.no) === String(chapNo); });
+  var st = STATE[id];
 
   document.getElementById("d-chapno").textContent = "章" + chapNo + " — " + chap.title;
   document.getElementById("d-title").textContent = item.name;
 
-  var missing = (item.requiredFor||[]).filter(function(f){
-    var key = f === "決定内容" || f === "確認結果" ? "decision" : f === "決定日" || f === "実施日" || f === "確認日" ? "done" : f === "決定者" || f === "確認者" ? "owner" : null;
-    if (f === "実施者氏名" || f === "資格区分") return !item.filled[f] && !(item.decision && item.decision.length > 0 && f !== "資格区分");
-    if (key) return !item.filled[key];
-    return !item.filled[f];
-  });
-  // simpler: for the "実施者の決定" demo item, force the exact 4 named fields
-  if (item.id === "c2-3"){
-    missing = ["実施者氏名","資格区分","決定日","決定者"];
-  } else {
-    missing = item.status === "完了" ? [] : (item.requiredFor||[]).filter(function(f){ return true; }).length && item.status !== "完了" ? [] : [];
-  }
-
   var body = '<span class="type-badge">' + item.type + '</span>';
-
   body += '<div class="d-block"><div class="d-label">項目の目的</div><div class="d-static">' + item.purpose + '</div></div>';
   body += '<div class="d-block"><div class="d-label">確認すべき内容</div><div class="d-static">' + (item.check || "—") + '</div></div>';
   if (item.options && item.options !== "—"){
@@ -596,64 +610,120 @@ function openDrawer(id){
   }
 
   body += '<div class="d-block"><div class="d-grid">';
-  if (item.id === "c2-3"){
-    body += fieldHTML("実施者氏名", "", true);
-    body += fieldHTML("資格区分", "", true, ["外部委託先の医師等","社内産業医","保健師","所定研修修了看護師"]);
-    body += fieldHTML("決定日", "", true, null, "date");
-    body += fieldHTML("決定者", "", true);
-  } else {
-    body += fieldHTML("決定内容・確認結果", item.decision, !item.decision);
-    body += fieldHTML("担当区分", item.ownerGroup, false, ["会社責任者","会社管理者","会社担当者","人事担当者","実施者","実施事務従事者","産業医または面接指導医","企業のオンライン保健室","システム会社","その他"]);
-    body += fieldHTML("担当者", item.owner, !item.owner);
-    body += fieldHTML("予定日", item.plan, !item.plan, null, "date");
-    body += fieldHTML("実施日／決定日／確認日", item.done, !item.done, null, "date");
-    body += fieldHTML("確認者", item.owner, false);
-  }
+  body += fieldHTML(id, "decision", "決定内容・確認結果", st.decision, isReqEmpty(item,"decision"));
+  body += fieldHTML(id, "ownerGroup", "担当区分", st.ownerGroup, false, OWNER_GROUP_OPTIONS);
+  body += fieldHTML(id, "owner", "担当者（氏名）", st.owner, false);
+  body += fieldHTML(id, "plan", "予定日", st.plan, false, null, "date");
+  body += fieldHTML(id, "done", "実施日／決定日", st.done, isReqEmpty(item,"done"), null, "date");
+  body += fieldHTML(id, "confirmPlan", "確認予定日", st.confirmPlan, false, null, "date");
+  body += fieldHTML(id, "confirmDone", "確認日", st.confirmDone, isReqEmpty(item,"confirmDone"), null, "date");
+  body += fieldHTML(id, "confirmer", "確認者", st.confirmer, isReqEmpty(item,"confirmer"));
   body += '</div></div>';
 
-  body += '<div class="d-block"><div class="d-label">ステータス</div><div class="d-static">' + item.status + '</div></div>';
+  body += '<div class="d-block"><div class="d-label">ステータス</div>';
+  body += '<select id="d-status-select">' + STATUS_OPTIONS.filter(function(s){ return s!=="完了"; }).map(function(s){
+    return '<option ' + (s===st.status?"selected":"") + '>' + s + '</option>';
+  }).join("") + '</select></div>';
   body += '<div class="d-block"><div class="d-label">法令上の区分</div><div class="d-static">' + item.law + '</div></div>';
   body += '<div class="d-block"><div class="d-label">根拠資料／添付資料</div><div class="d-static">（未添付）</div></div>';
-  body += '<div class="d-block"><div class="d-label">備考</div><div class="d-static">' + (item.note || "—") + '</div></div>';
+  body += '<div class="d-block"><div class="d-label">備考</div><textarea id="d-note" rows="2">' + (st.note||"") + '</textarea></div>';
 
   document.getElementById("d-body").innerHTML = body;
 
-  var isDemo = item.id === "c2-3";
-  var missingList = isDemo ? ["実施者氏名","資格区分","決定日","決定者"] : (item.status === "完了" ? [] : []);
-  var foot = "";
-  if (item.status === "完了"){
-    foot = '<div class="complete-box"><div class="cb-row"><input type="checkbox" checked disabled><span>完了</span></div></div>';
-  } else if (isDemo){
-    foot = '<div class="complete-box blocked"><div class="cb-row"><input type="checkbox" disabled><span>完了</span></div>' +
-      '<div class="cb-note">以下が未入力のため「完了」にできません：<ul>' +
-      missingList.map(function(f){ return "<li>" + f + "</li>"; }).join("") +
-      '</ul></div></div>';
-  } else {
-    foot = '<div class="complete-box"><div class="cb-row"><input type="checkbox"><span>完了</span></div>' +
-      '<div class="cb-note" style="color:var(--text-sub)">必須項目が揃うと完了にできます。</div></div>';
-  }
-  document.getElementById("d-foot").innerHTML = foot;
+  // wire up field inputs
+  ["decision","ownerGroup","owner","plan","done","confirmPlan","confirmDone","confirmer"].forEach(function(key){
+    var el = document.getElementById("d-" + id + "-" + key);
+    if (!el) return;
+    el.addEventListener("input", function(){ onFieldChange(item, key, el.value); });
+    el.addEventListener("change", function(){ onFieldChange(item, key, el.value); });
+  });
+  document.getElementById("d-status-select").addEventListener("change", function(e){
+    STATE[id].status = e.target.value;
+    persistItems(); renderAll();
+  });
+  document.getElementById("d-note").addEventListener("input", function(e){
+    STATE[id].note = e.target.value; persistItems();
+  });
+
+  renderCompleteBox(item);
 
   document.getElementById("overlay").classList.add("show");
   document.getElementById("drawer").classList.add("show");
 }
 
-function fieldHTML(label, value, empty, options, type){
-  var id = "f-" + Math.random().toString(36).slice(2,8);
+function isReqEmpty(item, key){
+  return (item.required||[]).indexOf(key) > -1 && !(STATE[item.id][key] && String(STATE[item.id][key]).trim());
+}
+
+function onFieldChange(item, key, value){
+  var st = STATE[item.id];
+  st[key] = value;
+  // if this item was 完了 but the edit removed a required value, drop back to 確認待ち automatically
+  if (st.status === "完了" && !isReqMet(item)){
+    st.status = "確認待ち";
+  }
+  persistItems();
+  renderCompleteBox(item);
+  renderNav();
+  updateHeaderStats();
+}
+
+function renderCompleteBox(item){
+  var st = STATE[item.id];
+  var met = isReqMet(item);
+  var missingLabels = (item.required||[]).filter(function(k){ return !(st[k] && String(st[k]).trim()); }).map(function(k){ return FIELD_LABEL[k]; });
+
+  var foot = '<div class="complete-box' + (!met && !(st.status==="完了") ? "" : "") + '">' +
+    '<div class="cb-row"><input type="checkbox" id="d-complete-cb" ' + (st.status==="完了" ? "checked" : "") + '><span>完了</span></div>';
+  if (st.status === "完了"){
+    foot += '<div class="cb-note" style="color:var(--success-700)">完了になっています。チェックを外すといつでも取り消せます。</div>';
+  } else if (!met){
+    foot += '<div class="cb-note">以下が未入力のため「完了」にできません：<ul>' +
+      missingLabels.map(function(f){ return "<li>" + f + "</li>"; }).join("") + '</ul></div>';
+  } else {
+    foot += '<div class="cb-note" style="color:var(--text-sub)">必須項目が揃っています。チェックを入れると完了になります。</div>';
+  }
+  foot += '</div>';
+  document.getElementById("d-foot").innerHTML = foot;
+
+  var cb = document.getElementById("d-complete-cb");
+  cb.addEventListener("change", function(){
+    var st2 = STATE[item.id];
+    if (cb.checked){
+      if (!isReqMet(item)){
+        cb.checked = false; // reject the check; keep it blocked and re-show the note
+        return;
+      }
+      st2.status = "完了";
+    } else {
+      st2.status = "確認待ち";
+    }
+    persistItems();
+    renderCompleteBox(item);
+    renderNav();
+    renderMain();
+    updateHeaderStats();
+  });
+}
+
+function fieldHTML(itemId, key, label, value, isEmpty, options, type){
+  var id = "d-" + itemId + "-" + key;
   var inner;
   if (options){
     inner = '<select id="' + id + '">' + '<option value="">選択してください</option>' +
       options.map(function(o){ return '<option ' + (o===value?"selected":"") + '>' + o + '</option>'; }).join("") + '</select>';
   } else {
-    inner = '<input type="' + (type||"text") + '" value="' + (value||"") + '" placeholder="未入力">';
+    inner = '<input id="' + id + '" type="' + (type||"text") + '" value="' + (value||"").replace(/"/g,"&quot;") + '" placeholder="未入力">';
   }
-  return '<div class="d-field' + (empty ? " empty" : "") + '"><label>' + label + (empty ? ' <span class="req">*未入力</span>' : '') + '</label>' + inner + '</div>';
+  return '<div class="d-field' + (isEmpty ? " empty" : "") + '"><label>' + label + (isEmpty ? ' <span class="req">*未入力</span>' : '') + '</label>' + inner + '</div>';
 }
 
 function closeDrawer(){
   document.getElementById("overlay").classList.remove("show");
   document.getElementById("drawer").classList.remove("show");
 }
+
+function renderAll(){ renderNav(); renderMain(); updateHeaderStats(); }
 
 window.openDrawer = openDrawer;
 window.closeDrawer = closeDrawer;
@@ -702,18 +772,36 @@ function restoreHeader(useDefaultsIfEmpty){
   });
 }
 
+// ---------------- item checklist state: saved per company (same key as header) ----------------
+function persistItems(){
+  try{ localStorage.setItem(storageKey() + "_items", JSON.stringify(STATE)); } catch(e){}
+}
+function loadItemState(){
+  var loaded = null;
+  try{
+    var raw = localStorage.getItem(storageKey() + "_items");
+    if (raw) loaded = JSON.parse(raw);
+  } catch(e){}
+  var fresh = {};
+  Object.keys(SEED).forEach(function(id){
+    fresh[id] = (loaded && loaded[id]) ? loaded[id] : JSON.parse(JSON.stringify(SEED[id]));
+  });
+  STATE = fresh;
+}
+
 document.getElementById("f-company").value = DEFAULTS["f-company"];
 restoreHeader(true);
+loadItemState();
 FIELD_IDS.forEach(function(id){
   document.getElementById(id).addEventListener("input", persistHeader);
 });
 document.getElementById("f-company").addEventListener("change", function(){
   restoreHeader(false);
+  loadItemState();
+  renderAll();
 });
 
-renderNav();
-renderMain();
-updateHeaderStats();
+renderAll();
 })();
 </script>
 </body>
