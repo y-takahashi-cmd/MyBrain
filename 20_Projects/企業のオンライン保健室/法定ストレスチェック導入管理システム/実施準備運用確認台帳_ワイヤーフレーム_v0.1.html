@@ -217,65 +217,14 @@
 <body>
 
 <div class="wf-banner">
-  <span>🧩 ワイヤーフレーム確認用（実データはグリットワークス様の実際の状況を仮に使用）</span>
-  <div class="wf-tabs">
-    <button data-goto="screenA" class="active">A. 企業・年度選択</button>
-    <button data-goto="screenB">B. 台帳 全体画面</button>
-    <button data-goto="screenC-note">C. 詳細画面の開き方</button>
-  </div>
+  <span>🧩 ワイヤーフレーム確認用（会社ごとに1本のファイルにする方式・実データはグリットワークス様の実際の状況を仮に使用）</span>
 </div>
 
-<!-- ========================= SCREEN A ========================= -->
-<section id="screenA" class="screen active">
-  <div class="wrap">
-    <div class="head">
-      <p class="eyebrow">企業のオンライン保健室</p>
-      <h1>ストレスチェック実施準備・運用確認台帳</h1>
-      <p>契約企業ごとに、決定事項・準備・実施・結果通知・高ストレス者対応・会社報告・情報保存までを確認・記録します。企業と実施年度を選んでください。</p>
-    </div>
-
-    <div class="company-list">
-      <div class="company-card" onclick="openCompany()">
-        <div>
-          <div class="name">有限会社グリットワークス</div>
-          <div class="sub">全社／2026年度／受検予定期間 2026/06/25〜2026/07/31</div>
-        </div>
-        <div class="stat">全体進捗<br><b>29%</b><div class="mini-bar"><div class="fill" style="width:29%"></div></div></div>
-        <div class="stat">未完了 <b>17</b>件／期限超過 <b>2</b>件</div>
-        <div class="go">台帳を開く →</div>
-      </div>
-
-      <div class="company-card">
-        <div>
-          <div class="name">株式会社サステナ</div>
-          <div class="sub">全社／2026年度／受検予定期間 未定</div>
-        </div>
-        <div class="stat">全体進捗<br><b>4%</b><div class="mini-bar"><div class="fill" style="width:4%"></div></div></div>
-        <div class="stat">未完了 <b>38</b>件／期限超過 <b>0</b>件</div>
-        <div class="go">台帳を開く →</div>
-      </div>
-
-      <div class="company-card">
-        <div>
-          <div class="name">杉山耕一税理士事務所</div>
-          <div class="sub">全社／2026年度／未着手</div>
-        </div>
-        <div class="stat">全体進捗<br><b>0%</b><div class="mini-bar"><div class="fill" style="width:0%"></div></div></div>
-        <div class="stat">未完了 <b>40</b>件／期限超過 <b>0</b>件</div>
-        <div class="go">台帳を開く →</div>
-      </div>
-
-      <button class="add-company">＋ 契約企業を追加する</button>
-    </div>
-  </div>
-</section>
-
-<!-- ========================= SCREEN B ========================= -->
-<section id="screenB" class="screen">
+<!-- ========================= 台帳（会社ごとに1本） ========================= -->
+<section id="screenB" class="screen active">
   <div class="topstat">
     <div class="row1">
       <div class="title">有限会社グリットワークス — ストレスチェック実施準備・運用確認台帳</div>
-      <button class="back" onclick="goto('screenA')">← 企業選択へ戻る</button>
     </div>
     <div class="meta-grid">
       <div><span class="k">事業場名</span><br><span class="v">全社</span></div>
@@ -299,18 +248,6 @@
       <div class="b-nav-scroll" id="chapNav"></div>
     </nav>
     <main class="b-main" id="chapMain"></main>
-  </div>
-</section>
-
-<!-- ========================= SCREEN C の説明（バナー切替用） ========================= -->
-<section id="screenC-note" class="screen">
-  <div class="wrap" style="max-width:700px; margin:0 auto; padding:3rem 1.5rem;">
-    <h1 style="font-size:1.3rem; margin-bottom:.8rem;">C. 詳細入力画面について</h1>
-    <p style="color:var(--text-sub); font-size:.9rem; line-height:1.9;">
-      C画面は独立ページではなく、「B. 台帳 全体画面」の表で行をクリックすると右側からスライドして開く詳細パネルとして実装しています。<br><br>
-      <b style="color:var(--text-heading)">「B. 台帳 全体画面」タブを開き、章2「担当者・実施体制」の「実施者の決定」の行をクリックしてみてください。</b><br><br>
-      決定内容・担当者・予定日などの入力欄に加えて、完了に必要な項目（実施者氏名・資格区分・決定日・決定者）が揃っていない場合は「完了」にできない、という動きを確認できます。
-    </p>
   </div>
 </section>
 
@@ -606,19 +543,6 @@ function closeDrawer(){
 
 window.openDrawer = openDrawer;
 window.closeDrawer = closeDrawer;
-window.openCompany = function(){ goto("screenB"); };
-window.goto = goto;
-
-function goto(id){
-  document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
-  document.getElementById(id).classList.add("active");
-  document.querySelectorAll(".wf-tabs button").forEach(function(b){ b.classList.toggle("active", b.dataset.goto === id); });
-  window.scrollTo(0,0);
-}
-
-document.querySelectorAll(".wf-tabs button").forEach(function(b){
-  b.addEventListener("click", function(){ goto(b.dataset.goto); });
-});
 
 renderNav();
 renderMain();
