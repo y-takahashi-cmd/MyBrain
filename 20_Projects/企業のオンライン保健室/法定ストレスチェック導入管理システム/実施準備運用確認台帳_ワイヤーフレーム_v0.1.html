@@ -1143,7 +1143,8 @@ function openDrawer(id){
   }
 
   var allFields = ["decision","ownerGroup","owner","plan","done","confirmPlan","confirmDone","confirmer"];
-  var showFields = item.fields || allFields;
+  var isSimpleDecisionOnly = item.required && item.required.length === 1 && item.required[0] === "decision";
+  var showFields = item.fields || (isSimpleDecisionOnly ? ["decision"] : allFields);
   var isCustom = showFields.length > 0 && typeof showFields[0] === "object";
   var fieldKeys = [];
 
