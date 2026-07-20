@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ストレスチェック実施準備・運用確認台帳（ワイヤーフレーム）</title>
+<style>
+  :root{
+    --brand:#74B2E0; --brand-deep:#2E6BA6; --brand-deeper:#1A3A5C; --brand-soft:#A3CDE8; --brand-line:#C5DDE9;
+    --page-bg:#F2F8FC; --card-bg:#FFFFFF; --card-bg-tint:#F8FBFE;
+    --text-heading:#1A3A5C; --text-body:#4A4A4A; --text-sub:#666666;
+    --border:#E0E0E0; --border-soft:#D6E9F5;
+    --success-50:#E6F5EB; --success-500:#28A745; --success-700:#1B7D3A;
+    --warning-50:#FFF8E1; --warning-500:#F0AD00; --warning-700:#C68A00;
+    --error-50:#FDEAEA; --error-500:#DC3545; --error-700:#B71C1C;
+    --info-50:#F2F8FC;
+    --font-head:"Hiragino Sans","Yu Gothic UI","Segoe UI",system-ui,sans-serif;
+    --font-body:"Hiragino Kaku Gothic ProN","Yu Gothic","Segoe UI",system-ui,sans-serif;
+    --shadow-card: 0 1px 2px rgba(26,58,92,.06), 0 8px 24px rgba(26,58,92,.07);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --page-bg:#0F1B2A; --card-bg:#1A2940; --card-bg-tint:#192538;
+      --text-heading:#A3CDE8; --text-body:#CCDDEE; --text-sub:#8899AA;
+      --border:#2A3950; --border-soft:#233350; --brand-line:#2A3950;
+      --success-50:#12271B; --success-700:#7DD39B; --warning-50:#2A2311; --warning-700:#FFD666;
+      --error-50:#2A1414; --error-700:#F09DA5; --info-50:#12233A;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --page-bg:#0F1B2A; --card-bg:#1A2940; --card-bg-tint:#192538;
+    --text-heading:#A3CDE8; --text-body:#CCDDEE; --text-sub:#8899AA;
+    --border:#2A3950; --border-soft:#233350; --brand-line:#2A3950;
+    --success-50:#12271B; --success-700:#7DD39B; --warning-50:#2A2311; --warning-700:#FFD666;
+    --error-50:#2A1414; --error-700:#F09DA5; --info-50:#12233A;
+    color-scheme: dark;
+  }
+  :root[data-theme="light"]{
+    --page-bg:#F2F8FC; --card-bg:#FFFFFF; --card-bg-tint:#F8FBFE;
+    --text-heading:#1A3A5C; --text-body:#4A4A4A; --text-sub:#666666;
+    --border:#E0E0E0; --border-soft:#D6E9F5; --brand-line:#C5DDE9;
+    --success-50:#E6F5EB; --success-700:#1B7D3A; --warning-50:#FFF8E1; --warning-700:#C68A00;
+    --error-50:#FDEAEA; --error-700:#B71C1C; --info-50:#F2F8FC;
+    color-scheme: light;
+  }
+
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--page-bg); color:var(--text-body); font-family:var(--font-body); font-size:14.5px; line-height:1.6; }
+  h1,h2,h3{ font-family:var(--font-head); color:var(--text-heading); margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* ---------- wireframe chrome (not part of the product) ---------- */
+  .wf-banner{
+    background:var(--brand-deeper); color:#fff; padding:.5rem 1.2rem;
+    font-size:.78rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;
+  }
+  .wf-banner b{ background:rgba(255,255,255,.15); padding:.1rem .5rem; border-radius:999px; }
+  .wf-tabs{ display:flex; gap:.4rem; }
+  .wf-tabs button{
+    border:1px solid rgba(255,255,255,.35); background:transparent; color:#fff; border-radius:999px;
+    padding:.25rem .85rem; font-size:.78rem; font-weight:700;
+  }
+  .wf-tabs button.active{ background:#fff; color:var(--brand-deeper); }
+
+  .screen{ display:none; }
+  .screen.active{ display:block; }
+
+  /* ================= SCREEN A ================= */
+  #screenA .wrap{ max-width:900px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  #screenA .head{ margin-bottom:1.6rem; }
+  #screenA .head .eyebrow{ font-size:.72rem; letter-spacing:.12em; font-weight:700; color:var(--brand-deep); text-transform:uppercase; }
+  #screenA .head h1{ font-size:1.5rem; font-weight:800; margin:.3rem 0 .3rem; }
+  #screenA .head p{ color:var(--text-sub); font-size:.9rem; margin:0; }
+
+  .company-list{ display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem; }
+  .company-card{
+    background:var(--card-bg); border:1px solid var(--border); border-radius:14px; padding:1.1rem 1.3rem;
+    box-shadow:var(--shadow-card); display:grid; grid-template-columns:1.6fr 1fr 1fr auto; gap:1rem; align-items:center;
+    cursor:pointer; transition:border-color .15s;
+  }
+  .company-card:hover{ border-color:var(--brand); }
+  @media (max-width:760px){ .company-card{ grid-template-columns:1fr; } }
+  .company-card .name{ font-weight:800; color:var(--text-heading); font-size:1.02rem; }
+  .company-card .sub{ font-size:.78rem; color:var(--text-sub); margin-top:.15rem; }
+  .company-card .stat{ font-size:.8rem; color:var(--text-body); }
+  .company-card .stat b{ font-variant-numeric:tabular-nums; color:var(--text-heading); }
+  .mini-bar{ height:6px; border-radius:999px; background:var(--border-soft); overflow:hidden; margin-top:.3rem; width:120px; }
+  .mini-bar .fill{ height:100%; background:var(--brand); }
+  .company-card .go{ font-size:.8rem; font-weight:700; color:var(--brand-deep); white-space:nowrap; }
+  .add-company{
+    border:1.5px dashed var(--brand-line); border-radius:14px; padding:1rem 1.3rem; text-align:center;
+    color:var(--brand-deep); font-weight:700; font-size:.88rem; background:transparent;
+  }
+
+  /* ================= SCREEN B ================= */
+  #screenB{ min-height:100vh; }
+  .topstat{ background:linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 100%); color:#fff; padding:1.1rem 1.4rem; }
+  .topstat .row1{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:.6rem; }
+  .topstat .row1 .title{ font-size:1.15rem; font-weight:800; }
+  .topstat .row1 .back{ font-size:.78rem; background:rgba(255,255,255,.18); border:none; color:#fff; padding:.3rem .8rem; border-radius:999px; }
+  .topstat .meta-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem 1.4rem; margin-top:.8rem; font-size:.78rem;
+  }
+  @media (max-width:900px){ .topstat .meta-grid{ grid-template-columns:repeat(2,1fr); } }
+  .topstat .meta-grid .k{ color:#DCEEFA; opacity:.85; }
+  .topstat .meta-grid .v{ font-weight:700; }
+  .topstat .stat-strip{ display:flex; gap:1.6rem; margin-top:.9rem; flex-wrap:wrap; }
+  .topstat .stat-strip .item{ font-size:.8rem; }
+  .topstat .stat-strip .item .num{ font-size:1.3rem; font-weight:800; font-variant-numeric:tabular-nums; display:block; }
+
+  .b-shell{ display:grid; grid-template-columns:270px minmax(0,1fr); }
+  @media (max-width:860px){ .b-shell{ grid-template-columns:1fr; } }
+
+  .b-nav{ border-right:1px solid var(--border); background:var(--card-bg); }
+  @media (max-width:860px){ .b-nav{ border-right:none; border-bottom:1px solid var(--border); } }
+  .b-nav-scroll{ max-height:calc(100vh - 148px); overflow-y:auto; padding:.8rem; }
+  @media (max-width:860px){ .b-nav-scroll{ max-height:220px; } }
+  .chap-btn{
+    width:100%; text-align:left; border:none; background:transparent; border-radius:10px;
+    padding:.55rem .7rem; display:flex; align-items:center; gap:.6rem; margin-bottom:.15rem; font-size:.83rem; color:var(--text-body);
+  }
+  .chap-btn:hover{ background:var(--card-bg-tint); }
+  .chap-btn.active{ background:var(--info-50); color:var(--brand-deep); font-weight:700; border:1px solid var(--brand-line); }
+  .chap-btn .no{ font-variant-numeric:tabular-nums; color:var(--text-sub); width:1.5em; flex:0 0 auto; }
+  .chap-btn.active .no{ color:var(--brand-deep); }
+  .chap-btn .lbl{ flex:1; min-width:0; }
+  .chap-btn .cnt{ font-size:.68rem; color:var(--text-sub); font-variant-numeric:tabular-nums; flex:0 0 auto; }
+  .chap-btn .turn-dot{ width:7px; height:7px; border-radius:50%; flex:0 0 auto; }
+  .turn-company{ background:var(--warning-500); }
+  .turn-us{ background:var(--brand); }
+  .turn-jisshi{ background:var(--brand-deeper); }
+  .turn-doctor{ background:var(--text-sub); }
+  .turn-none{ background:var(--border); }
+
+  .b-main{ padding:1.4rem 1.6rem 4rem; }
+  .b-main .chap-head{ display:flex; align-items:baseline; gap:.7rem; margin-bottom:.3rem; flex-wrap:wrap; }
+  .b-main .chap-head h2{ font-size:1.15rem; font-weight:800; }
+  .b-main .chap-head .no{ font-variant-numeric:tabular-nums; color:var(--brand); background:var(--info-50); border:1px solid var(--brand-line); border-radius:8px; padding:.1rem .5rem; font-weight:800; font-size:.85rem; }
+  .b-main .chap-desc{ color:var(--text-sub); font-size:.85rem; margin:0 0 1.1rem; }
+
+  .legend{ display:flex; gap:1rem; flex-wrap:wrap; font-size:.75rem; color:var(--text-sub); margin-bottom:.8rem; }
+  .legend span{ display:inline-flex; align-items:center; gap:.35em; }
+  .legend .dot{ width:7px; height:7px; border-radius:50%; }
+
+  .item-table{ width:100%; border-collapse:collapse; background:var(--card-bg); border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-card); }
+  .item-table thead th{ background:var(--info-50); color:var(--text-heading); font-size:.72rem; font-weight:700; text-align:left; padding:.6rem .75rem; white-space:nowrap; }
+  .item-table tbody td{ padding:.62rem .75rem; border-top:1px solid var(--border); font-size:.83rem; vertical-align:top; }
+  .item-table tbody tr{ cursor:pointer; }
+  .item-table tbody tr:hover{ background:var(--card-bg-tint); }
+  .item-table tbody tr.is-done{ }
+  .item-table .col-done{ width:2.2rem; text-align:center; }
+  .item-table .check{ width:1.2em; height:1.2em; border-radius:5px; border:2px solid var(--border); display:inline-block; }
+  .item-table .check.on{ background:var(--success-700); border-color:var(--success-700); position:relative; }
+  .item-table .check.on::after{ content:"✓"; color:#fff; font-size:.7rem; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  .item-table .name{ font-weight:700; color:var(--text-heading); }
+  .item-table .name .type-tag{ display:block; font-size:.66rem; font-weight:600; color:var(--brand-deep); margin-top:.15rem; }
+  .item-table .muted{ color:var(--text-sub); }
+  .item-table .col-detail{ color:var(--brand-deep); font-size:.78rem; font-weight:700; white-space:nowrap; }
+
+  .status-pill{ display:inline-flex; align-items:center; font-size:.7rem; font-weight:700; padding:.15rem .55rem; border-radius:999px; white-space:nowrap; }
+  .st-未着手{ background:var(--card-bg-tint); color:var(--text-sub); border:1px solid var(--border); }
+  .st-準備中{ background:var(--info-50); color:var(--brand-deep); border:1px solid var(--brand-line); }
+  .st-実施中{ background:var(--brand-soft); color:var(--brand-deeper); }
+  .st-確認待ち{ background:var(--warning-50); color:var(--warning-700); }
+  .st-完了{ background:var(--success-50); color:var(--success-700); }
+  .st-期限超過{ background:var(--error-50); color:var(--error-700); }
+  .st-保留{ background:var(--card-bg-tint); color:var(--text-sub); border:1px dashed var(--border); }
+
+  .owner-tag{ font-size:.7rem; color:var(--text-sub); }
+
+  .placeholder-chap{ background:var(--card-bg); border:1px dashed var(--border); border-radius:12px; padding:2rem; text-align:center; color:var(--text-sub); font-size:.85rem; }
+
+  /* ---------- detail drawer (screen C) ---------- */
+  .overlay{ position:fixed; inset:0; background:rgba(15,27,42,.35); display:none; z-index:40; }
+  .overlay.show{ display:block; }
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(480px,100%); background:var(--card-bg);
+    box-shadow:-8px 0 30px rgba(0,0,0,.15); z-index:41; transform:translateX(100%); transition:transform .22s ease;
+    display:flex; flex-direction:column;
+  }
+  .drawer.show{ transform:translateX(0); }
+  @media (prefers-reduced-motion: reduce){ .drawer{ transition:none; } }
+  .drawer-head{ padding:1.1rem 1.3rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-start; gap:.8rem; }
+  .drawer-head .chap-no{ font-size:.72rem; color:var(--brand-deep); font-weight:700; letter-spacing:.04em; }
+  .drawer-head h3{ font-size:1.05rem; font-weight:800; margin:.2rem 0 0; }
+  .drawer-head button{ border:none; background:var(--card-bg-tint); border-radius:8px; width:2em; height:2em; color:var(--text-sub); font-size:1rem; }
+  .drawer-body{ padding:1.2rem 1.3rem; overflow-y:auto; flex:1; }
+  .drawer-foot{ padding:1rem 1.3rem; border-top:1px solid var(--border); }
+
+  .type-badge{ display:inline-block; font-size:.7rem; font-weight:700; padding:.2rem .6rem; border-radius:999px; background:var(--info-50); color:var(--brand-deep); border:1px solid var(--brand-line); margin-bottom:.9rem; }
+
+  .d-block{ margin:0 0 1.3rem; }
+  .d-block .d-label{ font-size:.72rem; font-weight:700; color:var(--text-sub); text-transform:uppercase; letter-spacing:.05em; margin-bottom:.35rem; }
+  .d-block .d-static{ font-size:.87rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:8px; padding:.55rem .7rem; line-height:1.6; }
+  .d-grid{ display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+  .d-field label{ display:block; font-size:.72rem; font-weight:700; color:var(--text-sub); margin-bottom:.3rem; }
+  .d-field input, .d-field select, .d-field textarea{
+    width:100%; border:1.5px solid var(--border); border-radius:8px; padding:.45rem .6rem; font-size:.85rem;
+    font-family:var(--font-body); color:var(--text-heading); background:var(--card-bg);
+  }
+  .d-field input:focus, .d-field select:focus, .d-field textarea:focus{ outline:none; border-color:var(--brand); }
+  .d-field.empty input, .d-field.empty select{ border-color:var(--warning-500); background:var(--warning-50); }
+  .d-field .req{ color:var(--error-500); }
+
+  .complete-box{ border:1px solid var(--border); border-radius:10px; padding:.9rem 1rem; background:var(--card-bg-tint); }
+  .complete-box.blocked{ border-color:var(--warning-500); background:var(--warning-50); }
+  .complete-box .cb-row{ display:flex; align-items:center; gap:.6rem; font-weight:700; color:var(--text-heading); font-size:.9rem; }
+  .complete-box .cb-row input{ width:1.2em; height:1.2em; }
+  .complete-box .cb-note{ font-size:.78rem; color:var(--warning-700); margin-top:.5rem; }
+  .complete-box .cb-note ul{ margin:.3rem 0 0; padding-left:1.2em; }
+
+  .footer-note{ max-width:1180px; margin:0 auto; padding:1.5rem; color:var(--text-sub); font-size:.78rem; }
+</style>
+</head>
+<body>
+
+<div class="wf-banner">
+  <span>🧩 ワイヤーフレーム確認用（実データはグリットワークス様の実際の状況を仮に使用）</span>
+  <div class="wf-tabs">
+    <button data-goto="screenA" class="active">A. 企業・年度選択</button>
+    <button data-goto="screenB">B. 台帳 全体画面</button>
+    <button data-goto="screenC-note">C. 詳細画面の開き方</button>
+  </div>
+</div>
+
+<!-- ========================= SCREEN A ========================= -->
+<section id="screenA" class="screen active">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">企業のオンライン保健室</p>
+      <h1>ストレスチェック実施準備・運用確認台帳</h1>
+      <p>契約企業ごとに、決定事項・準備・実施・結果通知・高ストレス者対応・会社報告・情報保存までを確認・記録します。企業と実施年度を選んでください。</p>
+    </div>
+
+    <div class="company-list">
+      <div class="company-card" onclick="openCompany()">
+        <div>
+          <div class="name">有限会社グリットワークス</div>
+          <div class="sub">全社／2026年度／受検予定期間 2026/06/25〜2026/07/31</div>
+        </div>
+        <div class="stat">全体進捗<br><b>29%</b><div class="mini-bar"><div class="fill" style="width:29%"></div></div></div>
+        <div class="stat">未完了 <b>17</b>件／期限超過 <b>2</b>件</div>
+        <div class="go">台帳を開く →</div>
+      </div>
+
+      <div class="company-card">
+        <div>
+          <div class="name">株式会社サステナ</div>
+          <div class="sub">全社／2026年度／受検予定期間 未定</div>
+        </div>
+        <div class="stat">全体進捗<br><b>4%</b><div class="mini-bar"><div class="fill" style="width:4%"></div></div></div>
+        <div class="stat">未完了 <b>38</b>件／期限超過 <b>0</b>件</div>
+        <div class="go">台帳を開く →</div>
+      </div>
+
+      <div class="company-card">
+        <div>
+          <div class="name">杉山耕一税理士事務所</div>
+          <div class="sub">全社／2026年度／未着手</div>
+        </div>
+        <div class="stat">全体進捗<br><b>0%</b><div class="mini-bar"><div class="fill" style="width:0%"></div></div></div>
+        <div class="stat">未完了 <b>40</b>件／期限超過 <b>0</b>件</div>
+        <div class="go">台帳を開く →</div>
+      </div>
+
+      <button class="add-company">＋ 契約企業を追加する</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= SCREEN B ========================= -->
+<section id="screenB" class="screen">
+  <div class="topstat">
+    <div class="row1">
+      <div class="title">有限会社グリットワークス — ストレスチェック実施準備・運用確認台帳</div>
+      <button class="back" onclick="goto('screenA')">← 企業選択へ戻る</button>
+    </div>
+    <div class="meta-grid">
+      <div><span class="k">事業場名</span><br><span class="v">全社</span></div>
+      <div><span class="k">実施年度</span><br><span class="v">2026年度</span></div>
+      <div><span class="k">受検予定期間</span><br><span class="v">2026/06/25〜2026/07/31</span></div>
+      <div><span class="k">次の予定</span><br><span class="v">高ストレス者選定基準の会社説明（7/25予定）</span></div>
+      <div><span class="k">会社責任者</span><br><span class="v">大関謙吾</span></div>
+      <div><span class="k">会社管理者</span><br><span class="v">大関謙吾</span></div>
+      <div><span class="k">実施者</span><br><span class="v" style="color:#FFE9A8;">未定（決定待ち）</span></div>
+      <div><span class="k">企業のオンライン保健室担当者</span><br><span class="v">髙橋由香</span></div>
+    </div>
+    <div class="stat-strip">
+      <div class="item"><span class="num">29%</span>全体進捗</div>
+      <div class="item"><span class="num">17</span>未完了件数</div>
+      <div class="item"><span class="num">2</span>期限超過件数</div>
+    </div>
+  </div>
+
+  <div class="b-shell">
+    <nav class="b-nav">
+      <div class="b-nav-scroll" id="chapNav"></div>
+    </nav>
+    <main class="b-main" id="chapMain"></main>
+  </div>
+</section>
+
+<!-- ========================= SCREEN C の説明（バナー切替用） ========================= -->
+<section id="screenC-note" class="screen">
+  <div class="wrap" style="max-width:700px; margin:0 auto; padding:3rem 1.5rem;">
+    <h1 style="font-size:1.3rem; margin-bottom:.8rem;">C. 詳細入力画面について</h1>
+    <p style="color:var(--text-sub); font-size:.9rem; line-height:1.9;">
+      C画面は独立ページではなく、「B. 台帳 全体画面」の表で行をクリックすると右側からスライドして開く詳細パネルとして実装しています。<br><br>
+      <b style="color:var(--text-heading)">「B. 台帳 全体画面」タブを開き、章2「担当者・実施体制」の「実施者の決定」の行をクリックしてみてください。</b><br><br>
+      決定内容・担当者・予定日などの入力欄に加えて、完了に必要な項目（実施者氏名・資格区分・決定日・決定者）が揃っていない場合は「完了」にできない、という動きを確認できます。
+    </p>
+  </div>
+</section>
+
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="chap-no" id="d-chapno">章2 — 担当者・実施体制</div>
+      <h3 id="d-title">項目名</h3>
+    </div>
+    <button onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="d-body"></div>
+  <div class="drawer-foot" id="d-foot"></div>
+</div>
+
+<p class="footer-note">企業のオンライン保健室 — ストレスチェック実施準備・運用確認台帳 ワイヤーフレーム v0.1（2026-07-20）</p>
+
+<script>
+(function(){
+"use strict";
+
+var CHAPTERS = [
+  {no:0, title:"用語・役割の確認"},
+  {no:1, title:"企業・事業場情報"},
+  {no:2, title:"担当者・実施体制"},
+  {no:3, title:"基本方針・実施目的"},
+  {no:4, title:"衛生委員会等での審議"},
+  {no:5, title:"実施規程"},
+  {no:6, title:"システム準備"},
+  {no:7, title:"受検対象者の決定・登録"},
+  {no:8, title:"社員への事前案内"},
+  {no:9, title:"ストレスチェック実施中の管理"},
+  {no:10, title:"個人結果通知"},
+  {no:11, title:"高ストレス者への案内"},
+  {no:12, title:"医師による面接指導"},
+  {no:13, title:"企業のオンライン保健室面談"},
+  {no:14, title:"会社向け実施状況報告"},
+  {no:15, title:"集団分析"},
+  {no:16, title:"行政報告"},
+  {no:17, title:"情報保存"},
+  {no:18, title:"年度終了時の評価"},
+  {no:19, title:"次年度・職場環境改善への引継ぎ"}
+];
+
+// owner group -> who's turn dot
+var TURN = { "会社責任者":"turn-company","会社管理者":"turn-company","会社担当者":"turn-company","人事担当者":"turn-company",
+  "実施者":"turn-jisshi","実施事務従事者":"turn-jisshi",
+  "産業医または面接指導医":"turn-doctor",
+  "企業のオンライン保健室":"turn-us","システム会社":"turn-us","その他":"turn-none" };
+
+// Fully worked-out chapters for the wireframe. Others show a placeholder.
+var ITEMS = {
+  2: [
+    { id:"c2-1", name:"会社責任者の決定", type:"決定する項目", owner:"会社責任者", ownerGroup:"会社責任者",
+      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"大関謙吾（代表取締役）",
+      purpose:"ストレスチェック制度の実施責任を負う会社側の最終責任者を明確にする。",
+      check:"誰が会社責任者か。人事権・経営権を持つ立場か。",
+      options:"代表取締役／役員／人事担当役員 など",
+      law:"法令上必要", note:"", requiredFor:["決定内容","決定日","決定者"], filled:{decision:true, done:true, owner:true} },
+    { id:"c2-2", name:"会社管理者の決定", type:"決定する項目", owner:"会社責任者", ownerGroup:"会社責任者",
+      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"大関謙吾（会社責任者と兼任）",
+      purpose:"受検対象者の登録・受検状況の確認・社員への案内を行う会社側担当者を決める。",
+      check:"会社責任者と兼任か、別に立てるか。", options:"兼任／別担当者を置く",
+      law:"契約上必要", note:"", requiredFor:["決定内容","決定日"], filled:{decision:true, done:true} },
+    { id:"c2-3", name:"実施者の決定", type:"決定する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
+      plan:"2026-07-22", done:"", status:"確認待ち", decision:"",
+      purpose:"ストレスチェックの評価・高ストレス者の選定基準への関与・面接指導要否の判断を行う専門職を決める。",
+      check:"医師／保健師／所定研修修了の看護師／精神保健福祉士／公認心理師のいずれかであることを確認する。",
+      options:"外部委託の医師等／社内産業医／保健師",
+      law:"法令上必要", note:"看護師を予定しているため、所定研修修了の確認が必要（要確認）",
+      requiredFor:["実施者氏名","資格区分","決定日","決定者"], filled:{} },
+    { id:"c2-4", name:"実施者の資格確認", type:"確認する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
+      plan:"2026-07-22", done:"", status:"未着手", decision:"",
+      purpose:"実施者が法令上認められた資格（医師・保健師・所定研修修了看護師等）を満たしているかを確認する。",
+      check:"資格証・研修修了証の確認。", options:"確認済み／確認中／要再確認",
+      law:"法令上必要", note:"", requiredFor:["確認結果","確認日","確認者"], filled:{} },
+    { id:"c2-5", name:"実施事務従事者の選任", type:"決定する項目", owner:"会社管理者", ownerGroup:"会社管理者",
+      plan:"2026-07-10", done:"2026-07-09", status:"完了", decision:"大関謙吾（実施事務兼任・監督的地位ではないことを確認済み）",
+      purpose:"受検者登録・調査票回収・結果保存等の実務を担う担当者を選ぶ。",
+      check:"人事権・異動権を持つ「監督的地位にある者」でないことを確認する。",
+      options:"社内担当者／企業のオンライン保健室代行",
+      law:"法令上必要", note:"", requiredFor:["決定内容","決定日","確認結果"], filled:{decision:true, done:true} },
+    { id:"c2-6", name:"実施事務従事者の監督的地位チェック", type:"確認する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
+      plan:"2026-07-10", done:"2026-07-09", status:"完了", decision:"該当なし（監督的地位ではない）",
+      purpose:"実施事務従事者が対象者の解雇・異動等の権限を持つ立場でないかを確認する。",
+      check:"人事評価権・異動権の有無。", options:"問題なし／要確認／交代が必要",
+      law:"法令上必要", note:"", requiredFor:["確認結果","確認日","確認者"], filled:{decision:true, done:true} },
+    { id:"c2-7", name:"守秘義務の説明", type:"実施する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
+      plan:"2026-07-15", done:"", status:"期限超過", decision:"",
+      purpose:"個人結果等の秘密を扱う関係者に守秘義務を説明する。",
+      check:"説明資料・同意書の有無。", options:"実施済み／未実施",
+      law:"法令上必要", note:"実施者未確定のため保留中", requiredFor:["実施日","実施内容"], filled:{} },
+    { id:"c2-8", name:"企業のオンライン保健室担当者の登録", type:"記録する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
+      plan:"2026-06-15", done:"2026-06-15", status:"完了", decision:"髙橋由香",
+      purpose:"当社側の窓口担当者を記録する。", check:"—", options:"—",
+      law:"契約上必要", note:"", requiredFor:["決定内容"], filled:{decision:true, done:true} }
+  ],
+  7: [
+    { id:"c7-1", name:"対象者の判断基準の決定", type:"決定する項目", owner:"会社管理者", ownerGroup:"会社管理者",
+      plan:"2026-06-20", done:"2026-06-18", status:"完了", decision:"正社員・契約社員を対象、アルバイトは対象外",
+      purpose:"どの雇用区分を対象とするかの基準を決める。", check:"—", options:"—",
+      law:"会社運用ルール", note:"", requiredFor:["決定内容","決定日"], filled:{decision:true, done:true} },
+    { id:"c7-2", name:"対象者名簿の作成", type:"実施する項目", owner:"会社管理者", ownerGroup:"会社管理者",
+      plan:"2026-06-25", done:"2026-06-25", status:"完了", decision:"6名確定（大関謙吾・藤井和子・文屋伴張・林範世・小藪麗奈・渥美沙弥香）",
+      purpose:"受検対象者の名簿を確定する。", check:"—", options:"—",
+      law:"法令上必要", note:"", requiredFor:["決定内容","実施日"], filled:{decision:true, done:true} },
+    { id:"c7-3", name:"アルバイト3名の対象区分決定", type:"決定する項目", owner:"会社管理者", ownerGroup:"会社管理者",
+      plan:"2026-06-25", done:"2026-06-25", status:"完了", decision:"今回は対象外。必要になれば追加登録可能",
+      purpose:"アルバイト従業員を対象に含めるかを決める。", check:"—", options:"対象／対象外／確認中",
+      law:"会社運用ルール", note:"", requiredFor:["決定内容"], filled:{decision:true, done:true} },
+    { id:"c7-4", name:"対象者のシステム登録", type:"実施する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
+      plan:"2026-06-25", done:"2026-06-25", status:"完了", decision:"6名登録完了",
+      purpose:"対象者を実施システムへ登録する。", check:"—", options:"—",
+      law:"契約上必要", note:"", requiredFor:["実施日"], filled:{done:true} },
+    { id:"c7-5", name:"メールアドレスの登録", type:"実施する項目", owner:"企業のオンライン保健室", ownerGroup:"企業のオンライン保健室",
+      plan:"2026-07-09", done:"2026-07-09", status:"完了", decision:"正式メールアドレスへ変更・保存済み",
+      purpose:"個人結果通知に使うメールアドレスを登録する。", check:"—", options:"—",
+      law:"契約上必要", note:"", requiredFor:["実施日"], filled:{done:true} },
+    { id:"c7-6", name:"登録完了の確認", type:"確認する項目", owner:"会社管理者", ownerGroup:"会社管理者",
+      plan:"2026-07-25", done:"", status:"確認待ち", decision:"",
+      purpose:"登録内容に漏れ・誤りがないかを会社側が最終確認する。", check:"氏名・メール・部署の一致確認。",
+      options:"確認済み／要修正", law:"会社運用ルール", note:"", requiredFor:["確認結果","確認日","確認者"], filled:{} }
+  ]
+};
+
+var currentChap = 2;
+var currentCompanyProgress = 29;
+
+function counts(chapNo){
+  var arr = ITEMS[chapNo];
+  if (!arr) return null;
+  var done = arr.filter(function(i){ return i.status === "完了"; }).length;
+  return { done: done, total: arr.length };
+}
+function chapTurnClass(chapNo){
+  var arr = ITEMS[chapNo];
+  if (!arr) return "turn-none";
+  var pending = arr.find(function(i){ return i.status !== "完了"; });
+  if (!pending) return "turn-none";
+  return TURN[pending.ownerGroup] || "turn-none";
+}
+
+function renderNav(){
+  var nav = document.getElementById("chapNav");
+  nav.innerHTML = "";
+  CHAPTERS.forEach(function(c){
+    var btn = document.createElement("button");
+    btn.className = "chap-btn" + (c.no === currentChap ? " active" : "");
+    var cnt = counts(c.no);
+    var dotClass = chapTurnClass(c.no);
+    btn.innerHTML =
+      '<span class="no">' + String(c.no).padStart(2,"0") + '</span>' +
+      '<span class="lbl">' + c.title + '</span>' +
+      (cnt ? '<span class="cnt">' + cnt.done + '/' + cnt.total + '</span>' : '') +
+      '<span class="turn-dot ' + dotClass + '"></span>';
+    btn.addEventListener("click", function(){ currentChap = c.no; renderNav(); renderMain(); });
+    nav.appendChild(btn);
+  });
+}
+
+function renderMain(){
+  var main = document.getElementById("chapMain");
+  var chap = CHAPTERS.find(function(c){ return c.no === currentChap; });
+  var items = ITEMS[currentChap];
+
+  var html = '<div class="chap-head"><span class="no">' + String(chap.no).padStart(2,"0") + '</span><h2>' + chap.title + '</h2></div>';
+
+  if (!items){
+    html += '<div class="placeholder-chap">この章の確認項目はまだワイヤーフレームに入れていません。<br>章2・章7の構成でよければ、他の章にも同じ形式で項目を追加していきます。</div>';
+    main.innerHTML = html;
+    return;
+  }
+
+  html += '<div class="legend">' +
+    '<span><span class="dot turn-company"></span>会社対応待ち</span>' +
+    '<span><span class="dot turn-us"></span>企業のオンライン保健室対応待ち</span>' +
+    '<span><span class="dot turn-jisshi"></span>実施者対応待ち</span>' +
+    '<span><span class="dot turn-doctor"></span>医師対応待ち</span>' +
+  '</div>';
+
+  html += '<table class="item-table"><thead><tr>' +
+    '<th class="col-done">完了</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>実施日</th><th>状態</th><th></th>' +
+    '</tr></thead><tbody>';
+
+  items.forEach(function(it){
+    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (it.status==="完了" ? "is-done" : "") + '">' +
+      '<td class="col-done"><span class="check ' + (it.status==="完了" ? "on" : "") + '"></span></td>' +
+      '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
+      '<td class="' + (it.decision ? "" : "muted") + '">' + (it.decision || "未入力") + '</td>' +
+      '<td><span class="owner-tag">' + it.ownerGroup + '</span><br>' + (it.owner||"") + '</td>' +
+      '<td>' + (it.plan||"—") + '</td>' +
+      '<td>' + (it.done||"—") + '</td>' +
+      '<td><span class="status-pill st-' + it.status + '">' + it.status + '</span></td>' +
+      '<td class="col-detail">詳細 ›</td>' +
+    '</tr>';
+  });
+  html += '</tbody></table>';
+  main.innerHTML = html;
+}
+
+function openDrawer(id){
+  var item = null, chapNo = null;
+  Object.keys(ITEMS).forEach(function(k){
+    ITEMS[k].forEach(function(i){ if (i.id === id){ item = i; chapNo = k; } });
+  });
+  if (!item) return;
+  var chap = CHAPTERS.find(function(c){ return String(c.no) === String(chapNo); });
+
+  document.getElementById("d-chapno").textContent = "章" + chapNo + " — " + chap.title;
+  document.getElementById("d-title").textContent = item.name;
+
+  var missing = (item.requiredFor||[]).filter(function(f){
+    var key = f === "決定内容" || f === "確認結果" ? "decision" : f === "決定日" || f === "実施日" || f === "確認日" ? "done" : f === "決定者" || f === "確認者" ? "owner" : null;
+    if (f === "実施者氏名" || f === "資格区分") return !item.filled[f] && !(item.decision && item.decision.length > 0 && f !== "資格区分");
+    if (key) return !item.filled[key];
+    return !item.filled[f];
+  });
+  // simpler: for the "実施者の決定" demo item, force the exact 4 named fields
+  if (item.id === "c2-3"){
+    missing = ["実施者氏名","資格区分","決定日","決定者"];
+  } else {
+    missing = item.status === "完了" ? [] : (item.requiredFor||[]).filter(function(f){ return true; }).length && item.status !== "完了" ? [] : [];
+  }
+
+  var body = '<span class="type-badge">' + item.type + '</span>';
+
+  body += '<div class="d-block"><div class="d-label">項目の目的</div><div class="d-static">' + item.purpose + '</div></div>';
+  body += '<div class="d-block"><div class="d-label">確認すべき内容</div><div class="d-static">' + (item.check || "—") + '</div></div>';
+  if (item.options && item.options !== "—"){
+    body += '<div class="d-block"><div class="d-label">選択肢</div><div class="d-static">' + item.options + '</div></div>';
+  }
+
+  body += '<div class="d-block"><div class="d-grid">';
+  if (item.id === "c2-3"){
+    body += fieldHTML("実施者氏名", "", true);
+    body += fieldHTML("資格区分", "", true, ["外部委託先の医師等","社内産業医","保健師","所定研修修了看護師"]);
+    body += fieldHTML("決定日", "", true, null, "date");
+    body += fieldHTML("決定者", "", true);
+  } else {
+    body += fieldHTML("決定内容・確認結果", item.decision, !item.decision);
+    body += fieldHTML("担当区分", item.ownerGroup, false, ["会社責任者","会社管理者","会社担当者","人事担当者","実施者","実施事務従事者","産業医または面接指導医","企業のオンライン保健室","システム会社","その他"]);
+    body += fieldHTML("担当者", item.owner, !item.owner);
+    body += fieldHTML("予定日", item.plan, !item.plan, null, "date");
+    body += fieldHTML("実施日／決定日／確認日", item.done, !item.done, null, "date");
+    body += fieldHTML("確認者", item.owner, false);
+  }
+  body += '</div></div>';
+
+  body += '<div class="d-block"><div class="d-label">ステータス</div><div class="d-static">' + item.status + '</div></div>';
+  body += '<div class="d-block"><div class="d-label">法令上の区分</div><div class="d-static">' + item.law + '</div></div>';
+  body += '<div class="d-block"><div class="d-label">根拠資料／添付資料</div><div class="d-static">（未添付）</div></div>';
+  body += '<div class="d-block"><div class="d-label">備考</div><div class="d-static">' + (item.note || "—") + '</div></div>';
+
+  document.getElementById("d-body").innerHTML = body;
+
+  var isDemo = item.id === "c2-3";
+  var missingList = isDemo ? ["実施者氏名","資格区分","決定日","決定者"] : (item.status === "完了" ? [] : []);
+  var foot = "";
+  if (item.status === "完了"){
+    foot = '<div class="complete-box"><div class="cb-row"><input type="checkbox" checked disabled><span>完了</span></div></div>';
+  } else if (isDemo){
+    foot = '<div class="complete-box blocked"><div class="cb-row"><input type="checkbox" disabled><span>完了</span></div>' +
+      '<div class="cb-note">以下が未入力のため「完了」にできません：<ul>' +
+      missingList.map(function(f){ return "<li>" + f + "</li>"; }).join("") +
+      '</ul></div></div>';
+  } else {
+    foot = '<div class="complete-box"><div class="cb-row"><input type="checkbox"><span>完了</span></div>' +
+      '<div class="cb-note" style="color:var(--text-sub)">必須項目が揃うと完了にできます。</div></div>';
+  }
+  document.getElementById("d-foot").innerHTML = foot;
+
+  document.getElementById("overlay").classList.add("show");
+  document.getElementById("drawer").classList.add("show");
+}
+
+function fieldHTML(label, value, empty, options, type){
+  var id = "f-" + Math.random().toString(36).slice(2,8);
+  var inner;
+  if (options){
+    inner = '<select id="' + id + '">' + '<option value="">選択してください</option>' +
+      options.map(function(o){ return '<option ' + (o===value?"selected":"") + '>' + o + '</option>'; }).join("") + '</select>';
+  } else {
+    inner = '<input type="' + (type||"text") + '" value="' + (value||"") + '" placeholder="未入力">';
+  }
+  return '<div class="d-field' + (empty ? " empty" : "") + '"><label>' + label + (empty ? ' <span class="req">*未入力</span>' : '') + '</label>' + inner + '</div>';
+}
+
+function closeDrawer(){
+  document.getElementById("overlay").classList.remove("show");
+  document.getElementById("drawer").classList.remove("show");
+}
+
+window.openDrawer = openDrawer;
+window.closeDrawer = closeDrawer;
+window.openCompany = function(){ goto("screenB"); };
+window.goto = goto;
+
+function goto(id){
+  document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".wf-tabs button").forEach(function(b){ b.classList.toggle("active", b.dataset.goto === id); });
+  window.scrollTo(0,0);
+}
+
+document.querySelectorAll(".wf-tabs button").forEach(function(b){
+  b.addEventListener("click", function(){ goto(b.dataset.goto); });
+});
+
+renderNav();
+renderMain();
+})();
+</script>
+</body>
+</html>
