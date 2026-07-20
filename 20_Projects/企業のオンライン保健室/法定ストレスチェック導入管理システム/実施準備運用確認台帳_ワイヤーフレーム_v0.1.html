@@ -340,8 +340,8 @@
 
 var CHAPTERS = [
   {no:0, title:"用語・役割の確認"},
-  {no:1, title:"企業情報・導入目的"},
-  {no:2, title:"基本方針・実施目的"},
+  {no:1, title:"企業情報"},
+  {no:2, title:"導入目的・基本方針・実施目的"},
   {no:3, title:"担当者・実施体制"},
   {no:4, title:"衛生委員会等での審議"},
   {no:5, title:"実施規程"},
@@ -550,18 +550,20 @@ var ITEMS = {
       check:"—", options:"—", law:"会社運用ルール", required:["decision"] },
     { id:"c1-contact", name:"会社担当者の確認", type:"決定する項目", ownerGroup:"会社担当者",
       purpose:"当社との日常的な連絡窓口となる会社側担当者を確認する。",
-      check:"連絡先（メール・電話）も合わせて確認する。", options:"—", law:"契約上必要", required:["decision"] },
-    { id:"c1-pain", name:"一番困っていることのヒアリング", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      check:"連絡先（メール・電話）も合わせて確認する。", options:"—", law:"契約上必要", required:["decision"] }
+  ],
+  2: [
+    { id:"c2-pain", name:"一番困っていることのヒアリング", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"導入前に、会社が組織として一番困っていることをヒアリングし、提案・運用に反映する。",
       check:"—", options:"—", law:"企業のオンライン保健室運用ルール", required:["decision"] },
-    { id:"c1-purpose", name:"ストレスチェックを導入する目的の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+    { id:"c2-purpose", name:"ストレスチェックを導入する目的の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"法令対応だけが目的か、組織課題の把握や離職防止等も期待しているかを確認し、以降の運用方針に反映する。",
       check:"—", options:"法令対応／組織課題の把握／離職・休職予防／健康経営／その他",
       law:"企業のオンライン保健室運用ルール", required:["decision"] },
-    { id:"c1-kenko", name:"健康経営の取組有無の確認", type:"確認する項目", ownerGroup:"会社担当者",
+    { id:"c2-kenko", name:"健康経営の取組有無の確認", type:"確認する項目", ownerGroup:"会社担当者",
       purpose:"健康経営優良法人の取得意向や既存の取組の有無を確認し、提案内容に反映する。",
       check:"—", options:"取組あり／取組なし／検討中", law:"会社運用ルール", required:["decision"] },
-    { id:"c1-history", name:"過去のストレスチェック実施歴の確認", type:"確認する項目", ownerGroup:"会社担当者",
+    { id:"c2-history", name:"過去のストレスチェック実施歴の確認", type:"確認する項目", ownerGroup:"会社担当者",
       purpose:"過去の実施状況（実施有無、使用ツール、課題）を確認し、今回の設計に活かす。",
       check:"過去の受検率・高ストレス者対応で困った点等。", options:"—", law:"会社運用ルール", required:["decision"] }
   ],
