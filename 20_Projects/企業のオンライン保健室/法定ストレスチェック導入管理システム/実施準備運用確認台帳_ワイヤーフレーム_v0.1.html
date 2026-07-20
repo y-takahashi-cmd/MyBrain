@@ -100,12 +100,24 @@
   .topstat .row1{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:.6rem; }
   .topstat .row1 .title{ font-size:1.15rem; font-weight:800; }
   .topstat .row1 .back{ font-size:.78rem; background:rgba(255,255,255,.18); border:none; color:#fff; padding:.3rem .8rem; border-radius:999px; }
+  .topstat .row1 .title-input{
+    font-family:var(--font-head); font-size:1.15rem; font-weight:800; color:#fff; background:transparent;
+    border:none; border-bottom:1.5px solid rgba(255,255,255,.4); padding:.1rem .1rem; min-width:14em; outline:none;
+  }
+  .topstat .row1 .title-input::placeholder{ color:rgba(255,255,255,.65); font-weight:600; }
+  .topstat .row1 .title-suffix{ font-size:1.02rem; font-weight:700; color:#EAF4FC; opacity:.9; }
   .topstat .meta-grid{
     display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem 1.4rem; margin-top:.8rem; font-size:.78rem;
   }
   @media (max-width:900px){ .topstat .meta-grid{ grid-template-columns:repeat(2,1fr); } }
-  .topstat .meta-grid .k{ color:#DCEEFA; opacity:.85; }
+  .topstat .meta-grid .k{ color:#DCEEFA; opacity:.85; display:block; margin-bottom:.15rem; }
   .topstat .meta-grid .v{ font-weight:700; }
+  .topstat .meta-grid input{
+    width:100%; font-family:var(--font-body); font-size:.85rem; font-weight:700; color:#fff; background:transparent;
+    border:none; border-bottom:1px solid rgba(255,255,255,.35); padding:.1rem 0; outline:none;
+  }
+  .topstat .meta-grid input::placeholder{ color:rgba(255,255,255,.6); font-weight:500; }
+  .topstat .save-note{ font-size:.7rem; color:#DCEEFA; opacity:.8; margin-top:.6rem; }
   .topstat .stat-strip{ display:flex; gap:1.6rem; margin-top:.9rem; flex-wrap:wrap; }
   .topstat .stat-strip .item{ font-size:.8rem; }
   .topstat .stat-strip .item .num{ font-size:1.3rem; font-weight:800; font-variant-numeric:tabular-nums; display:block; }
@@ -133,6 +145,28 @@
   .turn-jisshi{ background:var(--brand-deeper); }
   .turn-doctor{ background:var(--text-sub); }
   .turn-none{ background:var(--border); }
+
+  .chap-btn.overview-btn{ background:var(--info-50); border:1px solid var(--brand-line); margin-bottom:.7rem; font-weight:700; color:var(--brand-deep); }
+  .chap-btn.overview-btn.active{ background:var(--brand); color:#fff; border-color:var(--brand); }
+  .chap-btn.overview-btn .no{ color:inherit; }
+  .nav-divider{ height:1px; background:var(--border); margin:.3rem .3rem .6rem; }
+
+  /* ---------- overview screen ---------- */
+  .ov-summary{ display:flex; flex-direction:column; gap:.35rem; margin-bottom:1.6rem; }
+  .ov-row{
+    display:grid; grid-template-columns:2.4rem 1fr 6rem 4.5rem 1rem; align-items:center; gap:.7rem;
+    padding:.4rem .5rem; border-radius:8px; font-size:.8rem;
+  }
+  .ov-row:hover{ background:var(--card-bg-tint); }
+  .ov-row .no{ font-variant-numeric:tabular-nums; color:var(--text-sub); }
+  .ov-row .lbl{ color:var(--text-body); font-weight:600; }
+  .ov-row .lbl.empty-chap{ color:var(--text-sub); font-weight:400; font-style:italic; }
+  .ov-row .cnt{ font-variant-numeric:tabular-nums; color:var(--text-sub); text-align:right; }
+  .ov-bar{ height:6px; border-radius:999px; background:var(--border-soft); overflow:hidden; }
+  .ov-bar .fill{ height:100%; background:var(--success-700); }
+  .ov-row .turn-dot{ width:7px; height:7px; border-radius:50%; justify-self:center; }
+
+  .ov-divider{ font-size:.72rem; font-weight:700; color:var(--text-sub); text-transform:uppercase; letter-spacing:.06em; margin:1.6rem 0 .6rem; }
 
   .b-main{ padding:1.4rem 1.6rem 4rem; }
   .b-main .chap-head{ display:flex; align-items:baseline; gap:.7rem; margin-bottom:.3rem; flex-wrap:wrap; }
@@ -217,30 +251,32 @@
 <body>
 
 <div class="wf-banner">
-  <span>🧩 ワイヤーフレーム確認用（会社ごとに1本のファイルにする方式・実データはグリットワークス様の実際の状況を仮に使用）</span>
+  <span>🧩 ワイヤーフレーム確認用（会社名を入力すれば、どの契約企業にも使い回せます）</span>
 </div>
 
-<!-- ========================= 台帳（会社ごとに1本） ========================= -->
+<!-- ========================= 台帳（会社ごとに1本・会社名を入力して使う） ========================= -->
 <section id="screenB" class="screen active">
   <div class="topstat">
     <div class="row1">
-      <div class="title">有限会社グリットワークス — ストレスチェック実施準備・運用確認台帳</div>
+      <input type="text" id="f-company" class="title-input" placeholder="◯◯株式会社">
+      <span class="title-suffix">— ストレスチェック実施準備・運用確認台帳</span>
     </div>
     <div class="meta-grid">
-      <div><span class="k">事業場名</span><br><span class="v">全社</span></div>
-      <div><span class="k">実施年度</span><br><span class="v">2026年度</span></div>
-      <div><span class="k">受検予定期間</span><br><span class="v">2026/06/25〜2026/07/31</span></div>
-      <div><span class="k">次の予定</span><br><span class="v">高ストレス者選定基準の会社説明（7/25予定）</span></div>
-      <div><span class="k">会社責任者</span><br><span class="v">大関謙吾</span></div>
-      <div><span class="k">会社管理者</span><br><span class="v">大関謙吾</span></div>
-      <div><span class="k">実施者</span><br><span class="v" style="color:#FFE9A8;">未定（決定待ち）</span></div>
-      <div><span class="k">企業のオンライン保健室担当者</span><br><span class="v">髙橋由香</span></div>
+      <div><span class="k">事業場名</span><input type="text" id="f-worksite" placeholder="例：全社"></div>
+      <div><span class="k">実施年度</span><input type="text" id="f-year" placeholder="例：2026年度"></div>
+      <div><span class="k">受検予定期間</span><input type="text" id="f-period" placeholder="例：2026/06/25〜07/31"></div>
+      <div><span class="k">次の予定</span><input type="text" id="f-next" placeholder="例：高ストレス者選定基準の会社説明"></div>
+      <div><span class="k">会社責任者</span><input type="text" id="f-owner" placeholder="氏名"></div>
+      <div><span class="k">会社管理者</span><input type="text" id="f-manager" placeholder="氏名"></div>
+      <div><span class="k">実施者</span><input type="text" id="f-jisshi" placeholder="氏名・未定なら空欄"></div>
+      <div><span class="k">企業のオンライン保健室担当者</span><input type="text" id="f-us" placeholder="氏名"></div>
     </div>
     <div class="stat-strip">
-      <div class="item"><span class="num">29%</span>全体進捗</div>
-      <div class="item"><span class="num">17</span>未完了件数</div>
-      <div class="item"><span class="num">2</span>期限超過件数</div>
+      <div class="item"><span class="num" id="stat-progress">—</span>全体進捗</div>
+      <div class="item"><span class="num" id="stat-incomplete">—</span>未完了件数</div>
+      <div class="item"><span class="num" id="stat-overdue">—</span>期限超過件数</div>
     </div>
+    <p class="save-note" id="save-note">入力内容は会社名ごとにこのブラウザに自動保存されます</p>
   </div>
 
   <div class="b-shell">
@@ -374,8 +410,7 @@ var ITEMS = {
   ]
 };
 
-var currentChap = 2;
-var currentCompanyProgress = 29;
+var currentChap = "overview";
 
 function counts(chapNo){
   var arr = ITEMS[chapNo];
@@ -391,9 +426,38 @@ function chapTurnClass(chapNo){
   return TURN[pending.ownerGroup] || "turn-none";
 }
 
+function allItems(){
+  var out = [];
+  Object.keys(ITEMS).forEach(function(chapNo){
+    ITEMS[chapNo].forEach(function(it){ out.push({ chapNo: chapNo, item: it }); });
+  });
+  return out;
+}
+
+function updateHeaderStats(){
+  var all = allItems();
+  var done = all.filter(function(x){ return x.item.status === "完了"; }).length;
+  var overdue = all.filter(function(x){ return x.item.status === "期限超過"; }).length;
+  var progress = all.length ? Math.round(done / all.length * 100) : 0;
+  document.getElementById("stat-progress").textContent = progress + "%";
+  document.getElementById("stat-incomplete").textContent = (all.length - done);
+  document.getElementById("stat-overdue").textContent = overdue;
+}
+
 function renderNav(){
   var nav = document.getElementById("chapNav");
   nav.innerHTML = "";
+
+  var ovBtn = document.createElement("button");
+  ovBtn.className = "chap-btn overview-btn" + (currentChap === "overview" ? " active" : "");
+  ovBtn.innerHTML = '<span class="no">📋</span><span class="lbl">全体チェック表（1枚で見る）</span>';
+  ovBtn.addEventListener("click", function(){ currentChap = "overview"; renderNav(); renderMain(); });
+  nav.appendChild(ovBtn);
+
+  var div = document.createElement("div");
+  div.className = "nav-divider";
+  nav.appendChild(div);
+
   CHAPTERS.forEach(function(c){
     var btn = document.createElement("button");
     btn.className = "chap-btn" + (c.no === currentChap ? " active" : "");
@@ -409,7 +473,56 @@ function renderNav(){
   });
 }
 
+function renderOverview(){
+  var main = document.getElementById("chapMain");
+  var html = '<div class="chap-head"><span class="no">📋</span><h2>全体チェック表 — 何ができていて、何がまだ決まっていないか</h2></div>';
+  html += '<p class="chap-desc">章ごとの進捗と、全項目を1枚にまとめた一覧です。行をクリックすると詳細が開きます。</p>';
+
+  html += '<div class="ov-summary">';
+  CHAPTERS.forEach(function(c){
+    var cnt = counts(c.no);
+    var pct = cnt && cnt.total ? Math.round(cnt.done / cnt.total * 100) : 0;
+    var dotClass = chapTurnClass(c.no);
+    html += '<div class="ov-row">' +
+      '<span class="no">' + String(c.no).padStart(2,"0") + '</span>' +
+      '<span class="lbl' + (cnt ? '' : ' empty-chap') + '">' + c.title + (cnt ? '' : '（未作成）') + '</span>' +
+      '<span class="ov-bar"><span class="fill" style="width:' + pct + '%"></span></span>' +
+      '<span class="cnt">' + (cnt ? cnt.done + '/' + cnt.total : '—') + '</span>' +
+      '<span class="turn-dot ' + dotClass + '"></span>' +
+    '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="ov-divider">全項目（完了していないもの・確認が必要なものが上に来ます）</div>';
+  var all = allItems().sort(function(a,b){
+    if ((a.item.status==="完了") !== (b.item.status==="完了")) return a.item.status==="完了" ? 1 : -1;
+    return Number(a.chapNo) - Number(b.chapNo);
+  });
+
+  html += '<table class="item-table"><thead><tr>' +
+    '<th class="col-done">完了</th><th>章</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>状態</th><th></th>' +
+    '</tr></thead><tbody>';
+  all.forEach(function(x){
+    var it = x.item;
+    var chap = CHAPTERS.find(function(c){ return String(c.no) === String(x.chapNo); });
+    html += '<tr onclick="openDrawer(\'' + it.id + '\')" class="' + (it.status==="完了" ? "is-done" : "") + '">' +
+      '<td class="col-done"><span class="check ' + (it.status==="完了" ? "on" : "") + '"></span></td>' +
+      '<td class="muted">' + String(x.chapNo).padStart(2,"0") + ' ' + chap.title + '</td>' +
+      '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
+      '<td class="' + (it.decision ? "" : "muted") + '">' + (it.decision || "未入力") + '</td>' +
+      '<td><span class="owner-tag">' + it.ownerGroup + '</span><br>' + (it.owner||"") + '</td>' +
+      '<td>' + (it.plan||"—") + '</td>' +
+      '<td><span class="status-pill st-' + it.status + '">' + it.status + '</span></td>' +
+      '<td class="col-detail">詳細 ›</td>' +
+    '</tr>';
+  });
+  html += '</tbody></table>';
+  main.innerHTML = html;
+}
+
 function renderMain(){
+  if (currentChap === "overview"){ renderOverview(); return; }
+
   var main = document.getElementById("chapMain");
   var chap = CHAPTERS.find(function(c){ return c.no === currentChap; });
   var items = ITEMS[currentChap];
@@ -544,8 +657,62 @@ function closeDrawer(){
 window.openDrawer = openDrawer;
 window.closeDrawer = closeDrawer;
 
+// ---------------- company header: editable + saved per company name ----------------
+var FIELD_IDS = ["f-company","f-worksite","f-year","f-period","f-next","f-owner","f-manager","f-jisshi","f-us"];
+var DEFAULTS = {
+  "f-company":"有限会社グリットワークス（例・書き換えてください）",
+  "f-worksite":"全社", "f-year":"2026年度", "f-period":"2026/06/25〜2026/07/31",
+  "f-next":"高ストレス者選定基準の会社説明（7/25予定）",
+  "f-owner":"大関謙吾", "f-manager":"大関謙吾", "f-jisshi":"", "f-us":"髙橋由香"
+};
+
+function storageKey(){
+  var name = (document.getElementById("f-company").value || "default").trim().toLowerCase();
+  var slug = name.replace(/[^a-z0-9぀-ヿ一-龯]+/g, "-") || "default";
+  return "sc_ledger_v1_" + slug;
+}
+
+var saveTimer;
+function persistHeader(){
+  try{
+    var data = {};
+    FIELD_IDS.forEach(function(id){ data[id] = document.getElementById(id).value; });
+    localStorage.setItem(storageKey(), JSON.stringify(data));
+    var note = document.getElementById("save-note");
+    note.textContent = "保存しました";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){ note.textContent = "入力内容は会社名ごとにこのブラウザに自動保存されます"; }, 1500);
+  } catch(e){ /* localStorage unavailable */ }
+}
+
+function restoreHeader(useDefaultsIfEmpty){
+  var data = null;
+  try{
+    var raw = localStorage.getItem(storageKey());
+    if (raw) data = JSON.parse(raw);
+  } catch(e){}
+  FIELD_IDS.forEach(function(id){
+    if (id === "f-company") return; // company name itself is the key; don't overwrite while typing
+    if (data && typeof data[id] !== "undefined"){
+      document.getElementById(id).value = data[id];
+    } else if (useDefaultsIfEmpty){
+      document.getElementById(id).value = DEFAULTS[id];
+    }
+  });
+}
+
+document.getElementById("f-company").value = DEFAULTS["f-company"];
+restoreHeader(true);
+FIELD_IDS.forEach(function(id){
+  document.getElementById(id).addEventListener("input", persistHeader);
+});
+document.getElementById("f-company").addEventListener("change", function(){
+  restoreHeader(false);
+});
+
 renderNav();
 renderMain();
+updateHeaderStats();
 })();
 </script>
 </body>
