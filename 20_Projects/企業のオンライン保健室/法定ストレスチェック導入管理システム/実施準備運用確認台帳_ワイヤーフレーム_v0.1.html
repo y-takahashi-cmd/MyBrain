@@ -1070,21 +1070,7 @@ function multiFieldCellHtml(it, st, locked){
     var disabledAttr = locked ? "disabled" : "";
     html += '<div style="display:flex; align-items:center; gap:.4rem;">';
     html += '<span style="font-size:.66rem; color:var(--text-sub); flex:0 0 auto; min-width:3.6em;">' + escapeHtml(fd.label) + '</span>';
-    if (fd.options && fd.combo){
-      var listId = "mf-" + it.id + "-" + fd.key + "-list";
-      html += '<input type="text" list="' + listId + '" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">' +
-        '<datalist id="' + listId + '">' + fd.options.map(function(o){ return '<option value="' + escapeHtml(o) + '">'; }).join("") + '</datalist>';
-    } else if (fd.options){
-      html += '<select onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
-      html += '<option value="">選択</option>';
-      fd.options.forEach(function(o){ html += '<option ' + (o===val?"selected":"") + '>' + escapeHtml(o) + '</option>'; });
-      html += '</select>';
-    } else if (fd.type === "date"){
-      html += '<input type="date" value="' + val + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
-    } else if (fd.type === "file"){
-      html += '<input type="file" accept=".doc,.docx,.pdf" onclick="event.stopPropagation()" onchange="handleFileInline(\'' + it.id + '\',\'' + fd.key + '\', this)" ' + disabledAttr + ' style="' + boxStyle + ' padding:.12rem;">';
-      if (val) html += '<span style="font-size:.7rem; color:var(--brand-deep); white-space:nowrap;">📎 ' + escapeHtml(val) + '</span>';
-    } else if (fd.type === "checkboxes"){
+    if (fd.type === "checkboxes"){
       var selected = val ? val.split("、") : [];
       html += '<div style="display:flex; flex-wrap:wrap; gap:.3rem;">';
       fd.options.forEach(function(o){
@@ -1102,6 +1088,20 @@ function multiFieldCellHtml(it, st, locked){
         });
         html += '</div>';
       }
+    } else if (fd.options && fd.combo){
+      var listId = "mf-" + it.id + "-" + fd.key + "-list";
+      html += '<input type="text" list="' + listId + '" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">' +
+        '<datalist id="' + listId + '">' + fd.options.map(function(o){ return '<option value="' + escapeHtml(o) + '">'; }).join("") + '</datalist>';
+    } else if (fd.options){
+      html += '<select onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
+      html += '<option value="">選択</option>';
+      fd.options.forEach(function(o){ html += '<option ' + (o===val?"selected":"") + '>' + escapeHtml(o) + '</option>'; });
+      html += '</select>';
+    } else if (fd.type === "date"){
+      html += '<input type="date" value="' + val + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
+    } else if (fd.type === "file"){
+      html += '<input type="file" accept=".doc,.docx,.pdf" onclick="event.stopPropagation()" onchange="handleFileInline(\'' + it.id + '\',\'' + fd.key + '\', this)" ' + disabledAttr + ' style="' + boxStyle + ' padding:.12rem;">';
+      if (val) html += '<span style="font-size:.7rem; color:var(--brand-deep); white-space:nowrap;">📎 ' + escapeHtml(val) + '</span>';
     } else {
       html += '<input type="text" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     }
