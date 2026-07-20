@@ -351,10 +351,10 @@ var CHAPTERS = [
     done:"受検対象者の名簿と、アルバイト等・派遣労働者の扱いの考え方が確定します。",
     next:"次は07 運営開始準備で、この名簿をもとにシステムへ登録していきます。"
   }},
-  {no:7, title:"運営開始準備", intro:{
-    why:"ストレスチェックを配信する前に、システム側の初期設定と対象者登録を済ませておく必要があります。",
+  {no:7, title:"アプリ準備・社員名簿登録", intro:{
+    why:"社員名簿の登録と、ストレスチェックアプリへのログイン確認を済ませておかないと、実施者が配信を始められません。",
     who:"03章で登録した実施事務従事者（会社側）",
-    done:"会社側の準備がすべて整い、実施者へ引き継げる状態になります。",
+    done:"社員名簿の登録とアプリのログイン確認が終わり、実施者へ引き継げる状態になります。",
     next:"次は09 ストレスチェック実施で、実施者が配信を行います。"
   }, completeMessage:"会社側準備が完了しました。\n次は09 ストレスチェック実施で実施者が配信を行います。"},
   {no:8, title:"社員への事前案内"},
@@ -751,7 +751,10 @@ var ITEMS = {
       check:"—", law:"会社運用ルール", required:["items"],
       fields:[
         { key:"items", label:"カスタム範囲（複数選択）", type:"checkboxes", options:["実施時期","実施方法","周知方法","苦情処理","保存期間","面接指導","集団分析","その他"] }
-      ] }
+      ] },
+    { id:"c7-kengen", name:"アクセス権限設計の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"誰がどこまでの情報を見られるかを確認する。特に、事業者が本人同意なしに個票（要配慮個人情報）を見られない設計になっているかを確認する。",
+      check:"—", options:"確認済み／要修正", law:"安衛則52-10・実施マニュアル", required:["decision","confirmDone"] }
   ],
   6: [
     { id:"c7-3", name:"対象範囲の決定", type:"決定する項目", ownerGroup:"会社管理者",
@@ -790,42 +793,123 @@ var ITEMS = {
       ] }
   ],
   7: [
-    { id:"c7-chousahyou", name:"調査票の選定", type:"決定する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+    { id:"c7-chousahyou", name:"実施する調査票を選ぶ", type:"決定する項目", ownerGroup:"実施事務従事者", autoOwner:true,
       purpose:"職業性ストレス簡易調査票（領域A仕事のストレス要因／B心身のストレス反応／C周囲のサポート／D満足度）の項目数を選ぶ。",
+      doneWhen:"どちらかを選んだら完了です。",
       check:"—", options:"57項目／57項目＋追加質問", law:"安衛則52-10・実施マニュアル", required:["decision"] },
-    { id:"c7-ms-account", name:"Microsoftアカウント確認", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"システム利用に必要なMicrosoftアカウントを確認する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-sc-login", name:"ストレスチェックアプリへログイン", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"ストレスチェックアプリへログインできることを確認する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-csvapp-dl", name:"対象者登録アプリ（CSV）ダウンロード", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"対象者登録用のCSVアプリを入手する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-csvapp-login", name:"対象者登録アプリへログイン", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"対象者登録アプリへログインできることを確認する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-kengen", name:"アクセス権限設計の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"誰がどこまでの情報を見られるかを確認する。特に、事業者が本人同意なしに個票（要配慮個人情報）を見られない設計になっているかを確認する。",
-      check:"—", options:"確認済み／要修正", law:"安衛則52-10・実施マニュアル", required:["decision","confirmDone"] },
-    { id:"c7-setup-done", name:"初期設定完了", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"システム側の初期設定が完了したことを確認する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-csv-prep", name:"CSV準備", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"06章で確定した対象者名簿をもとに、登録用CSVを準備する。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-csv-check", name:"CSV形式確認", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"氏名・メールアドレス・部署等、CSVの形式に不備がないかを確認する。", check:"—", options:"確認済み／要修正",
-      law:"契約上必要", required:["decision"] },
-    { id:"c7-csv-upload", name:"CSVアップロード", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"対象者登録アプリへCSVをアップロードする。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] },
-    { id:"c7-toroku-done", name:"対象社員登録完了", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"対象社員の登録内容に漏れ・誤りがないかを最終確認する。", check:"氏名・メール・部署の一致確認。", options:"確認済み／要修正",
-      law:"会社運用ルール", required:["decision","confirmDone"] },
-    { id:"c7-handover", name:"実施者への引き継ぎ", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      purpose:"担当実施者へ、対象者登録が完了したことを引き継ぐ。", check:"—", options:"—",
-      law:"契約上必要", required:["done"] }
+
+    { id:"c7-method", name:"登録方法を選ぶ", type:"決定する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する", sectionDesc:"社員数が多い場合はCSV登録がおすすめです。少人数の場合や一部社員のみ追加する場合は、画面からの手入力もできます。",
+      purpose:"社員名簿をどの方法でシステムに登録するかを選びます。",
+      doneWhen:"登録方法を選んだら完了です。",
+      check:"—", options:"CSVファイルでまとめて登録する／画面から一人ずつ手入力する", law:"会社運用ルール", required:["decision"] },
+
+    { id:"c7-csv-1", name:"① 対象者登録アプリを開く", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"CSVファイルでまとめて登録する" },
+      purpose:"社員名簿を登録するための専用アプリを開きます。",
+      doneWhen:"アプリの画面が開けたら完了です。",
+      contact:"URLが届いていない、または開けない場合は企業のオンライン保健室担当までご連絡ください。",
+      check:"—", law:"契約上必要", required:[],
+      fields:[ { key:"url", label:"アプリのURL（未受領なら空欄でOK）" } ] },
+    { id:"c7-csv-2", name:"② 名簿のひな形をダウンロードする", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"CSVファイルでまとめて登録する" },
+      purpose:"アプリから、社員情報を入力するためのひな形ファイルを入手します。",
+      doneWhen:"ひな形ファイルを保存したら完了です。",
+      check:"—", options:"—", law:"契約上必要", required:["done"] },
+    { id:"c7-csv-3", name:"③ 必要な社員情報を入力する", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"CSVファイルでまとめて登録する" },
+      purpose:"ひな形に社員の情報を入力します。",
+      referenceNote:"※CSVに必要な項目は、対象者登録アプリの仕様確認後に表示します。",
+      doneWhen:"必要な社員情報の入力が終わったら完了です。",
+      check:"—", options:"—", law:"契約上必要", required:["done"] },
+    { id:"c7-csv-4", name:"④ CSVファイルを作成する", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"CSVファイルでまとめて登録する" },
+      purpose:"入力したひな形をCSVファイルとして保存します。",
+      doneWhen:"CSVファイルが保存できたら完了です。",
+      check:"—", options:"—", law:"契約上必要", required:["done"] },
+    { id:"c7-csv-5", name:"⑤ CSVファイルを登録する", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"CSVファイルでまとめて登録する" },
+      purpose:"作成したCSVファイルをアプリに登録（アップロード）します。",
+      doneWhen:"アップロードが完了したら完了です。",
+      contact:"エラーが出て進めない場合は企業のオンライン保健室担当までご連絡ください。",
+      check:"—", options:"—", law:"契約上必要", required:["done"] },
+    { id:"c7-csv-6", name:"⑥ 登録結果を確認する", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"CSVファイルでまとめて登録する" },
+      purpose:"登録した社員の人数・内容に誤りがないかを確認します。",
+      doneWhen:"人数・内容に間違いがなければ完了です。",
+      check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"] },
+
+    { id:"c7-manual-1", name:"① 対象者登録アプリを開く", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"画面から一人ずつ手入力する" },
+      purpose:"社員名簿を登録するための専用アプリを開きます。",
+      doneWhen:"アプリの画面が開けたら完了です。",
+      contact:"URLが届いていない、または開けない場合は企業のオンライン保健室担当までご連絡ください。",
+      check:"—", law:"契約上必要", required:[],
+      fields:[ { key:"url", label:"アプリのURL（未受領なら空欄でOK）" } ] },
+    { id:"c7-manual-2", name:"② 社員情報を一人ずつ入力する", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"画面から一人ずつ手入力する" },
+      purpose:"画面の案内に沿って、対象の社員情報を一人ずつ入力します。",
+      doneWhen:"対象者全員の入力が終わったら完了です。",
+      check:"—", options:"—", law:"契約上必要", required:["done"] },
+    { id:"c7-manual-3", name:"③ 登録結果を確認する", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"社員名簿を登録する",
+      showIf:{ itemId:"c7-method", key:"decision", equals:"画面から一人ずつ手入力する" },
+      purpose:"登録した社員の人数・内容に誤りがないかを確認します。",
+      doneWhen:"人数・内容に間違いがなければ完了です。",
+      check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"] },
+
+    { id:"c7-app-url", name:"企業用ログインURLを受け取る", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"ストレスチェックアプリを使えるようにする", sectionDesc:"このアプリは、社員への受検案内、受検状況の確認、結果通知などに使用します。", sectionManual:true,
+      purpose:"ストレスチェックアプリにログインするためのURLを受け取ります。",
+      doneWhen:"URLが届いたら完了です。",
+      contact:"URLが届かない場合は企業のオンライン保健室担当までご連絡ください。",
+      check:"—", options:"—", law:"契約上必要", required:["done"] },
+    { id:"c7-app-loginmethod", name:"ログイン方法を確認する", type:"決定する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"ストレスチェックアプリを使えるようにする",
+      purpose:"どの方法でログインするかを確認します。",
+      doneWhen:"ログイン方法を確認できたら完了です。",
+      check:"—", options:"Microsoftアカウントでログイン／メールアドレス、パスワード、認証コードでログイン／運営側でアカウント発行が必要／未確認", law:"契約上必要", required:["decision"] },
+    { id:"c7-app-firstlogin", name:"初回ログインを行う", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"ストレスチェックアプリを使えるようにする",
+      purpose:"実際にログインし、アプリの画面が開くことを確認します。",
+      doneWhen:"ログインでき、画面が開いたら完了です。",
+      contact:"ログインできない場合は企業のオンライン保健室担当までご連絡ください。",
+      check:"—", options:"—", law:"契約上必要", required:["done"] },
+    { id:"c7-app-check-name", name:"自社名が正しく表示されているか確認する", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"ストレスチェックアプリを使えるようにする",
+      purpose:"アプリ内に表示される会社名が正しいかを確認します。",
+      doneWhen:"表示が正しければ完了です。",
+      check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"] },
+    { id:"c7-app-check-tanto", name:"会社担当者名が正しいか確認する", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"ストレスチェックアプリを使えるようにする",
+      purpose:"アプリに登録されている担当者名が正しいかを確認します。",
+      doneWhen:"表示が正しければ完了です。",
+      check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"] },
+    { id:"c7-app-check-contact", name:"問い合わせ先が正しいか確認する", type:"確認する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"ストレスチェックアプリを使えるようにする",
+      purpose:"困ったときの問い合わせ先が正しく表示されているかを確認します。",
+      doneWhen:"表示が正しければ完了です。",
+      check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"] },
+
+    { id:"c7-handover", name:"引き継ぎ内容の確認", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"実施者へ引き継ぐ", sectionDesc:"社員名簿の登録が完了したら、企業側の準備は完了です。以降の受検案内・配信設定は、実施者が行います。",
+      purpose:"企業側の準備が整ったことを、実施者へ引き継ぎます。",
+      doneWhen:"実施者への引き継ぎが済み、状態を「完了」にしたら完了です。",
+      check:"—", law:"契約上必要", required:["date"],
+      fields:[
+        { key:"companySide", label:"会社側準備担当者", autoFrom:"c3-5", autoKey:"name" },
+        { key:"jisshisha", label:"実施者", autoFrom:"c3-3", autoKey:"person" },
+        { key:"date", label:"引継日", type:"date" },
+        { key:"content", label:"引継内容", type:"textarea" }
+      ] }
   ],
   8: [
     { id:"c8-mokuteki", name:"受検の目的・任意性・秘密保持の案内", type:"通知する項目", ownerGroup:"企業のオンライン保健室",
@@ -1010,18 +1094,28 @@ function isReqMet(item){
   return (item.required||[]).every(function(k){ return st[k] && String(st[k]).trim() !== ""; });
 }
 
+// row-level conditional visibility: item.showIf = { itemId, key, equals }
+// lets one item's decision (e.g. "登録方法を選ぶ") show/hide a whole downstream item.
+function isItemVisible(item){
+  if (!item.showIf) return true;
+  var refSt = STATE[item.showIf.itemId];
+  if (!refSt) return false;
+  return refSt[item.showIf.key] === item.showIf.equals;
+}
+
 var currentChap = "overview";
 
 function counts(chapNo){
   var arr = ITEMS[chapNo];
   if (!arr) return null;
-  var done = arr.filter(function(i){ return STATE[i.id].status === "完了"; }).length;
-  return { done: done, total: arr.length };
+  var visible = arr.filter(isItemVisible);
+  var done = visible.filter(function(i){ return STATE[i.id].status === "完了"; }).length;
+  return { done: done, total: visible.length };
 }
 function chapTurnClass(chapNo){
   var arr = ITEMS[chapNo];
   if (!arr) return "turn-none";
-  var pending = arr.find(function(i){ return STATE[i.id].status !== "完了"; });
+  var pending = arr.filter(isItemVisible).find(function(i){ return STATE[i.id].status !== "完了"; });
   if (!pending) return "turn-none";
   return TURN[STATE[pending.id].ownerGroup || pending.ownerGroup] || "turn-none";
 }
@@ -1029,7 +1123,7 @@ function chapTurnClass(chapNo){
 function allItems(){
   var out = [];
   Object.keys(ITEMS).forEach(function(chapNo){
-    ITEMS[chapNo].forEach(function(it){ out.push({ chapNo: chapNo, item: it }); });
+    ITEMS[chapNo].forEach(function(it){ if (isItemVisible(it)) out.push({ chapNo: chapNo, item: it }); });
   });
   return out;
 }
@@ -1118,7 +1212,8 @@ function multiFieldCellHtml(it, st, locked){
       if (fd.showIf.equals !== undefined && sv !== fd.showIf.equals) return;
       if (fd.showIf.in && fd.showIf.in.indexOf(sv) === -1) return;
     }
-    var val = st[fd.key] || "";
+    var autoVal = (fd.autoFrom && STATE[fd.autoFrom]) ? (STATE[fd.autoFrom][fd.autoKey || "name"] || "") : "";
+    var val = st[fd.key] || autoVal;
     var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.24rem .4rem; font-size:.78rem; font-family:var(--font-body);" +
       (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
     var disabledAttr = locked ? "disabled" : "";
@@ -1491,8 +1586,10 @@ function renderMain(){
     '<span><span class="dot turn-doctor"></span>医師対応待ち</span>' +
   '</div>';
 
-  var hasCustomFields = items.some(function(it){ return !!it.fields; });
-  var simpleChapter = !hasCustomFields && items.every(function(it){
+  var visibleItems = items.filter(isItemVisible);
+
+  var hasCustomFields = visibleItems.some(function(it){ return !!it.fields; });
+  var simpleChapter = !hasCustomFields && visibleItems.every(function(it){
     return it.required && it.required.length === 1 && it.required[0] === "decision";
   });
 
@@ -1511,22 +1608,40 @@ function renderMain(){
       : '<th>状態</th><th>確認項目</th><th>決定内容・確認結果</th><th>担当者</th><th>予定日</th><th>実施日</th>') +
     '</tr></thead><tbody>';
 
-  items.forEach(function(it){
+  var lastSection = null;
+  visibleItems.forEach(function(it){
+    if (it.section && it.section !== lastSection){
+      lastSection = it.section;
+      var colspan = hasCustomFields ? 3 : (simpleChapter ? 4 : 6);
+      html += '<tr class="section-row"><td colspan="' + colspan + '" style="background:var(--info-50); border-top:2px solid var(--brand-line); padding:.55rem .7rem;">' +
+        '<div style="font-weight:700; color:var(--brand-deep); font-size:.85rem;">' + escapeHtml(it.section) + '</div>' +
+        (it.sectionDesc ? '<div style="font-size:.76rem; color:var(--text-body); margin-top:.15rem; line-height:1.6;">' + escapeHtml(it.sectionDesc) + '</div>' : '') +
+        (it.sectionManual ? '<div style="margin-top:.3rem;"><span style="display:inline-block; font-size:.72rem; border:1px solid var(--border); border-radius:999px; padding:.15rem .6rem; color:var(--text-sub); background:var(--card-bg);">📖 操作マニュアル（準備中）</span></div>' : '') +
+      '</td></tr>';
+    }
     var st = STATE[it.id];
     html += '<tr class="' + (st.status==="完了" ? "is-done" : "") + '">' +
       '<td>' + statusCellHtml(it, st) + '</td>' +
-      '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span></td>' +
+      '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span>' + itemInfoHtml(it, st) + '</td>' +
       '<td>' + decisionCellHtml(it, st) + '</td>' +
       (hasCustomFields ? '' : '<td>' + ownerCellHtml(it, st) + '</td>' + (simpleChapter ? '' : '<td>' + dateCellHtml(it, st, "plan") + '</td><td>' + dateCellHtml(it, st, "done") + '</td>')) +
     '</tr>';
   });
   html += '</tbody></table>';
 
-  if (chap.completeMessage && items.every(function(it){ return STATE[it.id].status === "完了"; })){
+  if (chap.completeMessage && visibleItems.length && visibleItems.every(function(it){ return STATE[it.id].status === "完了"; })){
     html += '<div style="margin-top:1rem; background:var(--success-50, #eafaf1); border:1px solid var(--success-line, #b7e4c7); border-radius:10px; padding:.8rem 1rem; font-size:.85rem; font-weight:700; color:var(--success-700, #1e7e45); white-space:pre-line; line-height:1.7;">✅ ' + escapeHtml(chap.completeMessage) + '</div>';
   }
 
   main.innerHTML = html;
+}
+
+function itemInfoHtml(it, st){
+  var lines = [];
+  if (it.doneWhen) lines.push('<span>✅ ' + escapeHtml(it.doneWhen) + '</span>');
+  if (it.contact) lines.push('<span>❓困ったときは：' + escapeHtml(it.contact) + '</span>');
+  if (!lines.length) return "";
+  return '<div style="margin-top:.3rem; display:flex; flex-direction:column; gap:.15rem; font-size:.68rem; color:var(--text-sub); font-weight:400; line-height:1.5;">' + lines.join("") + '</div>';
 }
 
 var STATUS_OPTIONS = ["未着手","準備中","実施中","確認待ち","保留","期限超過","完了"];
