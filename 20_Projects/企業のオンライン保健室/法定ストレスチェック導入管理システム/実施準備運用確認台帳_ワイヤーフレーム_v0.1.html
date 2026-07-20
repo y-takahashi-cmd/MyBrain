@@ -754,21 +754,40 @@ var ITEMS = {
       ] }
   ],
   6: [
-    { id:"c7-1", name:"対象者の判断基準の決定", type:"決定する項目", ownerGroup:"会社管理者",
-      purpose:"どの雇用区分を対象とするかの基準を決める。", check:"—", options:"—",
-      law:"会社運用ルール", required:["decision","done"] },
-    { id:"c7-2", name:"対象者名簿の作成", type:"実施する項目", ownerGroup:"会社管理者",
-      purpose:"受検対象者の名簿を確定する。", check:"—", options:"—",
-      law:"法令上必要", required:["decision","done"] },
-    { id:"c7-3", name:"対象範囲の決定（雇用形態によらず契約期間・労働時間で判定）", type:"決定する項目", ownerGroup:"会社管理者",
-      purpose:"契約社員・アルバイト等を含め、どこまでを受検対象に含めるかを決める。雇用形態の名称ではなく、契約期間×労働時間の基準で判定する（一般定期健康診断の「常時使用する労働者」の考え方を準用）。",
+    { id:"c7-3", name:"対象範囲の決定", type:"決定する項目", ownerGroup:"会社管理者",
+      purpose:"厚労省の基準を参考に受検対象者を決定する。正社員・契約社員・パート・アルバイト・派遣・出向者等、どの雇用区分を対象に含めるかを整理する。",
       check:"—",
-      referenceNote:"【厚労省実施マニュアルの基準】\n・必須対象：期間の定めのない契約、または契約1年以上（更新見込み含む）で、かつ週所定労働時間が通常の労働者の4分の3以上\n・努力義務対象：週所定労働時間が2分の1以上4分の3未満\n・対象外：週所定労働時間が2分の1未満\n※雇用形態の名称（正社員・契約社員・アルバイト等）では判定しません。",
-      options:"必須対象のみを対象とする（4分の3以上）／必須対象＋努力義務対象も対象とする（2分の1以上）／全従業員を対象とする（基準に関わらず）",
-      law:"安衛則52-9・実施マニュアル（一般健診の基準を準用）", required:["decision"] },
+      referenceNote:"【厚労省実施マニュアルの基準】\n・必須対象：期間の定めのない契約、または契約1年以上（更新見込み含む）で、かつ週所定労働時間が通常の労働者の4分の3以上\n・努力義務対象：週所定労働時間が2分の1以上4分の3未満\n・対象外：週所定労働時間が2分の1未満\n※雇用形態の名称（正社員・契約社員・アルバイト等）だけでは判定しません。まず下の基準で範囲を決め、そのうえでどの雇用区分が該当するかを整理してください。",
+      law:"安衛則52-9・実施マニュアル（一般健診の基準を準用）",
+      required:["hani","kubun"],
+      fields:[
+        { key:"hani", label:"対象範囲の判定基準", options:["必須対象のみを対象とする（4分の3以上）","必須対象＋努力義務対象も対象とする（2分の1以上）","全従業員を対象とする（基準に関わらず）"] },
+        { key:"kubun", label:"対象に含める雇用区分（複数選択）", type:"checkboxes", options:["正社員","契約社員","パート","アルバイト","派遣","出向者"] }
+      ] },
     { id:"c7-haken", name:"派遣労働者の扱いの整理", type:"確認する項目", ownerGroup:"会社管理者",
-      purpose:"派遣労働者は派遣元が実施することを整理・確認する。", check:"—", options:"—",
-      law:"安衛則52-9・実施マニュアル", required:["decision"] }
+      purpose:"派遣労働者・出向者について、どちらの事業場が実施主体となるかを整理・確認する。",
+      check:"—",
+      referenceNote:"【整理の考え方】\n・派遣労働者：ストレスチェックの実施義務は派遣元事業者にあります。派遣先に実施義務はなく、実務上は「派遣先で受検状況のみ確認する」対応が一般的です。\n・出向者：実際に指揮命令・労務管理を行っている事業場（多くの場合は出向先）が安全衛生管理の実施主体になるのが原則ですが、出向契約の定めで出向元が実施すると取り決めているケースもあるため、契約内容の確認が必要です。",
+      law:"安衛則52-9・実施マニュアル",
+      required:["haken","shukko"],
+      fields:[
+        { key:"haken", label:"派遣労働者の扱い", options:["対象者なし","派遣元で実施","派遣先で受検状況のみ確認"] },
+        { key:"shukko", label:"出向者の扱い", options:["対象者なし","出向先で実施（原則）","出向元で実施","出向契約の定めによる（要確認）"] }
+      ] },
+    { id:"c7-2", name:"対象者名簿の作成・確認", type:"実施する項目", ownerGroup:"会社管理者",
+      purpose:"①②で決定した対象範囲をもとに、受検対象者の名簿を作成・確認する。",
+      check:"—",
+      referenceNote:"ここでは受検対象者の名簿を確定します。\n実際のCSV登録または手入力は、07で行います。",
+      law:"法令上必要",
+      required:["count","method"],
+      fields:[
+        { key:"count", label:"対象者数" },
+        { key:"method", label:"名簿の確認方法", options:["CSVファイルを添付","Excelファイルを添付","画面に氏名を入力","対象者登録アプリに登録済み"] },
+        { key:"file", label:"添付ファイル", type:"file", accept:".csv,.xlsx,.xls", showIf:{ key:"method", in:["CSVファイルを添付","Excelファイルを添付"] } },
+        { key:"names", label:"氏名一覧入力欄", type:"textarea", showIf:{ key:"method", equals:"画面に氏名を入力" } },
+        { key:"createdDate", label:"名簿作成日", type:"date" },
+        { key:"confirmer", label:"最終確認者" }
+      ] }
   ],
   7: [
     { id:"c7-chousahyou", name:"調査票の選定", type:"決定する項目", ownerGroup:"実施事務従事者", autoOwner:true,
@@ -1094,7 +1113,11 @@ window.setTemplateInline = function(id, idxStr){
 function multiFieldCellHtml(it, st, locked){
   var html = '<div style="display:flex; flex-direction:column; gap:.35rem;">';
   it.fields.forEach(function(fd){
-    if (fd.showIf && st[fd.showIf.key] !== fd.showIf.equals) return;
+    if (fd.showIf){
+      var sv = st[fd.showIf.key];
+      if (fd.showIf.equals !== undefined && sv !== fd.showIf.equals) return;
+      if (fd.showIf.in && fd.showIf.in.indexOf(sv) === -1) return;
+    }
     var val = st[fd.key] || "";
     var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.24rem .4rem; font-size:.78rem; font-family:var(--font-body);" +
       (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
@@ -1131,8 +1154,10 @@ function multiFieldCellHtml(it, st, locked){
     } else if (fd.type === "date"){
       html += '<input type="date" value="' + val + '" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     } else if (fd.type === "file"){
-      html += '<input type="file" accept=".doc,.docx,.pdf" onclick="event.stopPropagation()" onchange="handleFileInline(\'' + it.id + '\',\'' + fd.key + '\', this)" ' + disabledAttr + ' style="' + boxStyle + ' padding:.12rem;">';
+      html += '<input type="file" accept="' + (fd.accept || ".doc,.docx,.pdf") + '" onclick="event.stopPropagation()" onchange="handleFileInline(\'' + it.id + '\',\'' + fd.key + '\', this)" ' + disabledAttr + ' style="' + boxStyle + ' padding:.12rem;">';
       if (val) html += '<span style="font-size:.7rem; color:var(--brand-deep); white-space:nowrap;">📎 ' + escapeHtml(val) + '</span>';
+    } else if (fd.type === "textarea"){
+      html += '<textarea onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' rows="2" placeholder="未入力" style="' + boxStyle + ' resize:vertical; font-family:var(--font-body);">' + escapeHtml(val) + '</textarea>';
     } else {
       html += '<input type="text" value="' + escapeHtml(val).replace(/"/g,"&quot;") + '" placeholder="未入力" onclick="event.stopPropagation()" onchange="setFieldInline(\'' + it.id + '\',\'' + fd.key + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     }
@@ -1142,19 +1167,21 @@ function multiFieldCellHtml(it, st, locked){
   return html;
 }
 
+function referenceNoteHtml(it){
+  if (!it.referenceNote) return "";
+  return '<div style="margin-bottom:.35rem; font-size:.72rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .55rem; line-height:1.7; white-space:pre-line;">' + escapeHtml(it.referenceNote) + '</div>';
+}
+
 function decisionCellHtml(it, st){
   var locked = st.status === "完了" && !it.noLock;
-  if (it.fields) return multiFieldCellHtml(it, st, locked);
-  if (it.textOptions) return templateCellHtml(it, st, locked);
+  if (it.fields) return referenceNoteHtml(it) + multiFieldCellHtml(it, st, locked);
+  if (it.textOptions) return referenceNoteHtml(it) + templateCellHtml(it, st, locked);
   var opts = (it.options && it.options !== "—") ? it.options.split(/[／\/]/).map(function(s){ return s.trim(); }).filter(Boolean) : null;
   var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; font-family:var(--font-body);" +
     (locked ? "background:var(--card-bg-tint); color:var(--text-sub); cursor:not-allowed;" : "background:var(--card-bg); color:var(--text-heading);");
   var disabledAttr = locked ? "disabled" : "";
   if (opts && opts.length){
-    var html = "";
-    if (it.referenceNote){
-      html += '<div style="margin-bottom:.35rem; font-size:.72rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .55rem; line-height:1.7; white-space:pre-line;">' + escapeHtml(it.referenceNote) + '</div>';
-    }
+    var html = referenceNoteHtml(it);
     html += '<select onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" ' + disabledAttr + ' style="' + boxStyle + '">';
     html += '<option value="">選択してください</option>';
     opts.forEach(function(o){
@@ -1241,7 +1268,7 @@ function generateRegulationDraft(){
   var responsible = (STATE["c3-1"] && STATE["c3-1"].name) || "（未定）";
   var manager = (STATE["c3-2"] && STATE["c3-2"].name) || "（未定）";
   var jisshisha = (STATE["c3-3"] && STATE["c3-3"].person) || "（未定）";
-  var taisho = (STATE["c7-1"] && STATE["c7-1"].decision) || "（未定）";
+  var taisho = (STATE["c7-3"] && STATE["c7-3"].hani) || "（未定）";
   var chousahyou = (STATE["c7-chousahyou"] && STATE["c7-chousahyou"].decision) || "（未定）";
   var shuchi = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].method) || "（未定）";
   var kujou = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].window) || "（未定）";
@@ -1533,6 +1560,11 @@ function openDrawer(id){
   body += '<div class="d-block"><div class="d-grid">';
   if (isCustom){
     showFields.forEach(function(fd){
+      if (fd.showIf){
+        var sv = st[fd.showIf.key];
+        if (fd.showIf.equals !== undefined && sv !== fd.showIf.equals) return;
+        if (fd.showIf.in && fd.showIf.in.indexOf(sv) === -1) return;
+      }
       fieldKeys.push(fd.key);
       body += fieldHTML(id, fd.key, fd.label, st[fd.key], isReqEmpty(item, fd.key), fd.options || null, fd.type || null, locked, fd.combo);
     });
