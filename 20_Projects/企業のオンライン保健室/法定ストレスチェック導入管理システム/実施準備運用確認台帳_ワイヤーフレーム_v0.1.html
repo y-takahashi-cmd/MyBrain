@@ -394,7 +394,12 @@ var CHAPTERS = [
     done:"面談の実施記録と、医師面接・医療機関受診への橋渡しが必要かどうかが記録されます。",
     next:"医師面接・医療機関受診が必要になった場合は、左のメニューから12章へ戻って引き継ぐことができます。"
   }, notice:"企業のオンライン保健室面談は、法定の医師による面接指導の代わりではありません。" },
-  {no:14, title:"会社報告"},
+  {no:14, title:"会社報告", intro:{
+    why:"ストレスチェックの結果を、会社が職場環境改善や従業員支援の判断に活用できる形で報告するためです。",
+    who:"実施者または企業のオンライン保健室担当者が報告内容を作成し、会社担当者・経営者が確認します。",
+    done:"会社が対応すべき事項、担当者、期限、次回確認日が明確になります。",
+    next:"次は15「集団分析」です。"
+  }, notice:"個人の回答内容、点数、高ストレス判定、面談内容は、本人の同意なく会社へ提供しません。会社へは、受検状況、個人を特定できない集計情報、職場全体の傾向、会社として対応が必要な事項を報告します。" },
   {no:15, title:"集団分析"},
   {no:16, title:"職場環境改善"},
   {no:17, title:"行政報告"},
@@ -795,7 +800,13 @@ var ITEMS = {
       check:"—",
       referenceNote:"【厚労省が示す代表的な基準】\n①合計点による方法：「心身のストレス反応」の合計点が高い者、または「心身のストレス反応」の合計点が一定以上かつ「仕事のストレス要因」「周囲のサポート」の合計点が著しく高い者\n②素点換算表を用いる方法：素点を換算表で点数化し、一定点数以上の者\nいずれも実施者の医学的な知見をもとに、事業場の実施方法として最終決定する。",
       law:"安衛則52-9・実施マニュアル", required:["decision"],
-      options:"厚労省標準基準（合計点による方法）を使用／厚労省標準基準（素点換算表）を使用／実施者の意見をもとに個別設定／前年度の基準を継続" }
+      options:"厚労省標準基準（合計点による方法）を使用／厚労省標準基準（素点換算表）を使用／実施者の意見をもとに個別設定／前年度の基準を継続" },
+    { id:"c5-houkoku-timing", name:"報告のタイミング・粒度の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"会社への報告タイミング・粒度を、会社ごとに1回だけ決める。14章では毎回決めず、ここでの決定を自動表示する。",
+      check:"—", law:"会社運用ルール", required:["items"],
+      fields:[
+        { key:"items", label:"報告のタイミング（複数選択）", type:"checkboxes", options:["中間報告","実施終了報告","緊急報告","年度報告"] }
+      ] }
   ],
   6: [
     { id:"c7-3", name:"対象範囲の決定", type:"決定する項目", ownerGroup:"会社管理者",
@@ -1218,15 +1229,45 @@ var ITEMS = {
       ] }
   ],
   14: [
-    { id:"c14-houkoku", name:"会社向け実施状況報告", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"受検率・高ストレス者数（人数レベル）・面接指導実施状況を、個人が特定されない形で事業者へ報告する。",
-      check:"—", options:"—", law:"安衛法66-10②（本人同意なき個票提供の禁止）", required:["done"] },
-    { id:"c14-senbiki", name:"個票を同意なく渡さない線引きの維持", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"報告に個人結果（個票）が含まれていないことを確認する。", check:"—",
-      options:"確認済み／要修正", law:"安衛法66-10②", required:["decision"] },
-    { id:"c14-timing", name:"報告のタイミング・粒度の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"会社への報告タイミングと粒度を決める。", check:"—", options:"—",
-      law:"会社運用ルール", required:["decision"] }
+    { id:"c14-jisshi-status", name:"区分1：実施状況の自動集計", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"対象者数・受検者数・受検率・高ストレス者数等、会社へ伝えられる範囲の実施状況を、前ページの内容から自動集計する。個人名は表示しない。",
+      check:"—", law:"安衛法66-10②（本人同意なき個票提供の禁止）", required:[], customRender:"jisshiStatusSummary" },
+    { id:"c14-keikou", name:"区分2：会社へ報告する傾向・注意点", type:"記録する項目", ownerGroup:"実施者",
+      purpose:"個人名や具体的な相談内容ではなく、会社として気を付けるべき職場全体の傾向を記録する。",
+      check:"—",
+      referenceNote:"補足メモには個人名や個人を特定できる情報を書かないでください（本人の同意または緊急性がある場合を除く）。",
+      law:"—", required:["items"],
+      fields:[
+        { key:"items", label:"傾向・注意点（複数選択）", type:"checkboxes", options:["業務量や長時間労働への負担","人間関係、コミュニケーション","相談しづらさ","管理職との関係","体調不良者の増加","休職、離職リスク","特定部署の受検率低下","職場環境上の課題","特に大きな課題なし","その他"] },
+        { key:"note", label:"補足メモ（個人名・個人が特定できる情報は書かない）", type:"textarea" }
+      ] },
+    { id:"c14-teian", name:"区分3：会社へ提案する対応", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"単なる報告で終わらせず、会社側の判断項目・対応方針・担当者・期限を記録する。",
+      check:"—", law:"—", required:[],
+      fields:[
+        { key:"items", label:"会社へ提案する対応（複数選択）", type:"checkboxes", options:["業務量の見直し","残業時間の確認","配置、担当業務の見直し","管理職からの声掛け","保健室面談の追加","産業医への相談","医療機関受診の支援","衛生委員会での審議","職場環境改善","経過観察","対応不要","その他"] },
+        { key:"houshin", label:"会社の対応方針", type:"textarea" },
+        { key:"tantou", label:"会社側担当者" },
+        { key:"kigen", label:"対応期限", type:"date" },
+        { key:"nextCheck", label:"次回確認日", type:"date" },
+        { key:"status", label:"実施状況", options:["未着手","対応中","完了"] }
+      ] },
+    { id:"c14-report", name:"報告書の自動生成", type:"記録する項目", ownerGroup:"実施者",
+      purpose:"区分1〜3の内容から、実施状況報告書（数字中心）と経営判断レポート（会社の判断につながる形）の2種類を自動作成する。",
+      check:"—", law:"—", required:["confirmed"], customRender:"houkokuDocs" },
+    { id:"c14-kiroku", name:"報告の記録", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"報告日・報告先・報告方法・報告者・会社側確認者・会社の回答・次回確認日を記録する。報告のタイミングは05章の決定を自動表示し、ここでは決め直さない。",
+      check:"—", law:"会社運用ルール", required:[],
+      autoDisplay:[{ itemId:"c5-houkoku-timing", key:"items", label:"報告のタイミング（05章で決定）", optional:true }],
+      fields:[
+        { key:"date", label:"報告日", type:"date" },
+        { key:"saki", label:"報告先" },
+        { key:"method", label:"報告方法", options:["対面","メール","報告書ファイル送付","オンライン会議","その他"] },
+        { key:"houkokusha", label:"報告者" },
+        { key:"kakuninsha", label:"会社側確認者" },
+        { key:"kaitou", label:"会社の回答", type:"textarea" },
+        { key:"nextCheck", label:"次回確認日", type:"date" }
+      ] }
   ],
   15: [
     { id:"c15-bunseki", name:"集団分析の実施", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
@@ -1630,6 +1671,8 @@ function decisionCellHtml(it, st){
   if (it.customRender === "assignmentSwitch") return assignmentSwitchCellHtml(it, st);
   if (it.customRender === "scheduleEcho") return scheduleEchoCellHtml(it, st);
   if (it.customRender === "shienPlan") return shienPlanCellHtml();
+  if (it.customRender === "jisshiStatusSummary") return jisshiStatusSummaryHtml();
+  if (it.customRender === "houkokuDocs") return houkokuDocsCellHtml(it, st);
   if (it.infoOnly) return referenceNoteHtml(it);
   var locked = st.status === "完了" && !it.noLock;
   if (it.fields){
@@ -1893,6 +1936,157 @@ function announceDocsCellHtml(it, st){
 
   if (!locked){
     html += '<button onclick="event.stopPropagation(); confirmAnnounceDocs()" style="border:1px solid var(--success-700); background:var(--success-50); color:var(--success-700); font-weight:700; font-size:.82rem; border-radius:8px; padding:.5rem 1rem; cursor:pointer;">✅ 内容を確認・確定する</button>';
+  } else {
+    html += '<div style="font-size:.78rem; color:var(--success-700); font-weight:700;">✅ 確定済み（ロック中）。状態を「完了」以外に戻すと再編集できます。</div>';
+  }
+  return html;
+}
+
+// ---------------- Chapter 14: auto-summarized implementation status + two auto-generated reports ----------------
+function jisshiStatusSummaryHtml(){
+  var s = function(id,key){ return (STATE[id] && STATE[id][key]) || ""; };
+  var taisho = s("c7-2","count"), ukensha = s("c9-toukei","ukensha");
+  var period = document.getElementById("f-period").value || "";
+  var t = parseFloat(taisho), u = parseFloat(ukensha);
+  var rate = (!isNaN(t) && t > 0 && !isNaN(u)) ? Math.round(u / t * 100) + "%" : "";
+  var mikensha = (!isNaN(t) && !isNaN(u)) ? String(t - u) : "";
+  var annaiCount = (STATE["c8-schedule"] && STATE["c8-schedule"].r1Date) ? 1 : 0;
+  var sokushinCount = 0;
+  ["r2Date","r3Date","r4Date"].forEach(function(k){ if (STATE["c8-schedule-followup"] && STATE["c8-schedule-followup"][k]) sokushinCount++; });
+  var koststress = s("c10-koststress","presence") === "いない" ? "0名（いない）" : s("c10-koststress","count");
+  var mensetsu = [s("c11-kibou","iryou"), s("c11-kibou","jibunIryou")].filter(Boolean).join("＋");
+
+  var rows = [
+    ["対象者数（06章）", taisho],
+    ["受検者数（09章）", ukensha],
+    ["未受検者数（自動計算）", mikensha],
+    ["受検率（自動計算）", rate],
+    ["実施期間（上部フォーム）", period],
+    ["案内回数（自動集計・08章）", annaiCount ? annaiCount + "回" : ""],
+    ["督促回数（自動集計・08章）", sokushinCount ? sokushinCount + "回" : ""],
+    ["高ストレス者数（10章）", koststress],
+    ["医師面接申出者数（11章）", mensetsu],
+    ["保健室面談利用者数（11章）", s("c11-kibou","hoken")],
+    ["結果通知完了状況（10章）", s("c10-tsuchi","status")]
+  ];
+  var html = '<table style="width:100%; border-collapse:collapse; font-size:.8rem;"><tbody>';
+  rows.forEach(function(r){
+    var v = r[1] && String(r[1]).trim() ? escapeHtml(r[1]) : '<span style="color:var(--text-sub);">未集計</span>';
+    html += '<tr><td style="padding:.3rem .5rem; border-top:1px solid var(--border); color:var(--text-sub); white-space:nowrap;">' + r[0] + '</td><td style="padding:.3rem .5rem; border-top:1px solid var(--border); font-weight:700; color:var(--text-heading);">' + v + '</td></tr>';
+  });
+  html += '</tbody></table>';
+  html += '<div style="margin-top:.5rem; font-size:.72rem; color:var(--text-sub);">個人名は表示していません。</div>';
+  return html;
+}
+
+function gatherHoukokuData(){
+  var s = function(id,key){ return (STATE[id] && STATE[id][key]) || ""; };
+  var taisho = s("c7-2","count"), ukensha = s("c9-toukei","ukensha");
+  var t = parseFloat(taisho), u = parseFloat(ukensha);
+  var rate = (!isNaN(t) && t > 0 && !isNaN(u)) ? Math.round(u / t * 100) + "%" : "未集計";
+  var mikensha = (!isNaN(t) && !isNaN(u)) ? String(t - u) : "未集計";
+  return {
+    companyName: document.getElementById("f-company").value || "当社",
+    period: document.getElementById("f-period").value || "",
+    taisho: taisho || "未集計", ukensha: ukensha || "未集計", mikensha: mikensha, rate: rate,
+    koststress: s("c10-koststress","presence") === "いない" ? "0名" : (s("c10-koststress","count") || "未集計"),
+    mensetsu: [s("c11-kibou","iryou"), s("c11-kibou","jibunIryou")].filter(Boolean).join("＋") || "未集計",
+    hoken: s("c11-kibou","hoken") || "未集計",
+    keikouItems: s("c14-keikou","items"),
+    keikouNote: s("c14-keikou","note"),
+    teianItems: s("c14-teian","items"),
+    houshin: s("c14-teian","houshin"),
+    kigen: s("c14-teian","kigen"),
+    nextCheck: s("c14-teian","nextCheck")
+  };
+}
+
+function buildHoukokuTexts(d){
+  var jisshi = "（AI自動生成・要レビュー）\n" +
+    "実施状況報告書\n\n" +
+    d.companyName + "　対象期間：" + d.period + "\n\n" +
+    "対象者数：" + d.taisho + "　受検者数：" + d.ukensha + "　未受検者数：" + d.mikensha + "　受検率：" + d.rate + "\n" +
+    "高ストレス者数：" + d.koststress + "\n" +
+    "医師面接申出者数：" + d.mensetsu + "\n" +
+    "保健室面談利用者数：" + d.hoken + "\n\n" +
+    "※個人が特定される情報は含まれていません。";
+
+  var keiei = "（AI自動生成・要レビュー）\n" +
+    "経営判断レポート\n\n" +
+    "【現在の状態】\n" + (d.keikouItems || "特に大きな課題なし") + (d.keikouNote ? "\n" + d.keikouNote : "") + "\n\n" +
+    "【気になる傾向】\n" + (d.keikouItems || "現時点で特筆すべき傾向はありません") + "\n\n" +
+    "【放置した場合のリスク】\n（AI下書き・要確認）上記の傾向が続く場合、体調不良や休職・離職リスクの増加、職場全体の生産性低下につながる可能性があります。\n\n" +
+    "【会社に判断してほしいこと】\n" + (d.teianItems || "現時点で特別な判断事項はありません") + "\n\n" +
+    "【推奨対応】\n" + (d.houshin || "経過観察") + "\n\n" +
+    "【次回確認時期】\n" + (d.nextCheck || d.kigen || "未定");
+
+  return { jisshi: jisshi, keiei: keiei };
+}
+
+window.generateHoukokuDocs = function(){
+  var st = STATE["c14-report"];
+  var texts = buildHoukokuTexts(gatherHoukokuData());
+  st.jisshi = texts.jisshi; st.keiei = texts.keiei;
+  persistItems(); renderNav(); updateHeaderStats(); renderMain();
+};
+
+window.setHoukokuField = function(key, value){
+  var st = STATE["c14-report"];
+  st[key] = value;
+  if (st.status === "完了") st.status = "確認待ち";
+  persistItems();
+};
+
+window.confirmHoukokuDocs = function(){
+  var st = STATE["c14-report"];
+  if (!st.jisshi || !st.keiei){
+    alert("2つの報告書をすべて自動生成してから確定してください。");
+    return;
+  }
+  st.confirmed = "true";
+  st.status = "完了";
+  persistItems(); renderNav(); updateHeaderStats(); renderMain();
+};
+
+window.printHoukokuDoc = function(key){
+  var text = STATE["c14-report"][key] || "";
+  var w = window.open("", "_blank");
+  if (!w) return;
+  w.document.write('<pre style="white-space:pre-wrap; font-family:sans-serif; font-size:14px; line-height:1.8; padding:2rem;">' + escapeHtml(text) + '</pre>');
+  w.document.close();
+  w.focus();
+  w.print();
+};
+
+window.copyHoukokuDoc = function(key){
+  var text = STATE["c14-report"][key] || "";
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).catch(function(){});
+  }
+};
+
+function houkokuDocsCellHtml(it, st){
+  var locked = st.status === "完了";
+  var html = '<button onclick="event.stopPropagation(); generateHoukokuDocs()" ' + (locked?"disabled":"") + ' style="margin-bottom:.8rem; border:1px solid var(--brand-line); background:var(--info-50); color:var(--brand-deep); font-weight:700; font-size:.82rem; border-radius:8px; padding:.5rem 1rem; cursor:pointer;">🪄 区分1〜3の内容から自動生成する</button>';
+
+  var DOCS = [
+    { key:"jisshi", label:"① 実施状況報告書" },
+    { key:"keiei", label:"② 経営判断レポート" }
+  ];
+  DOCS.forEach(function(d){
+    var val = st[d.key] || "";
+    html += '<div style="margin-bottom:.9rem; border:1px solid var(--border); border-radius:8px; padding:.7rem .8rem; background:var(--card-bg);">';
+    html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem; flex-wrap:wrap; gap:.4rem;"><b style="font-size:.8rem; color:var(--text-heading);">' + d.label + '</b>';
+    html += '<div style="display:flex; gap:.4rem;">' +
+      '<button onclick="event.stopPropagation(); copyHoukokuDoc(\'' + d.key + '\')" style="font-size:.7rem; border:1px solid var(--border); background:var(--card-bg-tint); border-radius:6px; padding:.2rem .5rem; cursor:pointer;">コピー</button>' +
+      '<button onclick="event.stopPropagation(); printHoukokuDoc(\'' + d.key + '\')" style="font-size:.7rem; border:1px solid var(--border); background:var(--card-bg-tint); border-radius:6px; padding:.2rem .5rem; cursor:pointer;">印刷／PDF保存</button>' +
+    '</div></div>';
+    html += '<textarea onclick="event.stopPropagation()" onchange="setHoukokuField(\'' + d.key + '\', this.value)" ' + (locked?"disabled":"") + ' rows="7" placeholder="上のボタンで自動生成してください" style="width:100%; border:1px solid var(--border); border-radius:6px; padding:.5rem .6rem; font-size:.78rem; font-family:var(--font-body); resize:vertical; background:' + (locked?"var(--card-bg-tint)":"var(--card-bg)") + ';">' + escapeHtml(val) + '</textarea>';
+    html += '</div>';
+  });
+
+  if (!locked){
+    html += '<button onclick="event.stopPropagation(); confirmHoukokuDocs()" style="border:1px solid var(--success-700); background:var(--success-50); color:var(--success-700); font-weight:700; font-size:.82rem; border-radius:8px; padding:.5rem 1rem; cursor:pointer;">✅ 内容を確認・確定する</button>';
   } else {
     html += '<div style="font-size:.78rem; color:var(--success-700); font-weight:700;">✅ 確定済み（ロック中）。状態を「完了」以外に戻すと再編集できます。</div>';
   }
