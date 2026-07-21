@@ -375,7 +375,12 @@ var CHAPTERS = [
     done:"結果通知が完了し、高ストレス者・面接指導希望者の人数が記録されます。",
     next:"次は11「高ストレス者対応」です。"
   }, notice:"個人結果は、本人の同意がない限り会社へ提供されません。結果通知は、すべてストレスチェックアプリから行われます。", completeMessage:"結果通知の確認が完了しました。\n次は11「高ストレス者対応」へ進んでください。" },
-  {no:11, title:"高ストレス者対応"},
+  {no:11, title:"高ストレス者対応", intro:{
+    why:"高ストレス者への案内・申出は、03〜08で決めた窓口・連絡先をそのまま使います。ここで新しく窓口や期限を決め直す必要はありません。",
+    who:"企業のオンライン保健室が確認・記録します。",
+    done:"高ストレス者数・申出案内の実施・面接指導希望者数が記録されます。",
+    next:"次は12「医師による面接指導」で、希望者を医師につなぎます。"
+  }, completeMessage:"高ストレス者対応の確認が完了しました。\n次は12「医師による面接指導」へ進んでください。" },
   {no:12, title:"医師による面接指導"},
   {no:13, title:"保健室面談"},
   {no:14, title:"会社報告"},
@@ -1068,18 +1073,31 @@ var ITEMS = {
       ] }
   ],
   11: [
-    { id:"c11-hantei", name:"高ストレス者の判定＋実施者の承認", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"合計点数法（領域B≧77、または(領域A+C)≧76かつ領域B≧63）等の基準で高ストレス者候補を判定し、実施者が最終承認する。システム判定はあくまで候補（candidate）、確定は実施者操作が必要。",
-      check:"—", options:"—", law:"安衛則52-15/16・実施マニュアル", required:["decision","done"] },
-    { id:"c11-kanshou", name:"高ストレス者への面接指導申出勧奨", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"高ストレス者へ医師面接指導の申出を勧奨する。", check:"—", options:"—",
-      law:"安衛則52-15/16", required:["done"] },
-    { id:"c11-madoguchi", name:"申出窓口・様式の案内", type:"通知する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"面接指導の申出窓口・様式を案内する。", check:"—", options:"—",
-      law:"実施マニュアル", required:["done"] },
-    { id:"c11-unyou", name:"勧奨方法・期限の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"勧奨の方法・期限、判定の候補→確定の運用を決める。", check:"—", options:"—",
-      law:"会社運用ルール", required:["decision"] }
+    { id:"c11-count", name:"高ストレス者数の確認（自動表示）", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"10章で記録した高ストレス者の人数をそのまま表示する。ここでの再入力は不要。判定はストレスチェックシステム上で行われる。",
+      check:"—", law:"安衛則52-15/16・実施マニュアル", required:[], infoOnly:true,
+      autoDisplay:[
+        { itemId:"c10-koststress", key:"presence", label:"高ストレス者の有無（10章）" },
+        { itemId:"c10-koststress", key:"count", label:"高ストレス者数（10章）", optional:true }
+      ] },
+    { id:"c11-annai", name:"面接指導申出の案内を実施したか確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"高ストレス者へ、医師面接指導の申出窓口・様式を案内できたかを確認する。窓口・連絡先は既存の設定を自動表示し、ここでは決め直さない。",
+      check:"—", options:"案内した／該当者なし／未実施",
+      referenceNote:"高ストレスと判定された方には、実施者から医師面接の申出方法をご案内します。申出に特別な期限は設けていません（随時受付）。",
+      law:"安衛則52-15/16・実施マニュアル", required:["decision"],
+      autoDisplay:[
+        { itemId:"c3-2", key:"name", label:"会社側の窓口・担当者（03章）" },
+        { itemId:"c3-2", key:"contact", label:"会社側の連絡先（03章）" },
+        { field:"f-us", label:"企業のオンライン保健室担当者（上部フォーム）" }
+      ] },
+    { id:"c11-boushu", name:"面接指導希望者数の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"案内後、実際に面接指導を希望した人数を記録する。個人名はここでは扱わない。",
+      check:"—", law:"安衛則52-15/16", required:["presence"],
+      autoDisplay:[{ itemId:"c10-mensetsuboushu", key:"count", label:"申出時点の希望者数（10章）", optional:true }],
+      fields:[
+        { key:"presence", label:"面接指導希望者の有無", options:["いない","いる"] },
+        { key:"count", label:"人数", showIf:{ key:"presence", equals:"いる" } }
+      ] }
   ],
   12: [
     { id:"c12-jisshi", name:"医師による面接指導の実施", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
