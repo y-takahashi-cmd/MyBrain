@@ -1001,16 +1001,10 @@ var ITEMS = {
       purpose:"03章の実施者区分（社内担当／外部委託）から、配信・督促・受検率確認の担当が保健室側か会社側かを自動表示する。表示内容を確認したらチェックする。",
       check:"—", options:"確認済み／要修正", law:"—", required:["decision"], customRender:"assignmentSwitch" },
 
-    { id:"c9-schedule-echo", name:"案内スケジュール（08章の内容を自動反映）", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      section:"② 案内スケジュール（自動反映）", sectionDesc:"08章で決めた日程をそのまま表示します。ここでの再入力は不要です。",
-      purpose:"08章で決めた案内・督促の日程をそのまま表示する。",
-      check:"—", law:"—", required:[], infoOnly:true,
-      autoDisplay:[
-        { itemId:"c8-schedule", key:"r1Date", label:"初回案内日（08章）" },
-        { itemId:"c8-schedule-followup", key:"r2Date", label:"1回目督促日（08章・任意）", optional:true },
-        { itemId:"c8-schedule-followup", key:"r3Date", label:"2回目督促日（08章・任意）", optional:true },
-        { itemId:"c8-schedule-followup", key:"r4Date", label:"最終案内日（08章・任意）", optional:true }
-      ] },
+    { id:"c9-schedule-echo", name:"案内スケジュール（08章の内容を自動反映）", type:"実施する項目", ownerGroup:"実施事務従事者",
+      section:"② 案内スケジュール（自動反映）", sectionDesc:"08章で決めた日程をそのまま表示します。日程の再入力は不要です。実施したらチェックしてください。",
+      purpose:"08章で決めた案内・督促の日程をそのまま表示し、実際に実施したらチェックを入れて記録する。",
+      check:"—", law:"—", required:[], customRender:"scheduleEcho" },
 
     { id:"c9-check-haishin", name:"配信は予定どおり実施できたか", type:"確認する項目", ownerGroup:"実施事務従事者",
       section:"③ 実施記録（最小限の入力）", sectionDesc:"予定どおり実施できたかを記録します。新しい設定はありません。内容を変更したい場合は該当する章から編集してください。",
@@ -1431,10 +1425,46 @@ function assignmentSwitchCellHtml(it, st){
   return html;
 }
 
+function scheduleEchoCellHtml(it, st){
+  var rounds = [
+    { key:"r1", label:"初回案内日", src:"c8-schedule", srcKey:"r1Date", optional:false },
+    { key:"r2", label:"1回目督促日", src:"c8-schedule-followup", srcKey:"r2Date", optional:true },
+    { key:"r3", label:"2回目督促日", src:"c8-schedule-followup", srcKey:"r3Date", optional:true },
+    { key:"r4", label:"最終案内日", src:"c8-schedule-followup", srcKey:"r4Date", optional:true }
+  ];
+  var locked = st.status === "完了";
+  var html = "";
+  rounds.forEach(function(r){
+    var srcSt = STATE[r.src];
+    var dateVal = srcSt ? (srcSt[r.srcKey] || "") : "";
+    if (!dateVal){
+      if (r.optional){
+        html += '<div style="margin-bottom:.35rem; font-size:.73rem; color:var(--text-sub); background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:6px; padding:.35rem .6rem;">' + escapeHtml(r.label) + '：未設定（任意）</div>';
+      } else {
+        html += '<div onclick="event.stopPropagation(); jumpToItem(\'' + r.src + '\')" style="cursor:pointer; margin-bottom:.35rem; font-size:.73rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:6px; padding:.4rem .6rem;">⚠ ' + escapeHtml(r.label) + '（08章）が未設定です（クリックでその章へ移動）</div>';
+      }
+      return;
+    }
+    var doneKey = r.key + "Done";
+    var checked = st[doneKey] === "true";
+    html += '<label onclick="event.stopPropagation()" style="display:flex; align-items:center; gap:.5rem; margin-bottom:.35rem; font-size:.78rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .6rem; cursor:' + (locked?"not-allowed":"pointer") + ';">' +
+      '<input type="checkbox" onchange="setScheduleDone(\'' + doneKey + '\', this.checked)" ' + (checked?"checked":"") + ' ' + (locked?"disabled":"") + ' style="width:1.1em; height:1.1em;">' +
+      '<span><b style="color:var(--text-heading);">' + escapeHtml(r.label) + '：</b>' + escapeHtml(dateVal) + '　実施済み</span>' +
+    '</label>';
+  });
+  return html;
+}
+
+window.setScheduleDone = function(key, checked){
+  STATE["c9-schedule-echo"][key] = checked ? "true" : "";
+  persistItems(); renderNav(); updateHeaderStats(); renderMain();
+};
+
 function decisionCellHtml(it, st){
   if (it.placeholder) return placeholderCellHtml(it);
   if (it.customRender === "announceDocs") return announceDocsCellHtml(it, st);
   if (it.customRender === "assignmentSwitch") return assignmentSwitchCellHtml(it, st);
+  if (it.customRender === "scheduleEcho") return scheduleEchoCellHtml(it, st);
   if (it.infoOnly) return referenceNoteHtml(it);
   var locked = st.status === "完了" && !it.noLock;
   if (it.fields){
