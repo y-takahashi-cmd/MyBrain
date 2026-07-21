@@ -374,7 +374,7 @@ var CHAPTERS = [
     who:"企業のオンライン保健室が確認・記録します。",
     done:"結果通知が完了し、高ストレス者・面接指導希望者の人数が記録されます。",
     next:"次は11「高ストレス者対応」です。"
-  }, notice:"個人結果は、本人の同意がない限り会社へ提供されません。", completeMessage:"結果通知の確認が完了しました。\n次は11「高ストレス者対応」へ進んでください。" },
+  }, notice:"個人結果は、本人の同意がない限り会社へ提供されません。結果通知は、すべてストレスチェックアプリから行われます。", completeMessage:"結果通知の確認が完了しました。\n次は11「高ストレス者対応」へ進んでください。" },
   {no:11, title:"高ストレス者対応"},
   {no:12, title:"医師による面接指導"},
   {no:13, title:"保健室面談"},
@@ -775,10 +775,7 @@ var ITEMS = {
       check:"—",
       referenceNote:"【厚労省が示す代表的な基準】\n①合計点による方法：「心身のストレス反応」の合計点が高い者、または「心身のストレス反応」の合計点が一定以上かつ「仕事のストレス要因」「周囲のサポート」の合計点が著しく高い者\n②素点換算表を用いる方法：素点を換算表で点数化し、一定点数以上の者\nいずれも実施者の医学的な知見をもとに、事業場の実施方法として最終決定する。",
       law:"安衛則52-9・実施マニュアル", required:["decision"],
-      options:"厚労省標準基準（合計点による方法）を使用／厚労省標準基準（素点換算表）を使用／実施者の意見をもとに個別設定／前年度の基準を継続" },
-    { id:"c5-format", name:"通知フォーマットの決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"結果通知の形式を、会社ごとに1回だけ決める。10章では毎回決めず、ここでの決定を自動表示する。",
-      check:"—", options:"システム画面／PDF", law:"会社運用ルール", required:["decision"] }
+      options:"厚労省標準基準（合計点による方法）を使用／厚労省標準基準（素点換算表）を使用／実施者の意見をもとに個別設定／前年度の基準を継続" }
   ],
   6: [
     { id:"c7-3", name:"対象範囲の決定", type:"決定する項目", ownerGroup:"会社管理者",
@@ -1052,9 +1049,8 @@ var ITEMS = {
         { key:"date", label:"通知日", type:"date" }
       ] },
     { id:"c10-naiyou", name:"通知内容の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"個人ストレスプロファイル・高ストレス該当の有無・セルフケア情報・面接指導の申出方法が通知に含まれているかを確認する。通知フォーマットは03章の決定を自動表示する（ここでは決め直さない）。",
-      check:"—", options:"確認済み／要修正", law:"安衛則52-12/13", required:["decision"],
-      autoDisplay:[{ itemId:"c5-format", key:"decision", label:"通知フォーマット（05章で決定）" }] },
+      purpose:"個人ストレスプロファイル・高ストレス該当の有無・セルフケア情報・面接指導の申出方法が、アプリからの通知に含まれているかを確認する。",
+      check:"—", options:"確認済み／要修正", law:"安衛則52-12/13", required:["decision"] },
     { id:"c10-koststress", name:"高ストレス者の有無", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"高ストレス者の有無と人数のみを記録する。個人名はここでは扱わない。判定は05章で決めた選定基準にもとづく。",
       check:"—", law:"安衛法66-10②", required:["presence"],
@@ -1390,7 +1386,10 @@ function autoDisplayHtml(it){
       val = el ? el.value : "";
     }
     if (val && String(val).trim()){
-      html += '<div style="margin-bottom:.35rem; font-size:.74rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .6rem; line-height:1.6;"><b style="color:var(--brand-deep);">' + escapeHtml(ad.label) + '：</b><span style="white-space:pre-wrap;">' + escapeHtml(val) + '</span></div>';
+      var valOnclick = ad.itemId ? (' onclick="event.stopPropagation(); jumpToItem(\'' + ad.itemId + '\')"') : '';
+      var valCursor = ad.itemId ? "cursor:pointer; " : "";
+      var jumpHint = ad.itemId ? '<span style="display:block; margin-top:.2rem; font-size:.68rem; color:var(--brand-deep); font-weight:700;">↳ クリックすると決定した章を開いて確認・変更できます</span>' : '';
+      html += '<div' + valOnclick + ' style="' + valCursor + 'margin-bottom:.35rem; font-size:.74rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .6rem; line-height:1.6;"><b style="color:var(--brand-deep);">' + escapeHtml(ad.label) + '：</b><span style="white-space:pre-wrap;">' + escapeHtml(val) + '</span>' + jumpHint + '</div>';
     } else if (ad.optional){
       html += '<div style="margin-bottom:.35rem; font-size:.73rem; color:var(--text-sub); background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:6px; padding:.35rem .6rem;">' + escapeHtml(ad.label) + '：未設定（任意）</div>';
     } else {
