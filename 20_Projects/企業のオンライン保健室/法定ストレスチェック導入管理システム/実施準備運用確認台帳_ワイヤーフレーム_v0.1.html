@@ -670,7 +670,10 @@ var ITEMS = {
     { id:"c3-8", name:"守秘義務の説明", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"個人結果等の秘密を扱う関係者に守秘義務を説明する。",
       check:"説明資料・同意書の有無。", options:"実施済み／未実施",
-      law:"法令上必要", required:["done"] }
+      law:"法令上必要", required:["done"] },
+    { id:"c3-format", name:"通知フォーマットの決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"結果通知の形式を、会社ごとに1回だけ決める。10章では毎回決めず、ここでの決定を自動表示する。",
+      check:"—", options:"システム画面／PDF", law:"会社運用ルール", required:["decision"] }
   ],
   4: [
     { id:"c4-upload", name:"自社規程を取り込む", type:"実施する項目", ownerGroup:"会社担当者",
@@ -1042,6 +1045,10 @@ var ITEMS = {
         { key:"status", label:"通知状況", options:["未通知","アプリから結果通知済み"] },
         { key:"date", label:"通知日", type:"date" }
       ] },
+    { id:"c10-naiyou", name:"通知内容の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"個人ストレスプロファイル・高ストレス該当の有無・セルフケア情報・面接指導の申出方法が通知に含まれているかを確認する。通知フォーマットは03章の決定を自動表示する（ここでは決め直さない）。",
+      check:"—", options:"確認済み／要修正", law:"安衛則52-12/13", required:["decision"],
+      autoDisplay:[{ itemId:"c3-format", key:"decision", label:"通知フォーマット（03章で決定）" }] },
     { id:"c10-koststress", name:"高ストレス者の有無", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"高ストレス者の有無と人数のみを記録する。個人名はここでは扱わない。",
       check:"—", law:"安衛法66-10②", required:["presence"],
