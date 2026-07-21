@@ -357,7 +357,12 @@ var CHAPTERS = [
     done:"社員名簿の登録とアプリのログイン確認が終わり、実施者へ引き継げる状態になります。",
     next:"次は09 ストレスチェック実施で、実施者が配信を行います。"
   }, completeMessage:"会社側準備が完了しました。\n次は09 ストレスチェック実施で実施者が配信を行います。"},
-  {no:8, title:"社員への事前案内"},
+  {no:8, title:"社員への事前案内", intro:{
+    why:"受検が始まる前に、目的・任意性・秘密保持・受検方法を社員へ周知しておかないと、受検率の低下や社員の不安・不信につながります。",
+    who:"会社担当者と企業のオンライン保健室が確認します。案内文は01〜08の設定内容をもとに自動作成します。",
+    done:"社員へ送る案内文・受検マニュアルが完成し、案内日と督促予定が確定します。",
+    next:"次は09「ストレスチェック実施」で、実施者が対象者へ受検案内を配信します。"
+  }},
   {no:9, title:"ストレスチェック実施"},
   {no:10, title:"結果通知"},
   {no:11, title:"高ストレス者対応"},
@@ -937,26 +942,96 @@ var ITEMS = {
       ] }
   ],
   8: [
-    { id:"c8-mokuteki", name:"受検の目的・任意性・秘密保持の案内", type:"通知する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"受検の目的、受検が任意であること、結果の秘密が保持されることを社員へ案内する。",
-      check:"—", options:"—", law:"指針（労働者への説明）", required:["done"] },
-    { id:"c8-kikan", name:"受検期間・方法（Web受検）の周知", type:"通知する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"受検期間とWeb受検の方法を周知する。", check:"—", options:"—",
-      law:"指針", required:["done"] },
-    { id:"c8-furieki", name:"受検しないことによる不利益はない旨の明記", type:"決定する項目", ownerGroup:"会社責任者",
-      purpose:"受検の有無で不利益取扱いをしないことを案内文に明記する。", check:"—", options:"—",
-      law:"指針", required:["decision"] },
-    { id:"c8-channel", name:"案内チャネルと督促方針の決定", type:"決定する項目", ownerGroup:"会社担当者",
-      purpose:"案内の配信方法と、未受検者への督促方針を決める。", check:"—",
-      options:"メール／掲示／説明会／その他", law:"会社運用ルール", required:["decision"] },
-    { id:"c8-doc", name:"受検案内文・受検マニュアル（📄L3様式）の作成", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"社員向け受検案内文を作成する。5章で決めた周知方法・苦情窓口・プライバシー保護方針を反映して自動生成できる。",
-      check:"—", law:"指針", required:["decision"],
-      textOptions:[
-        { label:"AIで自動作成（5章の内容を反映）", text: generateAnnouncementDraft },
-        { label:"企業のオンライン保健室のおすすめ案内を使用", text:"（企業のオンライン保健室が用意する案内パンフレットを使用します。実際のパンフレットデータは準備中）" },
-        { label:"自由作成", text:null }
-      ] }
+    { id:"c8-check-mokuteki", name:"社員へ伝える内容の確認：受検の目的・気づきの促進", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"① 社員へ伝える内容の確認", sectionDesc:"受検開始前に、以下の内容を社員へ伝えられる状態か確認します。01〜07で決定済みの内容は自動表示されます。未設定のものは黄色で警告されます。",
+      purpose:"社員が目的や個人情報の取扱いを理解し、安心して受検できるようにするため、受検の目的（本人の気づきとセルフケア支援）を正しく伝えられるかを確認する。",
+      check:"—", options:"確認済み／要修正", law:"指針（労働者への説明）", required:["decision"],
+      autoDisplay:[{ itemId:"c2-ichiji", key:"decision", label:"受検の目的（02章で決定）" }] },
+    { id:"c8-check-nini", name:"社員へ伝える内容の確認：受検は任意であること", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"① 社員へ伝える内容の確認",
+      purpose:"受検は本人の任意であり、義務ではないことを伝えられるかを確認する。",
+      check:"受検は労働者の義務ではありません。強制する表現になっていないか確認してください。",
+      options:"確認済み／要修正", law:"指針", required:["decision"] },
+    { id:"c8-check-furieki", name:"社員へ伝える内容の確認：受検しないことによる不利益はないこと", type:"確認する項目", ownerGroup:"会社責任者",
+      section:"① 社員へ伝える内容の確認",
+      purpose:"受検の有無で不利益取扱いをしないことを伝えられるかを確認する。",
+      check:"—", options:"確認済み／要修正", law:"指針", required:["decision"],
+      autoDisplay:[{ itemId:"c2-furieki", key:"decision", label:"不利益取扱い禁止の方針（02章で決定）" }] },
+    { id:"c8-check-kojinkekka", name:"社員へ伝える内容の確認：個人結果の取扱い", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"① 社員へ伝える内容の確認",
+      purpose:"回答内容・点数・評価結果・高ストレス該当等の「個人結果」は、本人の同意なく会社へ提供されないことを伝えられるかを確認する。",
+      check:"—",
+      referenceNote:"個人結果＝回答内容・点数・評価結果・高ストレス該当の有無・面接指導要否など。本人の同意なく事業者へ提供してはならない情報です。",
+      options:"確認済み／要修正", law:"安衛法66-10②", required:["decision"] },
+    { id:"c8-himitsu", name:"社員へ伝える内容の確認：秘密保持", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"① 社員へ伝える内容の確認",
+      purpose:"秘密保持について、社員に分かりやすく伝えられるかを確認する。",
+      check:"—",
+      referenceNote:"ストレスチェックの回答内容や個人結果は、実施者など限られた担当者だけが取り扱います。\n本人の同意なく、回答内容・点数・高ストレス判定などが会社へ提供されることはありません。",
+      richNote:'<details style="margin-bottom:.5rem; font-size:.8rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:8px; padding:.5rem .7rem;"><summary style="cursor:pointer; font-weight:700; color:var(--brand-deep);">秘密保持について詳しく見る</summary><div style="margin-top:.5rem; line-height:1.7;"><p style="margin:.3rem 0;"><b>会社が確認できること（受検状況）：</b>受検済み・未受検・対象外・通知未達など、受けたかどうかの情報のみです。</p><p style="margin:.3rem 0;"><b>会社が確認できないこと（個人結果）：</b>回答内容・点数・評価結果・高ストレス該当の有無などは、本人の同意なく会社へ提供されることはありません。取り扱えるのは実施者・実施事務従事者など限られた担当者のみです。</p></div></details>',
+      options:"確認済み／要修正", law:"安衛則52-10", required:["decision"] },
+    { id:"c8-check-koststress", name:"社員へ伝える内容の確認：高ストレスと判定された場合の流れ", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"① 社員へ伝える内容の確認",
+      purpose:"高ストレスと判定された場合に、どのような支援につながるかを伝えられるかを確認する。",
+      check:"—",
+      referenceNote:"高ストレスと判定された方には、実施者から医師による面接指導の申出方法や、企業のオンライン保健室の相談窓口をご案内します（詳細は10〜13章）。",
+      options:"確認済み／要修正", law:"指針", required:["decision"] },
+    { id:"c8-check-mensetsu", name:"社員へ伝える内容の確認：医師面接の申出方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"① 社員へ伝える内容の確認",
+      purpose:"高ストレス者が医師による面接指導を希望する場合の申出方法を伝えられるかを確認する。",
+      check:"—", options:"確認済み／要修正", law:"安衛法66-10③", required:["decision"],
+      autoDisplay:[{ itemId:"c12-ishi", key:"decision", label:"面接指導医の確保状況（12章で決定・未決定の場合は「実施者にご相談ください」と案内）" }] },
+    { id:"c8-check-hokenshitsu", name:"社員へ伝える内容の確認：企業のオンライン保健室への相談方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"① 社員へ伝える内容の確認",
+      purpose:"企業のオンライン保健室への相談方法（保健室面談等）を伝えられるかを確認する。",
+      check:"—", options:"確認済み／要修正", law:"—", required:["decision"],
+      autoDisplay:[{ field:"f-us", label:"企業のオンライン保健室担当者（上部フォームより）" }] },
+    { id:"c8-check-toiawase", name:"社員へ伝える内容の確認：問い合わせ先", type:"確認する項目", ownerGroup:"会社担当者",
+      section:"① 社員へ伝える内容の確認",
+      purpose:"不明点があった場合の問い合わせ先を伝えられるかを確認する。",
+      check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"],
+      autoDisplay:[{ itemId:"c3-2", key:"name", label:"会社管理者名（03章で決定）" }, { itemId:"c3-2", key:"contact", label:"会社管理者の連絡先（03章で決定）" }] },
+
+    { id:"c8-schedule", name:"案内チャネルと督促スケジュール", type:"決定する項目", ownerGroup:"会社担当者",
+      section:"② 案内チャネルと督促スケジュール", sectionDesc:"初回案内だけでなく、未受検者へいつ・どの方法で再案内するかを事前に決めます。",
+      purpose:"案内の配信方法と、未受検者への督促スケジュール（対象・方法・担当者・文面・実施済み）を決める。",
+      check:"—", law:"会社運用ルール", required:["channels","r1Date"],
+      fields:[
+        { key:"channels", label:"案内チャネル（複数選択可）", type:"checkboxes", options:["メール","ストレスチェックアプリ内メッセージ","社内チャット","社内掲示","朝礼","紙で配布","その他"] },
+        { key:"r1Date", label:"① 初回案内日", type:"date" },
+        { key:"r1Owner", label:"① 初回：担当者", autoFrom:"c3-2", autoKey:"name" },
+        { key:"r1Bunmen", label:"① 初回：使用する文面", options:["社員向け案内文（自動生成）","メール用短文（自動生成）","社内チャット用短文（自動生成）","その他"] },
+        { key:"r1Done", label:"① 初回：実施済み", options:["未実施","実施済み"] },
+        { key:"r2Date", label:"② 1回目督促日", type:"date" },
+        { key:"r2Target", label:"② 1回目督促：対象", options:["全対象者","未受検者のみ"] },
+        { key:"r2Owner", label:"② 1回目督促：担当者", autoFrom:"c3-2", autoKey:"name" },
+        { key:"r2Bunmen", label:"② 1回目督促：使用する文面", options:["社員向け案内文（自動生成）","メール用短文（自動生成）","社内チャット用短文（自動生成）","その他"] },
+        { key:"r2Done", label:"② 1回目督促：実施済み", options:["未実施","実施済み"] },
+        { key:"r3Date", label:"③ 2回目督促日", type:"date" },
+        { key:"r3Target", label:"③ 2回目督促：対象", options:["全対象者","未受検者のみ"] },
+        { key:"r3Owner", label:"③ 2回目督促：担当者", autoFrom:"c3-2", autoKey:"name" },
+        { key:"r3Bunmen", label:"③ 2回目督促：使用する文面", options:["社員向け案内文（自動生成）","メール用短文（自動生成）","社内チャット用短文（自動生成）","その他"] },
+        { key:"r3Done", label:"③ 2回目督促：実施済み", options:["未実施","実施済み"] },
+        { key:"r4Date", label:"④ 最終案内日", type:"date" },
+        { key:"r4Target", label:"④ 最終案内：対象", options:["全対象者","未受検者のみ"] },
+        { key:"r4Owner", label:"④ 最終案内：担当者", autoFrom:"c3-2", autoKey:"name" },
+        { key:"r4Bunmen", label:"④ 最終案内：使用する文面", options:["社員向け案内文（自動生成）","メール用短文（自動生成）","社内チャット用短文（自動生成）","その他"] },
+        { key:"r4Done", label:"④ 最終案内：実施済み", options:["未実施","実施済み"] },
+        { key:"actualDate", label:"実際の案内日（初回）", type:"date" },
+        { key:"completeDate", label:"案内完了日（全回終了）", type:"date" }
+      ] },
+
+    { id:"c8-doc", name:"社員向け受検案内文・受検マニュアル", subLabel:"管理様式：L3", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
+      section:"③ 案内文・受検マニュアルの作成", sectionDesc:"01〜08で設定した内容から自動作成します。ゼロから入力する必要はありません。",
+      purpose:"01〜08までに設定した情報をもとに、社員向け案内文・受検マニュアル・メール用短文・社内チャット用短文を自動作成する。",
+      check:"—", law:"指針", required:["confirmed"], customRender:"announceDocs" },
+
+    { id:"c8-pamphlet", name:"企業のオンライン保健室おすすめパンフレット", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
+      section:"④ 保健室おすすめパンフレット",
+      purpose:"企業のオンライン保健室が用意するおすすめ案内パンフレットを使用する（会社名・実施期間・受検URL・QRコード・問い合わせ先の自動差し込みを想定）。",
+      check:"—", law:"—", required:[], placeholder:true,
+      placeholderText:"企業のオンライン保健室おすすめパンフレット\n現在準備中です。（パンフレット機能：今後追加予定）",
+      doneWhen:"パンフレットは今後追加予定の機能です。現時点では対応不要のため、完了・保留のどちらでも構いません。" }
   ],
   9: [
     { id:"c9-monitor", name:"受検状況モニタリング・未受検者への再勧奨", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
@@ -1288,12 +1363,54 @@ function multiFieldCellHtml(it, st, locked){
   return html;
 }
 
+function autoDisplayHtml(it){
+  if (!it.autoDisplay) return "";
+  var html = "";
+  it.autoDisplay.forEach(function(ad){
+    var val = "";
+    if (ad.itemId){
+      var src = STATE[ad.itemId];
+      val = src ? (src[ad.key] || "") : "";
+    } else if (ad.field){
+      var el = document.getElementById(ad.field);
+      val = el ? el.value : "";
+    }
+    if (val && String(val).trim()){
+      html += '<div style="margin-bottom:.35rem; font-size:.74rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .6rem; line-height:1.6;"><b style="color:var(--brand-deep);">' + escapeHtml(ad.label) + '：</b><span style="white-space:pre-wrap;">' + escapeHtml(val) + '</span></div>';
+    } else {
+      var onclickAttr = ad.itemId ? (' onclick="event.stopPropagation(); jumpToItem(\'' + ad.itemId + '\')"') : '';
+      var cursorStyle = ad.itemId ? "cursor:pointer; " : "";
+      html += '<div' + onclickAttr + ' style="' + cursorStyle + 'margin-bottom:.35rem; font-size:.73rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:6px; padding:.4rem .6rem;">⚠ ' + escapeHtml(ad.label) + ' が未設定です' + (ad.itemId ? '（クリックでその章へ移動）' : '') + '</div>';
+    }
+  });
+  return html;
+}
+
+function jumpToItem(id){
+  var chapNo = null;
+  Object.keys(ITEMS).forEach(function(k){ if (ITEMS[k].some(function(i){ return i.id === id; })) chapNo = k; });
+  if (chapNo === null) return;
+  currentChap = Number(chapNo);
+  renderNav(); renderMain();
+}
+window.jumpToItem = jumpToItem;
+
 function referenceNoteHtml(it){
-  if (!it.referenceNote) return "";
-  return '<div style="margin-bottom:.35rem; font-size:.72rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .55rem; line-height:1.7; white-space:pre-line;">' + escapeHtml(it.referenceNote) + '</div>';
+  var html = autoDisplayHtml(it);
+  if (it.referenceNote){
+    html += '<div style="margin-bottom:.35rem; font-size:.72rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .55rem; line-height:1.7; white-space:pre-line;">' + escapeHtml(it.referenceNote) + '</div>';
+  }
+  if (it.richNote) html += it.richNote;
+  return html;
+}
+
+function placeholderCellHtml(it){
+  return '<div style="font-size:.8rem; color:var(--text-sub); font-style:italic; background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:8px; padding:.6rem .8rem; line-height:1.6; white-space:pre-line;">' + escapeHtml(it.placeholderText || "準備中です。") + '</div>';
 }
 
 function decisionCellHtml(it, st){
+  if (it.placeholder) return placeholderCellHtml(it);
+  if (it.customRender === "announceDocs") return announceDocsCellHtml(it, st);
   var locked = st.status === "完了" && !it.noLock;
   if (it.fields) return referenceNoteHtml(it) + multiFieldCellHtml(it, st, locked);
   if (it.textOptions) return referenceNoteHtml(it) + templateCellHtml(it, st, locked);
@@ -1649,7 +1766,7 @@ function renderMain(){
     var st = STATE[it.id];
     html += '<tr class="' + (st.status==="完了" ? "is-done" : "") + '">' +
       '<td>' + statusCellHtml(it, st) + '</td>' +
-      '<td class="name">' + it.name + '<span class="type-tag">' + it.type + '</span>' + itemInfoHtml(it, st) + '</td>' +
+      '<td class="name">' + it.name + '<span class="type-tag">' + it.type + (it.subLabel ? '　｜　' + escapeHtml(it.subLabel) : '') + '</span>' + itemInfoHtml(it, st) + '</td>' +
       '<td>' + decisionCellHtml(it, st) + '</td>' +
       (hasCustomFields ? '' : '<td>' + ownerCellHtml(it, st) + '</td>' + (simpleChapter ? '' : '<td>' + dateCellHtml(it, st, "plan") + '</td><td>' + dateCellHtml(it, st, "done") + '</td>')) +
     '</tr>';
