@@ -1097,6 +1097,13 @@ var ITEMS = {
       fields:[
         { key:"presence", label:"面接指導希望者の有無", options:["いない","いる"] },
         { key:"count", label:"人数", showIf:{ key:"presence", equals:"いる" } }
+      ] },
+    { id:"c11-hokenshitsu-boushu", name:"保健室面談（補足面談）希望者数の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"医師による面接指導は希望しないが、企業のオンライン保健室との補足面談（保健室面談）を希望する人数を記録する。個人名はここでは扱わない。",
+      check:"—", law:"—", required:["presence"],
+      fields:[
+        { key:"presence", label:"保健室面談（補足面談）希望者の有無", options:["いない","いる"] },
+        { key:"count", label:"人数", showIf:{ key:"presence", equals:"いる" } }
       ] }
   ],
   12: [
