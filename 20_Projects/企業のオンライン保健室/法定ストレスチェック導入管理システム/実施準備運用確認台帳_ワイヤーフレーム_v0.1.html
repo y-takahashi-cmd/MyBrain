@@ -363,7 +363,12 @@ var CHAPTERS = [
     done:"社員へ送る案内文・受検マニュアルが完成し、案内日と督促予定が確定します。",
     next:"次は09「ストレスチェック実施」で、実施者が対象者へ受検案内を配信します。"
   }},
-  {no:9, title:"ストレスチェック実施"},
+  {no:9, title:"ストレスチェック実施", intro:{
+    why:"08までで実施準備は完了しています。ここでは新しい設定はせず、予定どおり実施できたかを確認・記録します。",
+    who:"会社担当者・実施者が、最小限の記録を行います（設定は不要です）。",
+    done:"配信・督促が予定どおり行われたか、受検率がどうなっているかが記録されます。",
+    next:"次は10「結果通知」で、実施者が本人へ結果を通知します。"
+  }},
   {no:10, title:"結果通知"},
   {no:11, title:"高ストレス者対応"},
   {no:12, title:"医師による面接指導"},
@@ -991,15 +996,44 @@ var ITEMS = {
       doneWhen:"パンフレットは今後追加予定の機能です。現時点では対応不要のため、完了・保留のどちらでも構いません。" }
   ],
   9: [
-    { id:"c9-monitor", name:"受検状況モニタリング・未受検者への再勧奨", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"受検状況を確認し、未受検者へ再勧奨を行う。", check:"—", options:"—",
-      law:"安衛則52-10（情報管理）", required:["done"] },
+    { id:"c9-assignment", name:"実施担当（自動判定）", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"① 実施担当", sectionDesc:"03章「実施者の決定」の内容から自動で判定します。ここでの設定は不要です。",
+      purpose:"03章の実施者区分（社内担当／外部委託）から、配信・督促・受検率確認の担当が保健室側か会社側かを自動表示する。",
+      check:"—", law:"—", required:[], customRender:"assignmentSwitch" },
+
+    { id:"c9-schedule-echo", name:"案内スケジュール（08章の内容を自動反映）", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"② 案内スケジュール（自動反映）", sectionDesc:"08章で決めた日程をそのまま表示します。ここでの再入力は不要です。",
+      purpose:"08章で決めた案内・督促の日程をそのまま表示する。",
+      check:"—", law:"—", required:[], infoOnly:true,
+      autoDisplay:[
+        { itemId:"c8-schedule", key:"r1Date", label:"初回案内日（08章）" },
+        { itemId:"c8-schedule-followup", key:"r2Date", label:"1回目督促日（08章・任意）", optional:true },
+        { itemId:"c8-schedule-followup", key:"r3Date", label:"2回目督促日（08章・任意）", optional:true },
+        { itemId:"c8-schedule-followup", key:"r4Date", label:"最終案内日（08章・任意）", optional:true }
+      ] },
+
+    { id:"c9-check-haishin", name:"配信は予定どおり実施できたか", type:"確認する項目", ownerGroup:"実施事務従事者",
+      section:"③ 実施記録（最小限の入力）", sectionDesc:"予定どおり実施できたかを記録します。新しい設定はありません。内容を変更したい場合は該当する章から編集してください。",
+      purpose:"初回案内が予定どおり配信できたかを記録する。",
+      check:"—", options:"予定どおり実施できた／遅延した／未実施", law:"—", required:["decision"],
+      autoDisplay:[{ itemId:"c8-schedule", key:"r1Date", label:"予定していた初回案内日（08章）" }] },
+
+    { id:"c9-check-toisoku", name:"督促は予定どおり実施できたか", type:"確認する項目", ownerGroup:"実施事務従事者",
+      section:"③ 実施記録（最小限の入力）",
+      purpose:"未受検者への督促（再案内）が予定どおり実施できたかを記録する。督促を行わない場合は「実施不要」を選ぶ。",
+      check:"—", options:"実施した／実施不要（受検率良好等）／未実施", law:"安衛則52-10（情報管理）", required:["decision"] },
+
+    { id:"c9-toukei", name:"受検率の記録", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
+      section:"③ 実施記録（最小限の入力）",
+      purpose:"対象者数（06章より自動表示）に対して、現時点の受検者数を記録する。",
+      check:"—", law:"—", required:[],
+      autoDisplay:[{ itemId:"c7-2", key:"count", label:"対象者数（06章）" }],
+      fields:[ { key:"ukensha", label:"現時点の受検者数" } ] },
+
     { id:"c9-access", name:"回答データのアクセス制限管理の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      section:"③ 実施記録（最小限の入力）",
       purpose:"回答データへアクセスできるのが実施者・実施事務従事者のみであることを確認する。",
-      check:"—", options:"確認済み／要修正", law:"安衛則52-10", required:["decision"] },
-    { id:"c9-followup", name:"未受検者フォローの回数・締切の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"再勧奨の回数と最終締切を決める。", check:"—", options:"—",
-      law:"会社運用ルール", required:["decision"] }
+      check:"—", options:"確認済み／要修正", law:"安衛則52-10", required:["decision"] }
   ],
   10: [
     { id:"c10-tsuchi", name:"実施者から本人への直接・遅滞ない結果通知", type:"通知する項目", ownerGroup:"企業のオンライン保健室",
@@ -1334,6 +1368,8 @@ function autoDisplayHtml(it){
     }
     if (val && String(val).trim()){
       html += '<div style="margin-bottom:.35rem; font-size:.74rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .6rem; line-height:1.6;"><b style="color:var(--brand-deep);">' + escapeHtml(ad.label) + '：</b><span style="white-space:pre-wrap;">' + escapeHtml(val) + '</span></div>';
+    } else if (ad.optional){
+      html += '<div style="margin-bottom:.35rem; font-size:.73rem; color:var(--text-sub); background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:6px; padding:.35rem .6rem;">' + escapeHtml(ad.label) + '：未設定（任意）</div>';
     } else {
       var onclickAttr = ad.itemId ? (' onclick="event.stopPropagation(); jumpToItem(\'' + ad.itemId + '\')"') : '';
       var cursorStyle = ad.itemId ? "cursor:pointer; " : "";
@@ -1365,9 +1401,29 @@ function placeholderCellHtml(it){
   return '<div style="font-size:.8rem; color:var(--text-sub); font-style:italic; background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:8px; padding:.6rem .8rem; line-height:1.6; white-space:pre-line;">' + escapeHtml(it.placeholderText || "準備中です。") + '</div>';
 }
 
+function assignmentSwitchCellHtml(){
+  var cat = (STATE["c3-3"] && STATE["c3-3"].category) || "";
+  if (!cat){
+    return '<div onclick="event.stopPropagation(); jumpToItem(\'c3-3\')" style="cursor:pointer; font-size:.78rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:8px; padding:.5rem .7rem;">⚠ 実施担当が未設定です（03章「実施者の決定」で選択してください・クリックで移動）</div>';
+  }
+  var isOutsourced = cat === "外部委託";
+  var label = isOutsourced ? "企業のオンライン保健室（保健室プラン）" : "自社実施";
+  var rows = isOutsourced
+    ? [["アプリ配信","保健室"],["督促","保健室"],["受検率確認","保健室"]]
+    : [["配信","会社"],["督促","会社"],["受検率確認","会社"]];
+  var html = '<div style="font-size:.85rem; font-weight:800; color:var(--brand-deep); background:var(--info-50); border:1px solid var(--brand-line); border-radius:8px; padding:.5rem .7rem; margin-bottom:.6rem;">実施担当：' + escapeHtml(label) + '（03章より自動判定）</div>';
+  html += '<table style="width:100%; border-collapse:collapse; font-size:.8rem;"><tbody>';
+  rows.forEach(function(r){
+    html += '<tr><td style="padding:.3rem .5rem; border-top:1px solid var(--border); color:var(--text-sub);">' + r[0] + '</td><td style="padding:.3rem .5rem; border-top:1px solid var(--border); font-weight:700; color:var(--text-heading);">' + r[1] + '</td></tr>';
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
 function decisionCellHtml(it, st){
   if (it.placeholder) return placeholderCellHtml(it);
   if (it.customRender === "announceDocs") return announceDocsCellHtml(it, st);
+  if (it.customRender === "assignmentSwitch") return assignmentSwitchCellHtml();
   if (it.infoOnly) return referenceNoteHtml(it);
   var locked = st.status === "完了" && !it.noLock;
   if (it.fields){
