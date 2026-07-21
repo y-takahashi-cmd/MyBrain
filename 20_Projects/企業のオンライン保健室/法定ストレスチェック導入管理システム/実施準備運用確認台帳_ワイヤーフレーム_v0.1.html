@@ -1041,6 +1041,9 @@ var ITEMS = {
       check:"—", options:"確認済み／要修正", law:"安衛則52-10", required:["decision"] }
   ],
   10: [
+    { id:"c10-naiyou", name:"通知内容の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"個人ストレスプロファイル・高ストレス該当の有無・セルフケア情報・面接指導の申出方法が、アプリからの通知に含まれているかを確認する。",
+      check:"—", options:"確認済み／要修正", law:"安衛則52-12/13", required:["decision"] },
     { id:"c10-tsuchi", name:"結果通知が完了した", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"実施者から本人へ、ストレスチェックアプリを通じて結果通知が完了したことを記録する。",
       check:"—", law:"安衛法66-10②・安衛則52-12/13", required:["status"],
@@ -1048,9 +1051,6 @@ var ITEMS = {
         { key:"status", label:"通知状況", options:["未通知","アプリから結果通知済み"] },
         { key:"date", label:"通知日", type:"date" }
       ] },
-    { id:"c10-naiyou", name:"通知内容の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"個人ストレスプロファイル・高ストレス該当の有無・セルフケア情報・面接指導の申出方法が、アプリからの通知に含まれているかを確認する。",
-      check:"—", options:"確認済み／要修正", law:"安衛則52-12/13", required:["decision"] },
     { id:"c10-koststress", name:"高ストレス者の有無", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"高ストレス者の有無と人数のみを記録する。個人名はここでは扱わない。判定は05章で決めた選定基準にもとづく。",
       check:"—", law:"安衛法66-10②", required:["presence"],
