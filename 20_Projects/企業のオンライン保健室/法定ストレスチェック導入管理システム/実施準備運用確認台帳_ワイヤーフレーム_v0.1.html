@@ -874,11 +874,11 @@ var ITEMS = {
       doneWhen:"人数・内容に間違いがなければ完了です。",
       check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"] },
 
-    { id:"c7-app-url", name:"企業用ログインURLを受け取る", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+    { id:"c7-app-url", name:"ストレスチェック登録用ログインURLを受け取る", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
       section:"ストレスチェック配信アプリを使えるようにする", sectionDesc:"このアプリは、社員への受検案内、受検状況の確認、結果通知などに使用します。",
       sectionManual:{ label:"社員向け説明資料（運営マニュアル）を見る", path:"C:\\Users\\y-takahashi\\Desktop\\ストレスチェック関係資料\\運営マニュアル.pdf" },
-      purpose:"ストレスチェック配信アプリにログインするためのURLを受け取ります。",
-      referenceNote:"現在、ストレスチェック配信アプリのURLは準備中です。届き次第「受け取った」を選んで、下の欄にURLを入力してください。",
+      purpose:"ストレスチェックの登録・管理を行うためのログインURLを受け取ります。",
+      referenceNote:"現在、ストレスチェック登録用のURLは準備中です。届き次第「受け取った」を選んで、下の欄にURLを入力してください。",
       doneWhen:"URLの状況を選んだら完了です（未受け取りのままでも進められます）。",
       contact:"URLがなかなか届かない場合は企業のオンライン保健室担当までご連絡ください。",
       check:"—", law:"契約上必要", required:["status"],
@@ -912,6 +912,18 @@ var ITEMS = {
       purpose:"困ったときの問い合わせ先が正しく表示されているかを確認します。",
       doneWhen:"表示が正しければ完了です。",
       check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"] },
+    { id:"c7-haishin-url", name:"ストレスチェック配信アプリのログインURLを受け取り、ダウンロードする", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
+      section:"ストレスチェック配信アプリを使えるようにする",
+      purpose:"社員へストレスチェックを配信するための、もう一方のアプリ（配信アプリ）のURLを受け取り、ダウンロードします。",
+      referenceNote:"現在、ストレスチェック配信アプリのURLは準備中です。届き次第「受け取った」を選んで、下の欄にURLを入力してください。",
+      doneWhen:"URLを受け取り、ダウンロードが済んだら完了です（未受け取りのままでも進められます）。",
+      contact:"URLがなかなか届かない場合は企業のオンライン保健室担当までご連絡ください。",
+      check:"—", law:"契約上必要", required:["status"],
+      fields:[
+        { key:"status", label:"URLの受け取り状況", options:["未受け取り","受け取った"] },
+        { key:"url", label:"配信アプリのURL", showIf:{ key:"status", equals:"受け取った" } },
+        { key:"downloaded", label:"ダウンロード状況", options:["未実施","完了"], showIf:{ key:"status", equals:"受け取った" } }
+      ] },
 
     { id:"c7-handover", name:"引き継ぎ内容の確認", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
       section:"実施者へ引き継ぐ", sectionDesc:"社員名簿の登録が完了したら、企業側の準備は完了です。以降の受検案内・配信設定は、実施者が行います。",
