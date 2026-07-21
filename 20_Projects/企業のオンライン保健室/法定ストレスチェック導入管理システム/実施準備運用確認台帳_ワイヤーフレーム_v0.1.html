@@ -369,7 +369,12 @@ var CHAPTERS = [
     done:"配信・督促が予定どおり行われたか、受検率がどうなっているかが記録されます。",
     next:"次は10「結果通知」で、実施者が本人へ結果を通知します。"
   }},
-  {no:10, title:"結果通知"},
+  {no:10, title:"結果通知の確認", intro:{
+    why:"結果通知はストレスチェックアプリから行われるため、ここで新しい通知フォーマットなどを設定する必要はありません。予定どおり実施できたかを確認・記録します。",
+    who:"企業のオンライン保健室が確認・記録します。",
+    done:"結果通知が完了し、高ストレス者・面接指導希望者の人数が記録されます。",
+    next:"次は11「高ストレス者対応」です。"
+  }, notice:"個人結果は、本人の同意がない限り会社へ提供されません。", completeMessage:"結果通知の確認が完了しました。\n次は11「高ストレス者対応」へ進んでください。" },
   {no:11, title:"高ストレス者対応"},
   {no:12, title:"医師による面接指導"},
   {no:13, title:"保健室面談"},
@@ -1030,17 +1035,27 @@ var ITEMS = {
       check:"—", options:"確認済み／要修正", law:"安衛則52-10", required:["decision"] }
   ],
   10: [
-    { id:"c10-tsuchi", name:"実施者から本人への直接・遅滞ない結果通知", type:"通知する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"事業者を経由せず、実施者から本人へ直接・遅滞なく結果を通知する。",
-      check:"—", options:"—", law:"安衛法66-10②・安衛則52-12/13", required:["done"] },
-    { id:"c10-naiyou", name:"通知内容の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"個人ストレスプロファイル・高ストレス該当の有無・セルフケア情報・面接指導の申出方法が通知に含まれているかを確認する。",
-      check:"—", options:"確認済み／要修正", law:"安衛則52-12/13", required:["decision"] },
-    { id:"c10-doui", name:"本人同意のない個票入手をしないことの徹底", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"事業者は本人同意がない限り個票を入手しないことを徹底する。", check:"—", options:"—",
-      law:"安衛法66-10②", required:["decision"] },
-    { id:"c10-format", name:"通知フォーマットの決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"通知の形式を決める。", check:"—", options:"システム画面／PDF", law:"会社運用ルール", required:["decision"] }
+    { id:"c10-tsuchi", name:"結果通知が完了した", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"実施者から本人へ、ストレスチェックアプリを通じて結果通知が完了したことを記録する。",
+      check:"—", law:"安衛法66-10②・安衛則52-12/13", required:["status"],
+      fields:[
+        { key:"status", label:"通知状況", options:["未通知","アプリから結果通知済み"] },
+        { key:"date", label:"通知日", type:"date" }
+      ] },
+    { id:"c10-koststress", name:"高ストレス者の有無", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"高ストレス者の有無と人数のみを記録する。個人名はここでは扱わない。",
+      check:"—", law:"安衛法66-10②", required:["presence"],
+      fields:[
+        { key:"presence", label:"高ストレス者の有無", options:["いない","いる"] },
+        { key:"count", label:"人数", showIf:{ key:"presence", equals:"いる" } }
+      ] },
+    { id:"c10-mensetsuboushu", name:"面接指導希望者の有無", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"医師による面接指導を希望する人数のみを記録する。個人名はここでは扱わない。ここから11章「高ストレス者対応」につながる。",
+      check:"—", law:"安衛法66-10③", required:["presence"],
+      fields:[
+        { key:"presence", label:"面接指導希望者の有無", options:["いない","いる"] },
+        { key:"count", label:"人数", showIf:{ key:"presence", equals:"いる" } }
+      ] }
   ],
   11: [
     { id:"c11-hantei", name:"高ストレス者の判定＋実施者の承認", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
@@ -1906,6 +1921,10 @@ function renderMain(){
       '<div><b style="color:var(--brand-deep);">✅ 終わるとどうなるか：</b>' + escapeHtml(chap.intro.done) + '</div>' +
       '<div><b style="color:var(--brand-deep);">➡️ 次にやること：</b>' + escapeHtml(chap.intro.next) + '</div>' +
     '</div>';
+  }
+
+  if (chap.notice){
+    html += '<div style="background:var(--warning-50); border:1px solid var(--warning-500); border-radius:10px; padding:.6rem 1rem; margin-bottom:1rem; font-size:.8rem; color:var(--warning-700); font-weight:700; line-height:1.6;">⚠ ' + escapeHtml(chap.notice) + '</div>';
   }
 
   if (!items){
