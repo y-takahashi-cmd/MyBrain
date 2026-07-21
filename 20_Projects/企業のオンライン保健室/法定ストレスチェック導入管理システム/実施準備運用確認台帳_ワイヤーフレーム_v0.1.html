@@ -1521,22 +1521,156 @@ function generateRegulationDraft(){
     "8．その他\n本規程に定めのない事項は、衛生委員会等の審議結果（第4章）による。";
 }
 
-function generateAnnouncementDraft(){
-  var companyName = (document.getElementById("f-company") && document.getElementById("f-company").value) || "当社";
-  var purpose = (STATE["c2-ichiji"] && STATE["c2-ichiji"].decision) || "労働者のメンタルヘルス不調を未然に防止すること";
-  var method = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].method) || "（未定・5章で選択してください）";
-  var kujou = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].window) || "（未定・5章で選択してください）";
-  var privacy = (STATE["c5-shuchi-kujou"] && STATE["c5-shuchi-kujou"].privacy) || "（未定・5章で選択してください）";
-  return "（AI自動生成・要レビュー）\n" +
+// ---------------- Chapter 8: auto-generated announcement documents (info / manual / mail / chat) ----------------
+function missingAnnounceFields(){
+  var missing = [];
+  function chk(label, val){ if (!val || !String(val).trim()) missing.push(label); }
+  chk("会社名（上部フォーム）", document.getElementById("f-company").value);
+  chk("実施目的（02章：一次予防の目的を方針文に明記）", STATE["c2-ichiji"] && STATE["c2-ichiji"].decision);
+  chk("実施者名（03章：実施者の決定）", STATE["c3-3"] && STATE["c3-3"].person);
+  chk("実施事務従事者（03章：実施事務従事者の選任）", STATE["c3-5"] && STATE["c3-5"].name);
+  chk("受検対象者の範囲（06章：対象範囲の決定）", STATE["c7-3"] && STATE["c7-3"].hani);
+  chk("受検予定期間（上部フォーム）", document.getElementById("f-period").value);
+  chk("ストレスチェックアプリのURL（07章：配信アプリのログインURLを受け取る）", STATE["c7-app-url"] && STATE["c7-app-url"].url);
+  chk("不利益取扱い禁止の方針（02章）", STATE["c2-furieki"] && STATE["c2-furieki"].decision);
+  chk("問い合わせ担当者（03章：会社管理者の決定）", STATE["c3-2"] && STATE["c3-2"].name);
+  chk("問い合わせ先（03章：会社管理者の連絡先）", STATE["c3-2"] && STATE["c3-2"].contact);
+  chk("初回案内日（本章：案内チャネルと督促スケジュール）", STATE["c8-schedule"] && STATE["c8-schedule"].r1Date);
+  return missing;
+}
+
+function gatherAnnounceData(){
+  return {
+    companyName: document.getElementById("f-company").value || "当社",
+    worksite: document.getElementById("f-worksite").value || "",
+    period: document.getElementById("f-period").value || "",
+    purpose: (STATE["c2-ichiji"] && STATE["c2-ichiji"].decision) || "",
+    jisshisha: (STATE["c3-3"] && STATE["c3-3"].person) || "",
+    appUrl: (STATE["c7-app-url"] && STATE["c7-app-url"].url) || "（準備中）",
+    furieki: (STATE["c2-furieki"] && STATE["c2-furieki"].decision) || "",
+    contactName: (STATE["c3-2"] && STATE["c3-2"].name) || "",
+    contactTel: (STATE["c3-2"] && STATE["c3-2"].contact) || "",
+    hokenshitsu: (document.getElementById("f-us") && document.getElementById("f-us").value) || "企業のオンライン保健室"
+  };
+}
+
+function buildAnnounceTexts(d){
+  var info = "（AI自動生成・要レビュー）\n" +
     "件名：ストレスチェックの実施について\n\n" +
     "社員各位\n\n" +
-    companyName + "では、" + purpose + "を目的として、ストレスチェックを実施します。\n\n" +
+    d.companyName + (d.worksite ? "（" + d.worksite + "）" : "") + "では、" + d.purpose + "を目的として、ストレスチェックを実施します。\n\n" +
+    "・実施期間：" + d.period + "\n" +
+    "・受検方法：Web受検（下記アプリよりご回答ください）\n" +
+    "　" + d.appUrl + "\n" +
     "・受検は任意ですが、ご自身の心身の健康を確認する機会としてぜひ受検してください。\n" +
-    "・受検しないことによる不利益な取扱いは一切ありません。\n" +
-    "・結果は実施者から本人へ直接通知され、ご本人の同意なく会社へ提供されることはありません（" + privacy + "）。\n" +
-    "・案内は" + method + "でお送りします。\n" +
-    "・ご不明点・ご相談は" + kujou + "までお問い合わせください。\n\n" +
-    "企業のオンライン保健室";
+    "・" + d.furieki + "\n" +
+    "・回答内容や個人結果は実施者など限られた担当者のみが取り扱い、本人の同意なく会社へ提供されることはありません。\n" +
+    "・高ストレスと判定された方には、実施者より医師による面接指導の申出方法をご案内します。\n\n" +
+    "実施者：" + d.jisshisha + "\n" +
+    d.hokenshitsu + "（企業のオンライン保健室）\n" +
+    "問い合わせ先：" + d.contactName + "（" + d.contactTel + "）";
+
+  var manual = "（AI自動生成・要レビュー）\n" +
+    "受検マニュアル\n\n" +
+    "① 下記URLにアクセスしてください\n　" + d.appUrl + "\n\n" +
+    "② ご案内に沿ってログインしてください\n\n" +
+    "③ 質問に回答し、送信してください\n\n" +
+    "④ 回答内容や結果は、" + d.jisshisha + "（実施者）など限られた担当者のみが取り扱います。\n" +
+    "　本人の同意なく会社へ提供されることはありません。\n\n" +
+    "受検期間：" + d.period + "\n" +
+    "困ったときは：" + d.contactName + "（" + d.contactTel + "）まで";
+
+  var mail = "（AI自動生成・要レビュー）\n" +
+    "件名：【" + d.companyName + "】ストレスチェックのお願い\n\n" +
+    "本日よりストレスチェックを開始しました。\n下記URLより、" + d.period + "の間にご回答をお願いします。\n" + d.appUrl + "\n\n問い合わせ：" + d.contactName;
+
+  var chat = "（AI自動生成・要確認）\n" +
+    "📋 ストレスチェックのお願い\n本日から受検できます！" + d.period + "までにこちらからご回答ください👇\n" + d.appUrl;
+
+  return { info: info, manual: manual, mail: mail, chat: chat };
+}
+
+window.generateAnnounceDocs = function(){
+  var st = STATE["c8-doc"];
+  var missing = missingAnnounceFields();
+  st.missingCache = missing;
+  if (!missing.length){
+    var texts = buildAnnounceTexts(gatherAnnounceData());
+    st.info = texts.info; st.manual = texts.manual; st.mail = texts.mail; st.chat = texts.chat;
+  }
+  persistItems(); renderNav(); updateHeaderStats(); renderMain();
+};
+
+window.setAnnounceField = function(key, value){
+  var st = STATE["c8-doc"];
+  st[key] = value;
+  if (st.status === "完了") st.status = "確認待ち";
+  persistItems();
+};
+
+window.confirmAnnounceDocs = function(){
+  var st = STATE["c8-doc"];
+  if (!st.info || !st.manual || !st.mail || !st.chat){
+    alert("4つの文書をすべて自動生成してから確定してください。");
+    return;
+  }
+  st.confirmed = "true";
+  st.status = "完了";
+  persistItems(); renderNav(); updateHeaderStats(); renderMain();
+};
+
+window.printAnnounceDoc = function(key){
+  var text = STATE["c8-doc"][key] || "";
+  var w = window.open("", "_blank");
+  if (!w) return;
+  w.document.write('<pre style="white-space:pre-wrap; font-family:sans-serif; font-size:14px; line-height:1.8; padding:2rem;">' + escapeHtml(text) + '</pre>');
+  w.document.close();
+  w.focus();
+  w.print();
+};
+
+window.copyAnnounceDoc = function(key){
+  var text = STATE["c8-doc"][key] || "";
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).catch(function(){});
+  }
+};
+
+function announceDocsCellHtml(it, st){
+  var locked = st.status === "完了";
+  var missing = st.missingCache || [];
+  var html = "";
+  if (missing.length){
+    html += '<div style="margin-bottom:.6rem; font-size:.78rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:8px; padding:.5rem .7rem;">' +
+      '以下が未設定のため、案内文を完成できません：<ul style="margin:.35rem 0 0; padding-left:1.2em;">' +
+      missing.map(function(m){ return "<li>" + escapeHtml(m) + "</li>"; }).join("") + '</ul></div>';
+  }
+  html += '<button onclick="event.stopPropagation(); generateAnnounceDocs()" ' + (locked?"disabled":"") + ' style="margin-bottom:.8rem; border:1px solid var(--brand-line); background:var(--info-50); color:var(--brand-deep); font-weight:700; font-size:.82rem; border-radius:8px; padding:.5rem 1rem; cursor:pointer;">🪄 01〜08の内容から自動生成する</button>';
+
+  var DOCS = [
+    { key:"info", label:"① 社員向け案内文" },
+    { key:"manual", label:"② 受検マニュアル" },
+    { key:"mail", label:"③ メール用の短い案内文" },
+    { key:"chat", label:"④ 社内チャット用の短い案内文" }
+  ];
+  DOCS.forEach(function(d){
+    var val = st[d.key] || "";
+    html += '<div style="margin-bottom:.9rem; border:1px solid var(--border); border-radius:8px; padding:.7rem .8rem; background:var(--card-bg);">';
+    html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem; flex-wrap:wrap; gap:.4rem;"><b style="font-size:.8rem; color:var(--text-heading);">' + d.label + '</b>';
+    html += '<div style="display:flex; gap:.4rem;">' +
+      '<button onclick="event.stopPropagation(); copyAnnounceDoc(\'' + d.key + '\')" style="font-size:.7rem; border:1px solid var(--border); background:var(--card-bg-tint); border-radius:6px; padding:.2rem .5rem; cursor:pointer;">コピー</button>' +
+      '<button onclick="event.stopPropagation(); printAnnounceDoc(\'' + d.key + '\')" style="font-size:.7rem; border:1px solid var(--border); background:var(--card-bg-tint); border-radius:6px; padding:.2rem .5rem; cursor:pointer;">印刷／PDF保存</button>' +
+    '</div></div>';
+    html += '<textarea onclick="event.stopPropagation()" onchange="setAnnounceField(\'' + d.key + '\', this.value)" ' + (locked?"disabled":"") + ' rows="5" placeholder="上のボタンで自動生成してください" style="width:100%; border:1px solid var(--border); border-radius:6px; padding:.5rem .6rem; font-size:.78rem; font-family:var(--font-body); resize:vertical; background:' + (locked?"var(--card-bg-tint)":"var(--card-bg)") + ';">' + escapeHtml(val) + '</textarea>';
+    html += '</div>';
+  });
+
+  if (!locked){
+    html += '<button onclick="event.stopPropagation(); confirmAnnounceDocs()" style="border:1px solid var(--success-700); background:var(--success-50); color:var(--success-700); font-weight:700; font-size:.82rem; border-radius:8px; padding:.5rem 1rem; cursor:pointer;">✅ 内容を確認・確定する</button>';
+  } else {
+    html += '<div style="font-size:.78rem; color:var(--success-700); font-weight:700;">✅ 確定済み（ロック中）。状態を「完了」以外に戻すと再編集できます。</div>';
+  }
+  return html;
 }
 
 window.bulkSetDecision = function(prefix, decisionValue, statusValue){
