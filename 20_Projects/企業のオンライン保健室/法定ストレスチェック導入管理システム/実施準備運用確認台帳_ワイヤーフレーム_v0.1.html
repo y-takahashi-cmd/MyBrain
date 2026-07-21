@@ -998,8 +998,8 @@ var ITEMS = {
   9: [
     { id:"c9-assignment", name:"実施担当（自動判定）", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       section:"① 実施担当", sectionDesc:"03章「実施者の決定」の内容から自動で判定します。ここでの設定は不要です。",
-      purpose:"03章の実施者区分（社内担当／外部委託）から、配信・督促・受検率確認の担当が保健室側か会社側かを自動表示する。",
-      check:"—", law:"—", required:[], customRender:"assignmentSwitch" },
+      purpose:"03章の実施者区分（社内担当／外部委託）から、配信・督促・受検率確認の担当が保健室側か会社側かを自動表示する。表示内容を確認したらチェックする。",
+      check:"—", options:"確認済み／要修正", law:"—", required:["decision"], customRender:"assignmentSwitch" },
 
     { id:"c9-schedule-echo", name:"案内スケジュール（08章の内容を自動反映）", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
       section:"② 案内スケジュール（自動反映）", sectionDesc:"08章で決めた日程をそのまま表示します。ここでの再入力は不要です。",
@@ -1401,29 +1401,40 @@ function placeholderCellHtml(it){
   return '<div style="font-size:.8rem; color:var(--text-sub); font-style:italic; background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:8px; padding:.6rem .8rem; line-height:1.6; white-space:pre-line;">' + escapeHtml(it.placeholderText || "準備中です。") + '</div>';
 }
 
-function assignmentSwitchCellHtml(){
+function assignmentSwitchCellHtml(it, st){
   var cat = (STATE["c3-3"] && STATE["c3-3"].category) || "";
+  var locked = st.status === "完了";
+  var html = "";
   if (!cat){
-    return '<div onclick="event.stopPropagation(); jumpToItem(\'c3-3\')" style="cursor:pointer; font-size:.78rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:8px; padding:.5rem .7rem;">⚠ 実施担当が未設定です（03章「実施者の決定」で選択してください・クリックで移動）</div>';
+    html += '<div onclick="event.stopPropagation(); jumpToItem(\'c3-3\')" style="cursor:pointer; font-size:.78rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:8px; padding:.5rem .7rem; margin-bottom:.6rem;">⚠ 実施担当が未設定です（03章「実施者の決定」で選択してください・クリックで移動）</div>';
+  } else {
+    var isOutsourced = cat === "外部委託";
+    var label = isOutsourced ? "企業のオンライン保健室（保健室プラン）" : "自社実施";
+    var rows = isOutsourced
+      ? [["アプリ配信","保健室"],["督促","保健室"],["受検率確認","保健室"]]
+      : [["配信","会社"],["督促","会社"],["受検率確認","会社"]];
+    html += '<div style="font-size:.85rem; font-weight:800; color:var(--brand-deep); background:var(--info-50); border:1px solid var(--brand-line); border-radius:8px; padding:.5rem .7rem; margin-bottom:.6rem;">実施担当：' + escapeHtml(label) + '（03章より自動判定）</div>';
+    html += '<table style="width:100%; border-collapse:collapse; font-size:.8rem;"><tbody>';
+    rows.forEach(function(r){
+      html += '<tr><td style="padding:.3rem .5rem; border-top:1px solid var(--border); color:var(--text-sub);">' + r[0] + '</td><td style="padding:.3rem .5rem; border-top:1px solid var(--border); font-weight:700; color:var(--text-heading);">' + r[1] + '</td></tr>';
+    });
+    html += '</tbody></table>';
   }
-  var isOutsourced = cat === "外部委託";
-  var label = isOutsourced ? "企業のオンライン保健室（保健室プラン）" : "自社実施";
-  var rows = isOutsourced
-    ? [["アプリ配信","保健室"],["督促","保健室"],["受検率確認","保健室"]]
-    : [["配信","会社"],["督促","会社"],["受検率確認","会社"]];
-  var html = '<div style="font-size:.85rem; font-weight:800; color:var(--brand-deep); background:var(--info-50); border:1px solid var(--brand-line); border-radius:8px; padding:.5rem .7rem; margin-bottom:.6rem;">実施担当：' + escapeHtml(label) + '（03章より自動判定）</div>';
-  html += '<table style="width:100%; border-collapse:collapse; font-size:.8rem;"><tbody>';
-  rows.forEach(function(r){
-    html += '<tr><td style="padding:.3rem .5rem; border-top:1px solid var(--border); color:var(--text-sub);">' + r[0] + '</td><td style="padding:.3rem .5rem; border-top:1px solid var(--border); font-weight:700; color:var(--text-heading);">' + r[1] + '</td></tr>';
+  var boxStyle = "width:100%; margin-top:.6rem; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; font-family:var(--font-body);" +
+    (locked ? "background:var(--card-bg-tint); color:var(--text-sub); cursor:not-allowed;" : "background:var(--card-bg); color:var(--text-heading);");
+  html += '<select onclick="event.stopPropagation()" onchange="setDecisionInline(\'' + it.id + '\', this.value)" ' + (locked?"disabled":"") + ' style="' + boxStyle + '">';
+  html += '<option value="">この内容で確認しましたか？</option>';
+  ["確認済み","要修正"].forEach(function(o){
+    html += '<option ' + (o === st.decision ? "selected" : "") + '>' + o + '</option>';
   });
-  html += '</tbody></table>';
+  html += '</select>';
   return html;
 }
 
 function decisionCellHtml(it, st){
   if (it.placeholder) return placeholderCellHtml(it);
   if (it.customRender === "announceDocs") return announceDocsCellHtml(it, st);
-  if (it.customRender === "assignmentSwitch") return assignmentSwitchCellHtml();
+  if (it.customRender === "assignmentSwitch") return assignmentSwitchCellHtml(it, st);
   if (it.infoOnly) return referenceNoteHtml(it);
   var locked = st.status === "完了" && !it.noLock;
   if (it.fields){
