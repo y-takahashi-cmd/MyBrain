@@ -375,14 +375,25 @@ var CHAPTERS = [
     done:"結果通知が完了し、高ストレス者・面接指導希望者の人数が記録されます。",
     next:"次は11「高ストレス者対応」です。"
   }, notice:"個人結果は、本人の同意がない限り会社へ提供されません。結果通知は、すべてストレスチェックアプリから行われます。", completeMessage:"結果通知の確認が完了しました。\n次は11「高ストレス者対応」へ進んでください。" },
-  {no:11, title:"高ストレス者対応", intro:{
-    why:"高ストレス者への案内・申出は、03〜08で決めた窓口・連絡先をそのまま使います。ここで新しく窓口や期限を決め直す必要はありません。",
-    who:"企業のオンライン保健室が確認・記録します。",
-    done:"高ストレス者数・申出案内の実施・面接指導希望者数が記録されます。",
-    next:"次は12「医師による面接指導」で、希望者を医師につなぎます。"
-  }, completeMessage:"高ストレス者対応の確認が完了しました。\n次は12「医師による面接指導」へ進んでください。" },
-  {no:12, title:"医師による面接指導"},
-  {no:13, title:"保健室面談"},
+  {no:11, title:"高ストレス者への案内・希望確認", intro:{
+    why:"高ストレス者は必ず産業医面談を受けるわけではありません。本人へ複数の支援方法を案内し、希望を確認したうえで、12（医師面接・医療機関受診支援）または13（保健室面談）へ分岐します。",
+    who:"個人の判定結果や本人の希望は、実施者・実施事務従事者など閲覧権限のある担当者のみが確認します。",
+    done:"案内状況と、支援方法ごとの希望人数が記録されます。",
+    next:"希望内容に応じて12または13へ進みます（番号順に必ず進む設計ではありません）。"
+  }, notice:"企業のオンライン保健室面談は、法定の医師による面接指導の代わりではありません。個人の高ストレス判定・本人の希望は、閲覧権限のある担当者のみが扱い、本人の同意なく会社へ共有しません。",
+  completeMessage:"案内・希望確認が完了しました。\n希望内容に応じて12「医師面接・医療機関受診支援」または13「保健室面談」へ進んでください。" },
+  {no:12, title:"医師面接・医療機関受診支援", intro:{
+    why:"11章で「医師面接を希望」「本人希望の医療機関受診を希望」を選んだ方、または13章の面談後に受診が必要と判断された方だけが、このページの対象です。",
+    who:"実施者・企業のオンライン保健室が確認・記録します。",
+    done:"受診先が確定し、連絡・予約・受診・意見書受領までの状況が記録されます。",
+    next:"医師の意見をもとに、会社側で就業上の措置を検討します。"
+  }, notice:"面接指導の申出をしたこと・しなかったことを理由とした不利益な取扱いは行いません。" },
+  {no:13, title:"保健室面談", intro:{
+    why:"保健室面談は12（医師面接・医療機関受診支援）の後に必ず行うページではありません。11章で「補足面談を希望」「受診するか迷っている」「現時点では希望しないが再案内で同意した」などを選んだ方が対象です。",
+    who:"企業のオンライン保健室担当者が実施・記録します。",
+    done:"面談の実施記録と、医師面接・医療機関受診への橋渡しが必要かどうかが記録されます。",
+    next:"医師面接・医療機関受診が必要になった場合は、左のメニューから12章へ戻って引き継ぐことができます。"
+  }, notice:"企業のオンライン保健室面談は、法定の医師による面接指導の代わりではありません。" },
   {no:14, title:"会社報告"},
   {no:15, title:"集団分析"},
   {no:16, title:"職場環境改善"},
@@ -675,7 +686,11 @@ var ITEMS = {
     { id:"c3-8", name:"守秘義務の説明", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
       purpose:"個人結果等の秘密を扱う関係者に守秘義務を説明する。",
       check:"説明資料・同意書の有無。", options:"実施済み／未実施",
-      law:"法令上必要", required:["done"] }
+      law:"法令上必要", required:["done"] },
+    { id:"c3-soudan-plan", name:"相談窓口の提供形態の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"契約プランに応じて、高ストレス者への案内（11章）に企業のオンライン保健室の相談窓口を表示するかどうかを、会社ごとに1回だけ決める。",
+      check:"—", options:"企業のオンライン保健室を利用可能／自社相談窓口を表示／相談窓口なし",
+      law:"契約上必要", required:["decision"] }
   ],
   4: [
     { id:"c4-upload", name:"自社規程を取り込む", type:"実施する項目", ownerGroup:"会社担当者",
@@ -972,8 +987,7 @@ var ITEMS = {
         { itemId:"c2-furieki", key:"decision", label:"不利益取扱い禁止の方針（02章）" },
         { itemId:"c3-2", key:"name", label:"問い合わせ担当者（03章）" },
         { itemId:"c3-2", key:"contact", label:"問い合わせ先（03章）" },
-        { field:"f-us", label:"企業のオンライン保健室担当者（上部フォーム）" },
-        { itemId:"c12-ishi", key:"decision", label:"面接指導医の確保状況（12章・未定でもこのまま案内可）" }
+        { field:"f-us", label:"企業のオンライン保健室担当者（上部フォーム）" }
       ],
       richNote:'<div style="font-size:.8rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:8px; padding:.6rem .8rem; line-height:1.8; margin-top:.35rem;"><b style="color:var(--brand-deep);">変更不要・標準の案内内容：</b><br>・受検は本人の任意です。義務ではありません。<br>・回答内容や個人結果（点数・評価・高ストレス該当等）は、実施者など限られた担当者のみが取り扱い、本人の同意なく会社へ提供されることはありません。<br>・高ストレスと判定された方には、実施者から医師面接の申出方法や保健室相談の案内を行います。<details style="margin-top:.5rem;"><summary style="cursor:pointer; font-weight:700; color:var(--brand-deep);">秘密保持について詳しく見る</summary><div style="margin-top:.4rem;"><p style="margin:.3rem 0;"><b>会社が確認できること（受検状況）：</b>受検済み・未受検・対象外・通知未達など、受けたかどうかの情報のみです。</p><p style="margin:.3rem 0;"><b>会社が確認できないこと（個人結果）：</b>回答内容・点数・評価結果・高ストレス該当の有無などは、本人の同意なく会社へ提供されることはありません。</p></div></details></div>' },
     { id:"c8-summary-confirm", name:"上記の内容を確認しました", type:"確認する項目", ownerGroup:"会社担当者",
@@ -1073,20 +1087,20 @@ var ITEMS = {
       ] }
   ],
   11: [
-    { id:"c11-count", name:"高ストレス者数の確認（自動表示）", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"10章で記録した高ストレス者の人数をそのまま表示する。ここでの再入力は不要。判定はストレスチェックシステム上で行われる。",
+    { id:"c11-count", name:"① 高ストレス者数の確認（自動表示）", type:"確認する項目", ownerGroup:"実施者",
+      purpose:"10章で記録した高ストレス者の人数をそのまま表示する。ここでの再入力は不要。判定はストレスチェックシステム上で行われる。個人の判定結果は、実施者・実施事務従事者など閲覧権限のある担当者のみが確認する（会社担当者の画面には表示しない運用とする）。",
       check:"—", law:"安衛則52-15/16・実施マニュアル", required:[], infoOnly:true,
       autoDisplay:[
         { itemId:"c10-koststress", key:"presence", label:"高ストレス者の有無（10章）" },
         { itemId:"c10-koststress", key:"count", label:"高ストレス者数（10章）", optional:true }
       ] },
-    { id:"c11-annai", name:"面接指導申出の案内を実施したか確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"高ストレス者へ、医師面接指導の申出窓口・様式を案内できたかを確認する。窓口・連絡先は既存の設定を自動表示し、ここでは決め直さない。",
+    { id:"c11-annai", name:"② 本人への案内状況", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"高ストレス者へ、支援方法の案内ができたかを確認する。窓口・連絡先は既存の設定を自動表示し、ここでは決め直さない。",
       check:"—",
-      referenceNote:"高ストレスと判定された方には、実施者から医師面接の申出方法をご案内します。申出に特別な期限は設けていません（随時受付）。ただし、現在の状況をいつ最終確認したかは記録します。",
+      referenceNote:"申出に特別な期限は設けていません（随時受付）。ただし、現在の状況をいつ最終確認したかは記録します。",
       law:"安衛則52-15/16・実施マニュアル", required:["status"],
       fields:[
-        { key:"status", label:"案内実施状況", options:["案内した","該当者なし","未実施"] },
+        { key:"status", label:"本人への案内状況", options:["未案内","案内済み","回答待ち","本人の希望確認済み"] },
         { key:"confirmDate", label:"最終確認日（状況を確認した日）", type:"date" }
       ],
       autoDisplay:[
@@ -1094,50 +1108,114 @@ var ITEMS = {
         { itemId:"c3-2", key:"contact", label:"会社側の連絡先（03章）" },
         { field:"f-us", label:"企業のオンライン保健室担当者（上部フォーム）" }
       ] },
-    { id:"c11-boushu", name:"面接指導希望者数の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"案内後、実際に面接指導を希望した人数を記録する。個人名はここでは扱わない。",
-      check:"—", law:"安衛則52-15/16", required:["presence"],
-      autoDisplay:[{ itemId:"c10-mensetsuboushu", key:"count", label:"申出時点の希望者数（10章）", optional:true }],
+    { id:"c11-shien", name:"③ 本人へ提示する支援方法", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"高ストレス者へ提示する支援方法と、案内文の説明・注意書きを表示する。契約プラン（03章）に応じて保健室面談の表示有無が切り替わる。",
+      check:"—", law:"—", required:[], customRender:"shienPlan" },
+    { id:"c11-kibou", name:"④ 本人の希望（支援方法ごとの人数）", type:"記録する項目", ownerGroup:"実施者",
+      purpose:"本人が希望した支援方法ごとに人数を記録する。個人名はここでは扱わない。ここでの内容に応じて12・13へ進む（番号順に必ず進む設計ではない）。",
+      check:"—", law:"—", required:[],
       fields:[
-        { key:"presence", label:"面接指導希望者の有無", options:["いない","いる"] },
-        { key:"count", label:"人数", showIf:{ key:"presence", equals:"いる" } }
+        { key:"iryou", label:"法定の医師による面接指導を希望（人数）→12へ" },
+        { key:"jibunIryou", label:"本人が希望する医療機関の受診を希望（人数）→12へ" },
+        { key:"hoken", label:"企業のオンライン保健室による補足面談を希望（人数）→13へ" },
+        { key:"mayou", label:"受診するか迷っている・相談希望（人数）→13へ" },
+        { key:"nashi", label:"現時点では希望しない（人数）→下の⑤で再案内" }
       ] },
-    { id:"c11-hokenshitsu-boushu", name:"保健室面談（補足面談）希望者数の確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"医師による面接指導は希望しないが、企業のオンライン保健室との補足面談（保健室面談）を希望する人数を記録する。個人名はここでは扱わない。",
-      check:"—", law:"—", required:["presence"],
+    { id:"c11-nashi-followup", name:"⑤ 希望しない方への再案内・経過確認", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"「現時点では希望しない」とした方を放置せず、企業のオンライン保健室による補足面談を再案内し、経過を記録する。",
+      check:"—", law:"—", required:[],
+      autoDisplay:[{ itemId:"c11-kibou", key:"nashi", label:"現時点で希望しない人数（上の④）", optional:true }],
       fields:[
-        { key:"presence", label:"保健室面談（補足面談）希望者の有無", options:["いない","いる"] },
-        { key:"count", label:"人数", showIf:{ key:"presence", equals:"いる" } }
+        { key:"saian", label:"補足面談の再案内を実施したか", options:["未実施","実施した"] },
+        { key:"kekka", label:"再案内の結果", options:["未確定","保健室面談に同意（→13へ）","継続して希望しない"] },
+        { key:"note", label:"経過メモ", type:"textarea" }
       ] }
   ],
   12: [
-    { id:"c12-jisshi", name:"医師による面接指導の実施", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"本人の申出を受け、事業者は概ね1か月以内に医師の面接指導を実施する。",
-      check:"—", options:"—", law:"安衛法66-10③④⑤⑥・安衛則52-17/18/19", required:["plan","done"] },
-    { id:"c12-furieki", name:"申出を理由とした不利益取扱いの禁止", type:"決定する項目", ownerGroup:"会社責任者",
-      purpose:"面接指導の申出をしたこと・しなかったことを理由とした不利益取扱いを禁止する。",
-      check:"—", options:"—", law:"安衛法66-10", required:["decision"] },
-    { id:"c12-iken", name:"医師からの意見聴取・就業上の措置検討", type:"実施する項目", ownerGroup:"会社責任者",
-      purpose:"面接指導後概ね1か月以内に医師から意見を聴取し、就業上の措置（労働時間短縮・配置転換等）を検討・実施する。",
-      check:"—", options:"—", law:"安衛法66-10④⑤⑥・安衛則52-19", required:["done"] },
-    { id:"c12-ishi", name:"面接指導医の確保", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"面接指導を担当する医師のルートを確定する。",
-      check:"—", options:"地域産業保健センター（地さんぽ・無料取次ぎ）／産業医（オプション）",
-      law:"安衛法66-10③", required:["decision"] }
+    { id:"c12-target", name:"対象人数の確認（自動表示）", type:"確認する項目", ownerGroup:"実施者",
+      purpose:"11章・13章から、医師面接または医療機関受診の対象となった人数をそのまま表示する。ここでの再入力は不要。",
+      check:"—", law:"安衛法66-10③④⑤⑥・安衛則52-17/18/19", required:[], infoOnly:true,
+      autoDisplay:[
+        { itemId:"c11-kibou", key:"iryou", label:"医師面接指導を希望（11章）", optional:true },
+        { itemId:"c11-kibou", key:"jibunIryou", label:"本人希望の医療機関受診を希望（11章）", optional:true },
+        { itemId:"c13-jyoutai", key:"hikitsugi", label:"13章の面談後に受診が必要と判断（13章）", optional:true }
+      ] },
+    { id:"c12-jushinsaki", name:"受診先の選択", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"最初に受診先を選ぶ。産業医が決まっているかどうかで、この下に表示される確認項目が変わる。",
+      check:"—", law:"安衛法66-10③", required:["saki"],
+      fields:[
+        { key:"saki", label:"受診先", options:["契約産業医","予定している産業医","地域産業保健センター等","本人が希望する医療機関","その他"] }
+      ] },
+    { id:"c12-ishi-kettei", name:"産業医との面接指導の記録（産業医が決まっている場合）", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
+      showIf:{ itemId:"c12-jushinsaki", key:"saki", in:["契約産業医","予定している産業医"] },
+      purpose:"産業医が決まっている場合の、連絡から意見書受領までの状況を記録する。",
+      check:"—", law:"安衛法66-10③④⑤⑥・安衛則52-17/18/19", required:[],
+      fields:[
+        { key:"renraku", label:"産業医へ連絡したか", options:["未連絡","連絡済み"] },
+        { key:"renrakuDate", label:"連絡日", type:"date" },
+        { key:"yoyakuDate", label:"予約日", type:"date" },
+        { key:"yoteiDate", label:"受診予定日", type:"date" },
+        { key:"jisshiDate", label:"受診実施日", type:"date" },
+        { key:"ikensho", label:"医師の意見書を受領したか", options:["未受領","受領済み"] },
+        { key:"handover", label:"会社側の措置検討へ引き継いだか", options:["未引継ぎ","引継ぎ済み"] }
+      ] },
+    { id:"c12-ishi-mikettei", name:"受診先との調整記録（産業医が決まっていない場合）", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
+      showIf:{ itemId:"c12-jushinsaki", key:"saki", in:["地域産業保健センター等","本人が希望する医療機関","その他"] },
+      purpose:"産業医が決まっていない場合の、候補選定から受診実施までの状況を記録する。",
+      check:"—", law:"安衛法66-10③", required:[],
+      fields:[
+        { key:"kouho", label:"候補となる産業医または相談先" },
+        { key:"renrakusaki", label:"連絡先" },
+        { key:"renraku", label:"連絡したか", options:["未連絡","連絡済み"] },
+        { key:"renrakuDate", label:"連絡日", type:"date" },
+        { key:"jushinKanou", label:"受診可能か", options:["未確認","可能","不可"] },
+        { key:"yoyakuDate", label:"予約日", type:"date" },
+        { key:"yoteiDate", label:"受診予定日", type:"date" },
+        { key:"jisshiDate", label:"受診実施日", type:"date" }
+      ] },
+    { id:"c12-shorui", name:"必要書類の準備・確認", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"受診先の医師に確認したうえで、必要な書類を準備する。すべてを一律必須とはしない。",
+      check:"—", law:"安衛則52-17〜19", required:[],
+      fields:[
+        { key:"items", label:"準備する書類（複数選択・受診先に確認のうえ）", type:"checkboxes", options:["ストレスチェック結果","本人からの面接指導申出書","直近の勤怠情報・労働時間・時間外労働時間","健康診断結果","業務内容や就業状況が分かる資料","服薬内容や既往歴等、本人が医師へ伝える情報","その他"] },
+        { key:"confirmed", label:"受診先へ必要書類を確認済み", options:["未確認","確認済み"] }
+      ] }
   ],
   13: [
-    { id:"c13-yoyaku", name:"保健室面談の予約・実施フロー", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"高ストレス者・希望者へのオンライン保健師面談の予約・実施を行う。当社独自の付加サービス。",
-      check:"—", options:"—", law:"（法定外・要配慮個人情報準拠）", required:["done"] },
-    { id:"c13-yakuwari", name:"法定面接指導との役割分担の明確化", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"保健室面談＝補足フォロー、法定面接指導＝医師、という役割の切り分けを明確にする。",
-      check:"—", options:"—", law:"—", required:["decision"] },
-    { id:"c13-kankyou", name:"本人確認・秘密保持・通信環境の確保", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"オンライン面談における本人確認・秘密保持・通信環境を確保する。", check:"—",
-      options:"確認済み／要修正", law:"要配慮個人情報準拠", required:["decision"] },
-    { id:"c13-setsuzoku", name:"法定フローへの接続点の決定", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"保健室面談を、勧奨後の受け皿・面接指導までの橋渡しとして、法定フローのどこに接続するかを決める。",
-      check:"—", options:"—", law:"—", required:["decision"] }
+    { id:"c13-target", name:"対象人数の確認（自動表示）", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"11章から、保健室面談の対象となった人数をそのまま表示する。ここでの再入力は不要。",
+      check:"—", law:"（法定外・要配慮個人情報準拠）", required:[], infoOnly:true,
+      autoDisplay:[
+        { itemId:"c11-kibou", key:"hoken", label:"保健室補足面談を希望（11章）", optional:true },
+        { itemId:"c11-kibou", key:"mayou", label:"受診するか迷っている（11章）", optional:true },
+        { itemId:"c11-nashi-followup", key:"kekka", label:"再案内後の結果（11章）", optional:true }
+      ] },
+    { id:"c13-mokuteki", name:"面談目的", type:"決定する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"今回の面談の目的を選ぶ。", check:"—", law:"（法定外・要配慮個人情報準拠）", required:["mokuteki"],
+      fields:[
+        { key:"mokuteki", label:"面談目的", options:["受診するか迷っているため状況を整理する","医師面接を希望しない理由を確認する","医療機関受診への不安を整理する","体調や生活状況を確認する","産業医または医療機関への橋渡し","受診までの補足的なフォロー","その他"] }
+      ] },
+    { id:"c13-nittei", name:"面談日程", type:"実施する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"面談の予定日・実施日・担当者を記録する。", check:"—", law:"—", required:[],
+      fields:[
+        { key:"yoteiDate", label:"面談予定日", type:"date" },
+        { key:"jisshiDate", label:"面談実施日", type:"date" },
+        { key:"tantou", label:"担当者" }
+      ] },
+    { id:"c13-jyoutai", name:"面談記録・引き継ぎ", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
+      purpose:"現在の状態・本人の希望・医師面接や受診への橋渡しの要否を記録する。",
+      check:"—",
+      referenceNote:"「12へ引き継ぐ必要があるか」で「必要」を選んだ場合は、左のメニューから12章「医師面接・医療機関受診支援」を開いて引き継いでください。",
+      law:"—", required:[],
+      fields:[
+        { key:"genjou", label:"現在の状態", type:"textarea" },
+        { key:"kibou", label:"本人の希望", type:"textarea" },
+        { key:"saianai", label:"医師面接を再度案内したか", options:["未実施","案内した"] },
+        { key:"jushin", label:"医療機関受診を勧めたか", options:["未実施","勧めた"] },
+        { key:"hikitsugi", label:"12へ引き継ぐ必要があるか", options:["不要","必要"] },
+        { key:"nextFollow", label:"次回フォロー予定", type:"date" },
+        { key:"shuuryou", label:"面談終了または継続", options:["終了","継続"] }
+      ] }
   ],
   14: [
     { id:"c14-houkoku", name:"会社向け実施状況報告", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
@@ -1233,13 +1311,15 @@ function isReqMet(item){
   return (item.required||[]).every(function(k){ return st[k] && String(st[k]).trim() !== ""; });
 }
 
-// row-level conditional visibility: item.showIf = { itemId, key, equals }
+// row-level conditional visibility: item.showIf = { itemId, key, equals } or { itemId, key, in:[...] }
 // lets one item's decision (e.g. "登録方法を選ぶ") show/hide a whole downstream item.
 function isItemVisible(item){
   if (!item.showIf) return true;
   var refSt = STATE[item.showIf.itemId];
   if (!refSt) return false;
-  return refSt[item.showIf.key] === item.showIf.equals;
+  var val = refSt[item.showIf.key];
+  if (item.showIf.in) return item.showIf.in.indexOf(val) > -1;
+  return val === item.showIf.equals;
 }
 
 var currentChap = "overview";
@@ -1514,11 +1594,42 @@ window.setScheduleStatus = function(key, value){
   persistItems(); renderNav(); updateHeaderStats(); renderMain();
 };
 
+function shienPlanCellHtml(){
+  var plan = (STATE["c3-soudan-plan"] && STATE["c3-soudan-plan"].decision) || "";
+  var html = "";
+  if (!plan){
+    html += '<div onclick="event.stopPropagation(); jumpToItem(\'c3-soudan-plan\')" style="cursor:pointer; font-size:.73rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:6px; padding:.4rem .6rem; margin-bottom:.6rem;">⚠ 相談窓口の提供形態が未設定です（03章・クリックで移動）</div>';
+  }
+  html += '<div style="font-size:.8rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:8px; padding:.6rem .8rem; line-height:1.8; margin-bottom:.6rem;">' +
+    '高ストレスと判定された方には、医師による面接指導をおすすめします。かかりつけ医や希望する医療機関への受診を検討することもできます。' +
+    (plan === "自社相談窓口を表示"
+      ? '受診するか迷っている場合や、すぐに医師面接を希望しない場合は、自社の相談窓口で状況を整理し、今後の対応を一緒に考えることができます。'
+      : plan === "相談窓口なし"
+      ? ''
+      : '受診するか迷っている場合や、すぐに医師面接を希望しない場合は、企業のオンライン保健室で現在の状況を整理し、今後の対応を一緒に考えることができます。') +
+  '</div>';
+  html += '<div style="font-size:.72rem; color:var(--text-sub); font-weight:700; margin-bottom:.3rem;">本人へ提示する支援方法：</div>';
+  html += '<ul style="margin:0 0 .6rem; padding-left:1.3em; font-size:.8rem; color:var(--text-body); line-height:1.8;">';
+  html += '<li>法定の医師による面接指導</li>';
+  html += '<li>本人が希望する医療機関（かかりつけ医・心療内科・精神科等）の受診</li>';
+  if (plan === "自社相談窓口を表示"){
+    html += '<li>自社の相談窓口での面談</li>';
+  } else if (plan !== "相談窓口なし"){
+    html += '<li>企業のオンライン保健室による補足面談</li>';
+  }
+  html += '<li>受診するか迷っている場合の相談</li>';
+  html += '<li>現時点では希望しない</li>';
+  html += '</ul>';
+  html += '<div style="font-size:.76rem; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:6px; padding:.5rem .7rem; line-height:1.7;">⚠ 企業のオンライン保健室面談は、法定の医師による面接指導の代わりではありません。状況確認、相談支援、医師や医療機関への橋渡しを目的とします。</div>';
+  return html;
+}
+
 function decisionCellHtml(it, st){
   if (it.placeholder) return placeholderCellHtml(it);
   if (it.customRender === "announceDocs") return announceDocsCellHtml(it, st);
   if (it.customRender === "assignmentSwitch") return assignmentSwitchCellHtml(it, st);
   if (it.customRender === "scheduleEcho") return scheduleEchoCellHtml(it, st);
+  if (it.customRender === "shienPlan") return shienPlanCellHtml();
   if (it.infoOnly) return referenceNoteHtml(it);
   var locked = st.status === "完了" && !it.noLock;
   if (it.fields){
