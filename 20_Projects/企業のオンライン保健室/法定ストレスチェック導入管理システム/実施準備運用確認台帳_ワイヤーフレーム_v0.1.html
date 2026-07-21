@@ -994,31 +994,18 @@ var ITEMS = {
 
     { id:"c8-schedule", name:"案内チャネルと督促スケジュール", type:"決定する項目", ownerGroup:"会社担当者",
       section:"② 案内チャネルと督促スケジュール", sectionDesc:"初回案内だけでなく、未受検者へいつ・どの方法で再案内するかを事前に決めます。",
-      purpose:"案内の配信方法と、未受検者への督促スケジュール（対象・方法・担当者・文面・実施済み）を決める。",
+      purpose:"案内の配信方法と、未受検者への督促スケジュール（初回・1回目督促・2回目督促・最終案内の日程と実施済みチェック）を決める。",
       check:"—", law:"会社運用ルール", required:["channels","r1Date"],
       fields:[
         { key:"channels", label:"案内チャネル（複数選択可）", type:"checkboxes", options:["メール","ストレスチェックアプリ内メッセージ","社内チャット","社内掲示","朝礼","紙で配布","その他"] },
         { key:"r1Date", label:"① 初回案内日", type:"date" },
-        { key:"r1Owner", label:"① 初回：担当者", autoFrom:"c3-2", autoKey:"name" },
-        { key:"r1Bunmen", label:"① 初回：使用する文面", options:["社員向け案内文（自動生成）","メール用短文（自動生成）","社内チャット用短文（自動生成）","その他"] },
         { key:"r1Done", label:"① 初回：実施済み", options:["未実施","実施済み"] },
         { key:"r2Date", label:"② 1回目督促日", type:"date" },
-        { key:"r2Target", label:"② 1回目督促：対象", options:["全対象者","未受検者のみ"] },
-        { key:"r2Owner", label:"② 1回目督促：担当者", autoFrom:"c3-2", autoKey:"name" },
-        { key:"r2Bunmen", label:"② 1回目督促：使用する文面", options:["社員向け案内文（自動生成）","メール用短文（自動生成）","社内チャット用短文（自動生成）","その他"] },
         { key:"r2Done", label:"② 1回目督促：実施済み", options:["未実施","実施済み"] },
         { key:"r3Date", label:"③ 2回目督促日", type:"date" },
-        { key:"r3Target", label:"③ 2回目督促：対象", options:["全対象者","未受検者のみ"] },
-        { key:"r3Owner", label:"③ 2回目督促：担当者", autoFrom:"c3-2", autoKey:"name" },
-        { key:"r3Bunmen", label:"③ 2回目督促：使用する文面", options:["社員向け案内文（自動生成）","メール用短文（自動生成）","社内チャット用短文（自動生成）","その他"] },
         { key:"r3Done", label:"③ 2回目督促：実施済み", options:["未実施","実施済み"] },
         { key:"r4Date", label:"④ 最終案内日", type:"date" },
-        { key:"r4Target", label:"④ 最終案内：対象", options:["全対象者","未受検者のみ"] },
-        { key:"r4Owner", label:"④ 最終案内：担当者", autoFrom:"c3-2", autoKey:"name" },
-        { key:"r4Bunmen", label:"④ 最終案内：使用する文面", options:["社員向け案内文（自動生成）","メール用短文（自動生成）","社内チャット用短文（自動生成）","その他"] },
-        { key:"r4Done", label:"④ 最終案内：実施済み", options:["未実施","実施済み"] },
-        { key:"actualDate", label:"実際の案内日（初回）", type:"date" },
-        { key:"completeDate", label:"案内完了日（全回終了）", type:"date" }
+        { key:"r4Done", label:"④ 最終案内：実施済み", options:["未実施","実施済み"] }
       ] },
 
     { id:"c8-doc", name:"社員向け受検案内文・受検マニュアル", subLabel:"管理様式：L3", type:"記録する項目", ownerGroup:"企業のオンライン保健室",
