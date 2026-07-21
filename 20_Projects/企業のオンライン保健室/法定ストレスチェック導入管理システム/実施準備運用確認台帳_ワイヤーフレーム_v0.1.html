@@ -1427,36 +1427,33 @@ function assignmentSwitchCellHtml(it, st){
 
 function scheduleEchoCellHtml(it, st){
   var rounds = [
-    { key:"r1", label:"初回案内日", src:"c8-schedule", srcKey:"r1Date", optional:false },
-    { key:"r2", label:"1回目督促日", src:"c8-schedule-followup", srcKey:"r2Date", optional:true },
-    { key:"r3", label:"2回目督促日", src:"c8-schedule-followup", srcKey:"r3Date", optional:true },
-    { key:"r4", label:"最終案内日", src:"c8-schedule-followup", srcKey:"r4Date", optional:true }
+    { key:"r1", label:"初回案内日", src:"c8-schedule", srcKey:"r1Date" },
+    { key:"r2", label:"1回目督促日", src:"c8-schedule-followup", srcKey:"r2Date" },
+    { key:"r3", label:"2回目督促日", src:"c8-schedule-followup", srcKey:"r3Date" },
+    { key:"r4", label:"最終案内日", src:"c8-schedule-followup", srcKey:"r4Date" }
   ];
   var locked = st.status === "完了";
   var html = "";
   rounds.forEach(function(r){
     var srcSt = STATE[r.src];
     var dateVal = srcSt ? (srcSt[r.srcKey] || "") : "";
-    if (!dateVal){
-      if (r.optional){
-        html += '<div style="margin-bottom:.35rem; font-size:.73rem; color:var(--text-sub); background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:6px; padding:.35rem .6rem;">' + escapeHtml(r.label) + '：未設定（任意）</div>';
-      } else {
-        html += '<div onclick="event.stopPropagation(); jumpToItem(\'' + r.src + '\')" style="cursor:pointer; margin-bottom:.35rem; font-size:.73rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:6px; padding:.4rem .6rem;">⚠ ' + escapeHtml(r.label) + '（08章）が未設定です（クリックでその章へ移動）</div>';
-      }
-      return;
-    }
-    var doneKey = r.key + "Done";
-    var checked = st[doneKey] === "true";
-    html += '<label onclick="event.stopPropagation()" style="display:flex; align-items:center; gap:.5rem; margin-bottom:.35rem; font-size:.78rem; color:var(--text-body); background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .6rem; cursor:' + (locked?"not-allowed":"pointer") + ';">' +
-      '<input type="checkbox" onchange="setScheduleDone(\'' + doneKey + '\', this.checked)" ' + (checked?"checked":"") + ' ' + (locked?"disabled":"") + ' style="width:1.1em; height:1.1em;">' +
-      '<span><b style="color:var(--text-heading);">' + escapeHtml(r.label) + '：</b>' + escapeHtml(dateVal) + '　実施済み</span>' +
-    '</label>';
+    var statusKey = r.key + "Status";
+    var current = st[statusKey] || "";
+    var boxStyle = "border:1px solid var(--border); border-radius:6px; padding:.28rem .4rem; font-size:.78rem; font-family:var(--font-body);" +
+      (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
+    html += '<div style="display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.4rem; background:var(--card-bg-tint); border:1px solid var(--border); border-radius:6px; padding:.4rem .6rem;">';
+    html += '<span style="font-size:.78rem; color:var(--text-body); flex:1; min-width:9em;"><b style="color:var(--text-heading);">' + escapeHtml(r.label) + '</b>' + (dateVal ? '：' + escapeHtml(dateVal) : '（日付未設定）') + '</span>';
+    html += '<select onclick="event.stopPropagation()" onchange="setScheduleStatus(\'' + statusKey + '\', this.value)" ' + (locked?"disabled":"") + ' style="' + boxStyle + '">';
+    ["","未完了","完了","不要"].forEach(function(o){
+      html += '<option ' + (o===current?"selected":"") + '>' + (o===""?"選択してください":o) + '</option>';
+    });
+    html += '</select></div>';
   });
   return html;
 }
 
-window.setScheduleDone = function(key, checked){
-  STATE["c9-schedule-echo"][key] = checked ? "true" : "";
+window.setScheduleStatus = function(key, value){
+  STATE["c9-schedule-echo"][key] = value;
   persistItems(); renderNav(); updateHeaderStats(); renderMain();
 };
 
