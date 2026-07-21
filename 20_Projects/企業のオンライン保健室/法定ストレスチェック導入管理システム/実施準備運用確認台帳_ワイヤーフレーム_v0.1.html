@@ -875,7 +875,8 @@ var ITEMS = {
       check:"—", options:"確認済み／要修正", law:"会社運用ルール", required:["decision"] },
 
     { id:"c7-app-url", name:"企業用ログインURLを受け取る", type:"実施する項目", ownerGroup:"実施事務従事者", autoOwner:true,
-      section:"ストレスチェック配信アプリを使えるようにする", sectionDesc:"このアプリは、社員への受検案内、受検状況の確認、結果通知などに使用します。", sectionManual:true,
+      section:"ストレスチェック配信アプリを使えるようにする", sectionDesc:"このアプリは、社員への受検案内、受検状況の確認、結果通知などに使用します。",
+      sectionManual:{ label:"社員向け説明資料（運営マニュアル）を見る", path:"C:\\Users\\y-takahashi\\Desktop\\ストレスチェック関係資料\\運営マニュアル.pdf" },
       purpose:"ストレスチェック配信アプリにログインするためのURLを受け取ります。",
       referenceNote:"現在、ストレスチェック配信アプリのURLは準備中です。届き次第「受け取った」を選んで、下の欄にURLを入力してください。",
       doneWhen:"URLの状況を選んだら完了です（未受け取りのままでも進められます）。",
@@ -1634,7 +1635,8 @@ function renderMain(){
       html += '<tr class="section-row"><td colspan="' + colspan + '" style="background:var(--info-50); border-top:2px solid var(--brand-line); padding:.55rem .7rem;">' +
         '<div style="font-weight:700; color:var(--brand-deep); font-size:.85rem;">' + escapeHtml(it.section) + '</div>' +
         (it.sectionDesc ? '<div style="font-size:.76rem; color:var(--text-body); margin-top:.15rem; line-height:1.6;">' + escapeHtml(it.sectionDesc) + '</div>' : '') +
-        (it.sectionManual ? '<div style="margin-top:.3rem;"><span style="display:inline-block; font-size:.72rem; border:1px solid var(--border); border-radius:999px; padding:.15rem .6rem; color:var(--text-sub); background:var(--card-bg);">📖 操作マニュアル（準備中）</span></div>' : '') +
+        (it.sectionManual && it.sectionManual.path ? '<div style="margin-top:.3rem;"><a href="file:///' + encodeURI(it.sectionManual.path.replace(/\\/g,"/")) + '" target="_blank" onclick="event.stopPropagation()" style="display:inline-block; font-size:.72rem; border:1px solid var(--brand-line); border-radius:999px; padding:.15rem .6rem; color:var(--brand-deep); background:var(--card-bg); text-decoration:none;">📖 ' + escapeHtml(it.sectionManual.label || "操作マニュアルを見る") + '</a></div>'
+          : it.sectionManual ? '<div style="margin-top:.3rem;"><span style="display:inline-block; font-size:.72rem; border:1px solid var(--border); border-radius:999px; padding:.15rem .6rem; color:var(--text-sub); background:var(--card-bg);">📖 操作マニュアル（準備中）</span></div>' : '') +
       '</td></tr>';
     }
     var st = STATE[it.id];
