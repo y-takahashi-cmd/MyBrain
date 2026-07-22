@@ -1293,7 +1293,7 @@ var ITEMS = {
         { key:"tantou", label:"分析担当者", autoFrom:"c5-bunseki-settei", autoKey:"tantou" }
       ] },
     { id:"c14-shokibo", name:"区分3：少人数集団への対応", type:"確認する項目", ownerGroup:"企業のオンライン保健室",
-      purpose:"対象人数が最小人数を下回る集団は、個人特定防止の観点から結果を表示しない。",
+      purpose:"対象人数が最小人数を下回る集団は、個人特定防止の観点から結果を表示しない。受検者数が10人未満の場合は、対象者全員の同意なく分析結果を会社へ提供してはならない（少人数集団ルール）。",
       check:"—", law:"実施マニュアル", required:[], customRender:"shokiboCheck" },
     { id:"c14-kekka", name:"区分4：分析結果", type:"記録する項目", ownerGroup:"実施者",
       purpose:"分析結果を記録・添付する。すべてを手入力させず、PDF添付と必要な要約だけで完了できるようにする。",
@@ -1849,7 +1849,7 @@ function decisionCellHtml(it, st){
   if (it.customRender === "jisshiStatusSummary") return jisshiStatusSummaryHtml();
   if (it.customRender === "houkokuDocs") return houkokuDocsCellHtml(it, st);
   if (it.customRender === "bunsekiSettei") return bunsekiSetteiHtml();
-  if (it.customRender === "shokiboCheck") return shokiboCheckHtml();
+  if (it.customRender === "shokiboCheck") return shokiboCheckHtml(it, st);
   if (it.customRender === "kaizenDoc") return kaizenDocCellHtml(it, st);
   if (it.customRender === "gyouseiYouhi") return gyouseiYouhiHtml();
   if (it.customRender === "hozonTaishoList") return hozonTaishoListHtml();
@@ -2329,17 +2329,44 @@ function bunsekiSetteiHtml(){
   return html;
 }
 
-function shokiboCheckHtml(){
+function shokiboCheckHtml(it, st){
   var ninzuu = parseFloat((STATE["c14-jisshi"] && STATE["c14-jisshi"].ninzuu) || "");
   var saitei = parseFloat((STATE["c5-bunseki-settei"] && STATE["c5-bunseki-settei"].saitei) || "");
+  var html = "";
+
   if (isNaN(ninzuu) || isNaN(saitei)){
-    return '<div style="font-size:.8rem; color:var(--text-sub); background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:8px; padding:.6rem .8rem;">対象人数（区分2）と最小人数（05章）の両方が数値で入力されると、自動判定します。</div>';
+    html += '<div style="font-size:.8rem; color:var(--text-sub); background:var(--card-bg-tint); border:1px dashed var(--border); border-radius:8px; padding:.6rem .8rem; margin-bottom:.6rem;">対象人数（区分2）と最小人数（05章）の両方が数値で入力されると、自動判定します。</div>';
+  } else if (ninzuu < saitei){
+    html += '<div style="font-size:.82rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:8px; padding:.6rem .8rem; line-height:1.7; margin-bottom:.6rem;">この集団は人数が少ないため、個人特定防止の観点から分析結果を表示できません。（対象人数 ' + ninzuu + ' 人 ＜ 最小人数 ' + saitei + ' 人）</div>';
+  } else {
+    html += '<div style="font-size:.82rem; font-weight:700; color:var(--success-700); background:var(--success-50); border:1px solid var(--success-700); border-radius:8px; padding:.6rem .8rem; margin-bottom:.6rem;">対象人数（' + ninzuu + '人）が最小人数（' + saitei + '人）以上のため、分析結果を表示できます。</div>';
   }
-  if (ninzuu < saitei){
-    return '<div style="font-size:.82rem; font-weight:700; color:var(--warning-700); background:var(--warning-50); border:1px solid var(--warning-500); border-radius:8px; padding:.6rem .8rem; line-height:1.7;">この集団は人数が少ないため、個人特定防止の観点から分析結果を表示できません。（対象人数 ' + ninzuu + ' 人 ＜ 最小人数 ' + saitei + ' 人）</div>';
+
+  if (!isNaN(ninzuu) && ninzuu < 10){
+    var locked = st.status === "完了";
+    var current = st.doui || "";
+    html += '<div style="font-size:.78rem; font-weight:700; color:var(--error-700); background:var(--error-50); border:1px solid var(--error-500); border-radius:8px; padding:.6rem .8rem; margin-bottom:.5rem; line-height:1.7;">⚠ 受検者数が10人未満のため、対象者全員の同意なく事業者へ分析結果を提供することはできません（少人数集団ルール）。</div>';
+    var boxStyle = "width:100%; border:1px solid var(--border); border-radius:6px; padding:.32rem .4rem; font-size:.82rem; font-family:var(--font-body);" +
+      (locked ? "background:var(--card-bg-tint); color:var(--text-sub);" : "background:var(--card-bg); color:var(--text-heading);");
+    html += '<label style="display:block; font-size:.74rem; color:var(--text-sub); margin-bottom:.25rem;">対象者全員の同意書を取得したか</label>';
+    html += '<select onclick="event.stopPropagation()" onchange="setShokiboDoui(this.value)" ' + (locked?"disabled":"") + ' style="' + boxStyle + '">';
+    ["","未取得","取得済み"].forEach(function(o){
+      html += '<option ' + (o===current?"selected":"") + '>' + (o===""?"選択してください":o) + '</option>';
+    });
+    html += '</select>';
+    if (current === "取得済み"){
+      html += '<div style="margin-top:.4rem; font-size:.76rem; color:var(--success-700); font-weight:700;">✓ 同意書取得済みのため、会社への結果提供が可能です。</div>';
+    } else {
+      html += '<div style="margin-top:.4rem; font-size:.76rem; color:var(--warning-700); font-weight:700;">⚠ 同意書が未取得の間は、会社へ結果を提供しないでください。</div>';
+    }
   }
-  return '<div style="font-size:.82rem; font-weight:700; color:var(--success-700); background:var(--success-50); border:1px solid var(--success-700); border-radius:8px; padding:.6rem .8rem;">対象人数（' + ninzuu + '人）が最小人数（' + saitei + '人）以上のため、分析結果を表示できます。</div>';
+
+  return html;
 }
+window.setShokiboDoui = function(value){
+  STATE["c14-shokibo"].doui = value;
+  persistItems(); renderNav(); updateHeaderStats(); renderMain();
+};
 
 // ---------------- Chapter 15: auto-generated workplace-improvement plan document ----------------
 function gatherKaizenData(){
