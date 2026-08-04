@@ -1,0 +1,518 @@
+<title>繁忙期を支える職場づくりのご提案｜駒ヶ根高原リトリート すずらん颯</title>
+<style>
+:root{
+  --paper:#FBFAF6;
+  --paper-raised:#FFFFFF;
+  --ink:#20303A;
+  --ink-soft:#4B5D66;
+  --ink-muted:#7C8B92;
+  --blue:#356B82;
+  --blue-deep:#1E4756;
+  --green:#6C8F6E;
+  --green-deep:#4C6B4E;
+  --mist:#E9EFEA;
+  --mist-blue:#E4EDF0;
+  --line:#D8DFD9;
+  --card-shadow: 0 1px 2px rgba(32,48,58,.06), 0 8px 24px rgba(32,48,58,.06);
+}
+:root[data-theme="dark"]{
+  --paper:#182420;
+  --paper-raised:#1F2E29;
+  --ink:#EDEFE9;
+  --ink-soft:#C4CFC7;
+  --ink-muted:#8FA095;
+  --blue:#7FB2C6;
+  --blue-deep:#A9D0DE;
+  --green:#9AC29B;
+  --green-deep:#B8D9B6;
+  --mist:#243530;
+  --mist-blue:#213338;
+  --line:#33443D;
+  --card-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#182420;
+    --paper-raised:#1F2E29;
+    --ink:#EDEFE9;
+    --ink-soft:#C4CFC7;
+    --ink-muted:#8FA095;
+    --blue:#7FB2C6;
+    --blue-deep:#A9D0DE;
+    --green:#9AC29B;
+    --green-deep:#B8D9B6;
+    --mist:#243530;
+    --mist-blue:#213338;
+    --line:#33443D;
+    --card-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Yu Gothic Medium","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.serif{
+  font-family:"Shippori Mincho","Zen Old Mincho","Yu Mincho","Hiragino Mincho ProN",serif;
+}
+.tabular{ font-variant-numeric: tabular-nums; }
+
+/* ---------- top controls ---------- */
+.controls{
+  position:sticky; top:0; z-index:20;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  padding:14px 16px;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.tab{
+  appearance:none; border:1px solid var(--line); background:var(--paper-raised);
+  color:var(--ink-soft); font-family:inherit; font-size:.92rem; letter-spacing:.02em;
+  padding:9px 22px; border-radius:999px; cursor:pointer;
+  transition:background .15s ease, color .15s ease, border-color .15s ease;
+}
+.tab:hover{ border-color:var(--blue); }
+.tab:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+.tab[aria-selected="true"]{
+  background:var(--blue-deep); border-color:var(--blue-deep); color:var(--paper);
+}
+:root[data-theme="dark"] .tab[aria-selected="true"]{ color:#12211C; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .tab[aria-selected="true"]{ color:#12211C; } }
+
+.deck-wrap{ display:flex; flex-direction:column; align-items:center; gap:28px; padding:28px 16px 64px; }
+.deck-wrap[hidden]{ display:none; }
+
+/* ---------- slide shell ---------- */
+.slide{
+  width:min(1180px, 94vw);
+  aspect-ratio:16/9;
+  background:var(--paper-raised);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--card-shadow);
+  padding:clamp(28px,4vw,64px);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  overflow:hidden;
+}
+.eyebrow{
+  font-size:.78rem; letter-spacing:.16em; color:var(--blue);
+  text-transform:uppercase; font-weight:600; margin:0 0 10px;
+}
+.page-index{
+  position:absolute; right:clamp(20px,3vw,40px); bottom:clamp(18px,2.6vw,32px);
+  font-size:.78rem; color:var(--ink-muted); letter-spacing:.05em;
+}
+
+/* subtle ridge motif echoing the highland skyline */
+.ridge{
+  position:absolute; left:0; right:0; bottom:0; height:120px;
+  opacity:.5; pointer-events:none;
+}
+
+/* ---------- Slide 1: cover ---------- */
+.s1{ justify-content:center; align-items:flex-start; }
+.s1 .brand{ font-size:.85rem; color:var(--ink-muted); letter-spacing:.08em; margin-bottom:clamp(20px,4vh,40px); }
+.s1 h1{
+  font-size:clamp(2rem,4.2vw,3.4rem); line-height:1.35; margin:0 0 18px; font-weight:600;
+  text-wrap:balance; color:var(--ink); max-width:14ch;
+}
+.s1 .sub{
+  font-size:clamp(1rem,1.5vw,1.2rem); color:var(--ink-soft); line-height:1.9;
+  max-width:34ch; margin:0 0 auto;
+}
+.s1 .footer-row{
+  width:100%; display:flex; justify-content:space-between; align-items:flex-end;
+  border-top:1px solid var(--line); padding-top:18px; margin-top:24px;
+}
+.s1 .client{ font-size:1.05rem; color:var(--ink); }
+.s1 .from{ font-size:.85rem; color:var(--ink-muted); text-align:right; line-height:1.6; }
+
+/* ---------- Slide 2: flow ---------- */
+.s2 h2{ font-size:clamp(1.3rem,2.1vw,1.7rem); margin:0 0 clamp(20px,3.5vh,36px); font-weight:600; text-wrap:balance; }
+.flow{
+  display:flex; align-items:stretch; gap:0; flex:1;
+}
+.flow-step{
+  flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:14px; padding:0 8px;
+}
+.flow-icon{
+  width:64px; height:64px; border-radius:50%; background:var(--mist);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--blue-deep);
+}
+.flow-icon.green{ background:var(--mist-blue); color:var(--green-deep); }
+.flow-label{ font-size:.98rem; color:var(--ink); font-weight:600; line-height:1.5; }
+.flow-arrow{
+  flex:0 0 auto; align-self:center; color:var(--ink-muted); font-size:1.4rem;
+  padding:0 6px; margin-top:-40px;
+}
+.s2 .caveat{
+  margin-top:auto; padding-top:18px; border-top:1px dashed var(--line);
+  font-size:.82rem; color:var(--ink-muted); line-height:1.7;
+}
+
+/* ---------- Slide 3: timeline ---------- */
+.s3 h2{ font-size:clamp(1.3rem,2.1vw,1.7rem); margin:0 0 clamp(24px,4vh,44px); font-weight:600; }
+.timeline{
+  position:relative; flex:1; display:flex; align-items:flex-start; justify-content:space-between;
+}
+.timeline::before{
+  content:""; position:absolute; top:33px; left:4%; right:4%; height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--green));
+  opacity:.55;
+}
+.tl-node{ position:relative; flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:0 6px; }
+.tl-dot{
+  width:14px; height:14px; border-radius:50%; background:var(--paper-raised);
+  border:3px solid var(--blue); z-index:1; margin-top:27px;
+}
+.tl-node:nth-child(odd) .tl-dot{ border-color:var(--green); }
+.tl-month{ font-size:.78rem; color:var(--ink-muted); letter-spacing:.04em; }
+.tl-title{ font-size:.98rem; font-weight:600; color:var(--ink); }
+.tl-desc{ font-size:.8rem; color:var(--ink-soft); line-height:1.6; max-width:15ch; }
+
+/* ---------- Slide 4: plans ---------- */
+.s4 h2{ font-size:clamp(1.3rem,2.1vw,1.7rem); margin:0 0 clamp(18px,3vh,30px); font-weight:600; }
+.plans{ display:flex; gap:22px; flex:1; }
+.plan-card{
+  flex:1; background:var(--mist); border:1px solid var(--line); border-radius:12px;
+  padding:clamp(18px,2.4vw,28px); display:flex; flex-direction:column; gap:14px;
+  position:relative;
+}
+.plan-card.highlight{ background:var(--mist-blue); border-color:var(--blue); }
+.plan-badge{
+  align-self:flex-start; font-size:.72rem; letter-spacing:.06em; font-weight:700;
+  color:var(--paper); background:var(--blue-deep); padding:4px 12px; border-radius:999px;
+}
+.plan-card.highlight .plan-badge{ background:var(--green-deep); }
+.plan-name{ font-size:1.15rem; font-weight:700; color:var(--ink); margin-top:2px; }
+.plan-purpose{ font-size:.86rem; color:var(--ink-soft); line-height:1.7; }
+.plan-nums{ margin-top:auto; display:flex; flex-direction:column; gap:6px; padding-top:10px; border-top:1px solid var(--line); }
+.plan-row{ display:flex; justify-content:space-between; font-size:.88rem; color:var(--ink-soft); }
+.plan-row .val{ color:var(--ink); font-weight:600; }
+.plan-total{ display:flex; justify-content:space-between; align-items:baseline; margin-top:6px; }
+.plan-total .label{ font-size:.86rem; color:var(--ink-muted); }
+.plan-total .amount{ font-size:1.5rem; font-weight:700; color:var(--blue-deep); }
+.plan-card.highlight .plan-total .amount{ color:var(--green-deep); }
+.plan-total .tax{ font-size:.72rem; color:var(--ink-muted); margin-left:4px; }
+.s4 .extra{ margin-top:16px; font-size:.82rem; color:var(--ink-muted); text-align:right; }
+
+/* ---------- Slide 5: consultation ---------- */
+.s5{ justify-content:center; }
+.s5 h2{ font-size:clamp(1.4rem,2.4vw,2rem); margin:0 0 22px; font-weight:600; max-width:16ch; text-wrap:balance; }
+.s5 .lead{ font-size:1rem; color:var(--ink-soft); line-height:2; max-width:46ch; margin:0 0 20px; }
+.s5 .target-box{
+  display:inline-flex; align-items:center; gap:14px; background:var(--mist);
+  border:1px solid var(--line); border-radius:12px; padding:16px 22px; margin-bottom:22px;
+}
+.s5 .target-box .n{ font-size:1.6rem; font-weight:700; color:var(--blue-deep); }
+.s5 .target-box .t{ font-size:.9rem; color:var(--ink-soft); line-height:1.6; }
+.s5 .closing{ font-size:.95rem; color:var(--ink); line-height:1.9; max-width:44ch; }
+
+@media print{
+  .controls{ display:none; }
+  .deck-wrap{ padding:0; gap:0; }
+  .slide{ box-shadow:none; border-radius:0; width:100%; page-break-after:always; }
+}
+</style>
+
+<div class="controls" role="tablist" aria-label="プラン切り替え">
+  <button class="tab" role="tab" id="tab-2" aria-selected="true" aria-controls="deck-2" onclick="showDeck('2')">2名プラン（厨房のみ）</button>
+  <button class="tab" role="tab" id="tab-3" aria-selected="false" aria-controls="deck-3" onclick="showDeck('3')">3名プラン（厨房＋フロント）</button>
+</div>
+
+<!-- ============ DECK: 2名プラン ============ -->
+<div class="deck-wrap" id="deck-2">
+
+  <!-- Slide 1 -->
+  <section class="slide s1">
+    <div class="brand serif">海音〜心体の調律〜　ご提案</div>
+    <h1 class="serif">繁忙期を支える、<br>職場づくりのご提案</h1>
+    <p class="sub">繁忙期でも、従業員が安心して働き、<br>お客様に心からのおもてなしを届けられる場所へ</p>
+    <div class="footer-row">
+      <div class="client serif">駒ヶ根高原リトリート すずらん颯 御中</div>
+      <div class="from">海音〜心体の調律〜　髙橋由香<br>企業のオンライン保健室</div>
+    </div>
+    <div class="page-index">01</div>
+  </section>
+
+  <!-- Slide 2 -->
+  <section class="slide s2">
+    <div class="eyebrow">見えてきたこと</div>
+    <h2 class="serif">今回、お話を伺って見えてきたこと</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20h16M6 20l1-9h10l1 9M7 11a5 5 0 0 1 10 0"/></svg>
+        </div>
+        <div class="flow-label">繁忙期の<br>利益</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon green" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V9l7-5 7 5v12M5 21h14M10 21v-6h4v6"/></svg>
+        </div>
+        <div class="flow-label">厨房の<br>人材定着</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 21c0-4 3-6.5 7-6.5S19 17 19 21"/></svg>
+        </div>
+        <div class="flow-label">フロントの<br>負担</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon green" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M5 8l2.5 2M19 8l-2.5 2M4 21h16M6 21v-6a6 6 0 0 1 12 0v6"/></svg>
+        </div>
+        <div class="flow-label">繁忙期を安心して<br>迎える体制づくり</div>
+      </div>
+    </div>
+    <p class="caveat">※ 料理長は交代されており、これまでの傾向が今後も続くかどうかは、あらためて状況を見ながらご一緒に確認していければと思います。</p>
+    <div class="page-index">02</div>
+  </section>
+
+  <!-- Slide 3 -->
+  <section class="slide s3">
+    <div class="eyebrow">伴走のかたち</div>
+    <h2 class="serif">オンライン保健室でできること</h2>
+    <div class="timeline">
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">8〜9月</div>
+        <div class="tl-title">現状確認</div>
+        <div class="tl-desc">繁忙期を迎える前の体調・気持ちの確認</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">〜11月</div>
+        <div class="tl-title">繁忙期</div>
+        <div class="tl-desc">負荷が高まる時期の伴走</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">11〜12月</div>
+        <div class="tl-title">振り返り</div>
+        <div class="tl-desc">繁忙期を終えての振り返り</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">3〜4月</div>
+        <div class="tl-title">改善確認</div>
+        <div class="tl-desc">準備が計画通り進んでいるか確認</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">随時</div>
+        <div class="tl-title">経営者<br>フィードバック</div>
+        <div class="tl-desc">3か月ごとにレポートで共有</div>
+      </div>
+    </div>
+    <div class="page-index">03</div>
+  </section>
+
+  <!-- Slide 4 (2-person numbers) -->
+  <section class="slide s4">
+    <div class="eyebrow">プランのご案内</div>
+    <h2 class="serif">プラン比較</h2>
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-badge">3回フォロー</div>
+        <div class="plan-name">9か月プラン</div>
+        <p class="plan-purpose">今年の繁忙期を振り返り、来年度の準備まで伴走します。</p>
+        <div class="plan-nums">
+          <div class="plan-row"><span>初期費用</span><span class="val tabular">18,000円</span></div>
+          <div class="plan-row"><span>月額</span><span class="val tabular">10,000円</span></div>
+          <div class="plan-total"><span class="label">合計</span><span class="amount tabular">108,000<span class="tax">円（税別）</span></span></div>
+        </div>
+      </div>
+      <div class="plan-card highlight">
+        <div class="plan-badge">4回フォロー</div>
+        <div class="plan-name">12か月プラン</div>
+        <p class="plan-purpose">翌年の繁忙期前まで伴走し、改善が定着したかを確認します。</p>
+        <div class="plan-nums">
+          <div class="plan-row"><span>初期費用</span><span class="val tabular">18,000円</span></div>
+          <div class="plan-row"><span>月額</span><span class="val tabular">10,000円</span></div>
+          <div class="plan-total"><span class="label">合計</span><span class="amount tabular">138,000<span class="tax">円（税別）</span></span></div>
+        </div>
+      </div>
+    </div>
+    <p class="extra">追加面談（60分）：15,000円</p>
+    <div class="page-index">04</div>
+  </section>
+
+  <!-- Slide 5 -->
+  <section class="slide s5">
+    <div class="eyebrow">ご相談したいこと</div>
+    <h2 class="serif">対象者について、<br>ご一緒にご相談させてください</h2>
+    <div class="target-box">
+      <div class="n tabular">2</div>
+      <div class="t">今回は厨房スタッフ<br>2名で見積りを作成しています</div>
+    </div>
+    <p class="lead">お話を伺う中で、厨房の穴埋めをされているフロントスタッフの皆様の負荷も気になりました。対象者について、あらためて一緒にご相談できればと思います。</p>
+    <p class="closing serif">繁忙期を安心して迎えられる体制づくりを、これから一緒につくっていけたら嬉しいです。</p>
+    <div class="page-index">05</div>
+  </section>
+
+</div>
+
+<!-- ============ DECK: 3名プラン ============ -->
+<div class="deck-wrap" id="deck-3" hidden>
+
+  <!-- Slide 1 -->
+  <section class="slide s1">
+    <div class="brand serif">海音〜心体の調律〜　ご提案</div>
+    <h1 class="serif">繁忙期を支える、<br>職場づくりのご提案</h1>
+    <p class="sub">繁忙期でも、従業員が安心して働き、<br>お客様に心からのおもてなしを届けられる場所へ</p>
+    <div class="footer-row">
+      <div class="client serif">駒ヶ根高原リトリート すずらん颯 御中</div>
+      <div class="from">海音〜心体の調律〜　髙橋由香<br>企業のオンライン保健室</div>
+    </div>
+    <div class="page-index">01</div>
+  </section>
+
+  <!-- Slide 2 -->
+  <section class="slide s2">
+    <div class="eyebrow">見えてきたこと</div>
+    <h2 class="serif">今回、お話を伺って見えてきたこと</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20h16M6 20l1-9h10l1 9M7 11a5 5 0 0 1 10 0"/></svg>
+        </div>
+        <div class="flow-label">繁忙期の<br>利益</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon green" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V9l7-5 7 5v12M5 21h14M10 21v-6h4v6"/></svg>
+        </div>
+        <div class="flow-label">厨房の<br>人材定着</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 21c0-4 3-6.5 7-6.5S19 17 19 21"/></svg>
+        </div>
+        <div class="flow-label">フロントの<br>負担</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon green" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M5 8l2.5 2M19 8l-2.5 2M4 21h16M6 21v-6a6 6 0 0 1 12 0v6"/></svg>
+        </div>
+        <div class="flow-label">繁忙期を安心して<br>迎える体制づくり</div>
+      </div>
+    </div>
+    <p class="caveat">※ 料理長は交代されており、これまでの傾向が今後も続くかどうかは、あらためて状況を見ながらご一緒に確認していければと思います。</p>
+    <div class="page-index">02</div>
+  </section>
+
+  <!-- Slide 3 -->
+  <section class="slide s3">
+    <div class="eyebrow">伴走のかたち</div>
+    <h2 class="serif">オンライン保健室でできること</h2>
+    <div class="timeline">
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">8〜9月</div>
+        <div class="tl-title">現状確認</div>
+        <div class="tl-desc">繁忙期を迎える前の体調・気持ちの確認</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">〜11月</div>
+        <div class="tl-title">繁忙期</div>
+        <div class="tl-desc">負荷が高まる時期の伴走</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">11〜12月</div>
+        <div class="tl-title">振り返り</div>
+        <div class="tl-desc">繁忙期を終えての振り返り</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">3〜4月</div>
+        <div class="tl-title">改善確認</div>
+        <div class="tl-desc">準備が計画通り進んでいるか確認</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot"></div>
+        <div class="tl-month tabular">随時</div>
+        <div class="tl-title">経営者<br>フィードバック</div>
+        <div class="tl-desc">3か月ごとにレポートで共有</div>
+      </div>
+    </div>
+    <div class="page-index">03</div>
+  </section>
+
+  <!-- Slide 4 (3-person numbers) -->
+  <section class="slide s4">
+    <div class="eyebrow">プランのご案内</div>
+    <h2 class="serif">プラン比較</h2>
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-badge">3回フォロー</div>
+        <div class="plan-name">9か月プラン</div>
+        <p class="plan-purpose">今年の繁忙期を振り返り、来年度の準備まで伴走します。</p>
+        <div class="plan-nums">
+          <div class="plan-row"><span>初期費用</span><span class="val tabular">24,000円</span></div>
+          <div class="plan-row"><span>月額</span><span class="val tabular">13,340円</span></div>
+          <div class="plan-total"><span class="label">合計</span><span class="amount tabular">144,060<span class="tax">円（税別）</span></span></div>
+        </div>
+      </div>
+      <div class="plan-card highlight">
+        <div class="plan-badge">4回フォロー</div>
+        <div class="plan-name">12か月プラン</div>
+        <p class="plan-purpose">翌年の繁忙期前まで伴走し、改善が定着したかを確認します。</p>
+        <div class="plan-nums">
+          <div class="plan-row"><span>初期費用</span><span class="val tabular">24,000円</span></div>
+          <div class="plan-row"><span>月額</span><span class="val tabular">13,340円</span></div>
+          <div class="plan-total"><span class="label">合計</span><span class="amount tabular">184,080<span class="tax">円（税別）</span></span></div>
+        </div>
+      </div>
+    </div>
+    <p class="extra">追加面談（60分）：15,000円</p>
+    <div class="page-index">04</div>
+  </section>
+
+  <!-- Slide 5 -->
+  <section class="slide s5">
+    <div class="eyebrow">ご相談したいこと</div>
+    <h2 class="serif">対象者について、<br>ご一緒にご相談させてください</h2>
+    <div class="target-box">
+      <div class="n tabular">3</div>
+      <div class="t">厨房スタッフ2名＋フロントスタッフ1名の<br>3名体制でのプランです</div>
+    </div>
+    <p class="lead">お話を伺う中で、厨房の穴埋めをされているフロントスタッフの皆様の負荷が特に気になり、あわせてプランをご用意しました。対象者について、ご一緒にご相談できればと思います。</p>
+    <p class="closing serif">繁忙期を安心して迎えられる体制づくりを、これから一緒につくっていけたら嬉しいです。</p>
+    <div class="page-index">05</div>
+  </section>
+
+</div>
+
+<script>
+function showDeck(which){
+  var d2 = document.getElementById('deck-2');
+  var d3 = document.getElementById('deck-3');
+  var t2 = document.getElementById('tab-2');
+  var t3 = document.getElementById('tab-3');
+  if(which === '2'){
+    d2.hidden = false; d3.hidden = true;
+    t2.setAttribute('aria-selected','true'); t3.setAttribute('aria-selected','false');
+  } else {
+    d2.hidden = true; d3.hidden = false;
+    t2.setAttribute('aria-selected','false'); t3.setAttribute('aria-selected','true');
+  }
+}
+</script>
