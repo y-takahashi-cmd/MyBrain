@@ -13,6 +13,10 @@
   --mist:#E9EFEA;
   --mist-blue:#E4EDF0;
   --line:#D8DFD9;
+  --chain-1:#D8E7EC;
+  --chain-2:#5E8F94;
+  --chain-3:#4C6B4E;
+  --chain-1-ink:#1E4756;
   --card-shadow: 0 1px 2px rgba(32,48,58,.06), 0 8px 24px rgba(32,48,58,.06);
 }
 :root[data-theme="dark"]{
@@ -28,6 +32,10 @@
   --mist:#243530;
   --mist-blue:#213338;
   --line:#33443D;
+  --chain-1:#2C4650;
+  --chain-2:#3F6B67;
+  --chain-3:#4C6B4E;
+  --chain-1-ink:#A9D0DE;
   --card-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
 }
 @media (prefers-color-scheme: dark){
@@ -44,6 +52,10 @@
     --mist:#243530;
     --mist-blue:#213338;
     --line:#33443D;
+    --chain-1:#2C4650;
+    --chain-2:#3F6B67;
+    --chain-3:#4C6B4E;
+    --chain-1-ink:#A9D0DE;
     --card-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
   }
 }
@@ -134,50 +146,55 @@ body{
 .s1 .client{ font-size:1.05rem; color:var(--ink); }
 .s1 .from{ font-size:.85rem; color:var(--ink-muted); text-align:right; line-height:1.6; }
 
-/* ---------- Slide 2: flow ---------- */
-.s2 h2{ font-size:clamp(1.3rem,2.1vw,1.7rem); margin:0 0 clamp(20px,3.5vh,36px); font-weight:600; text-wrap:balance; }
-.flow{
-  display:flex; align-items:stretch; gap:0; flex:1;
+/* ---------- Slide 2: chain diagram ---------- */
+.s2 h2{ font-size:clamp(1.3rem,2.1vw,1.7rem); margin:0 0 clamp(18px,3vh,30px); font-weight:600; text-wrap:balance; }
+.chain{
+  display:flex; align-items:center; justify-content:center; flex:1;
+  padding:0 clamp(0px,2vw,20px);
 }
-.flow-step{
-  flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;
-  gap:14px; padding:0 8px;
+.chain-node{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px; width:clamp(120px,15vw,180px); }
+.chain-circle{
+  width:clamp(84px,9vw,112px); height:clamp(84px,9vw,112px); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto;
 }
-.flow-icon{
-  width:64px; height:64px; border-radius:50%; background:var(--mist);
-  display:flex; align-items:center; justify-content:center;
-  color:var(--blue-deep);
-}
-.flow-icon.green{ background:var(--mist-blue); color:var(--green-deep); }
-.flow-label{ font-size:.98rem; color:var(--ink); font-weight:600; line-height:1.5; }
-.flow-arrow{
-  flex:0 0 auto; align-self:center; color:var(--ink-muted); font-size:1.4rem;
-  padding:0 6px; margin-top:-40px;
+.chain-circle svg{ width:36%; height:36%; }
+.chain-node.n1 .chain-circle{ background:var(--chain-1); color:var(--chain-1-ink); }
+.chain-node.n2 .chain-circle{ background:var(--chain-2); color:#fff; }
+.chain-node.n3 .chain-circle{ background:var(--chain-3); color:#fff; }
+.chain-label{ font-size:.94rem; font-weight:700; color:var(--ink); line-height:1.5; }
+.chain-connector{ width:clamp(40px,6vw,84px); flex:0 0 auto; color:var(--ink-muted); margin:0 -4px; align-self:flex-start; margin-top:clamp(30px,4vw,44px); }
+.chain-connector svg{ width:100%; height:auto; display:block; }
+.callout{
+  margin-top:clamp(18px,3vh,28px); background:var(--mist-blue); border-radius:12px;
+  padding:16px 24px; font-size:1.02rem; font-weight:700; color:var(--blue-deep); text-align:center;
 }
 .s2 .caveat{
-  margin-top:auto; padding-top:18px; border-top:1px dashed var(--line);
-  font-size:.82rem; color:var(--ink-muted); line-height:1.7;
+  margin-top:14px; font-size:.8rem; color:var(--ink-muted); line-height:1.7; text-align:center;
 }
 
-/* ---------- Slide 3: timeline ---------- */
-.s3 h2{ font-size:clamp(1.3rem,2.1vw,1.7rem); margin:0 0 clamp(24px,4vh,44px); font-weight:600; }
-.timeline{
-  position:relative; flex:1; display:flex; align-items:flex-start; justify-content:space-between;
+/* ---------- Slide 3: phased timeline ---------- */
+.s3 h2{ font-size:clamp(1.3rem,2.1vw,1.7rem); margin:0 0 clamp(24px,4vh,40px); font-weight:600; }
+.phase-block{ position:relative; }
+.phase-highlight{
+  position:absolute; left:25%; width:25%; top:-10px; bottom:-10px;
+  background:var(--mist-blue); border-radius:16px; z-index:0;
 }
-.timeline::before{
-  content:""; position:absolute; top:33px; left:4%; right:4%; height:2px;
-  background:linear-gradient(90deg,var(--blue),var(--green));
-  opacity:.55;
+.phase-top-row, .phase-bottom-row{ position:relative; z-index:1; display:grid; grid-template-columns:repeat(4,1fr); }
+.phase-top-row .phase-col{ padding:8px 8px 12px; text-align:center; }
+.phase-bottom-row .phase-col{ padding:14px 8px 6px; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; }
+.phase-name{ font-size:.92rem; font-weight:700; color:var(--ink); }
+.phase-axis{ position:relative; z-index:1; height:1px; background:var(--line); }
+.phase-icon{
+  width:46px; height:46px; border-radius:50%; background:var(--paper-raised);
+  border:1.6px solid var(--blue); display:flex; align-items:center; justify-content:center; color:var(--blue-deep);
 }
-.tl-node{ position:relative; flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:0 6px; }
-.tl-dot{
-  width:14px; height:14px; border-radius:50%; background:var(--paper-raised);
-  border:3px solid var(--blue); z-index:1; margin-top:27px;
-}
-.tl-node:nth-child(odd) .tl-dot{ border-color:var(--green); }
-.tl-month{ font-size:.78rem; color:var(--ink-muted); letter-spacing:.04em; }
-.tl-title{ font-size:.98rem; font-weight:600; color:var(--ink); }
-.tl-desc{ font-size:.8rem; color:var(--ink-soft); line-height:1.6; max-width:15ch; }
+.phase-icon svg{ width:22px; height:22px; }
+.phase-bottom-row .phase-col:nth-child(2) .phase-icon{ border-color:var(--green); color:var(--green-deep); }
+.phase-step{ font-size:.82rem; color:var(--ink-soft); }
+.phase-brace{ margin-top:clamp(14px,3vh,24px); display:flex; flex-direction:column; align-items:center; gap:8px; }
+.phase-brace svg{ width:64%; max-width:560px; color:var(--ink-muted); display:block; }
+.brace-label{ display:flex; align-items:center; gap:8px; font-size:.86rem; color:var(--ink-soft); }
+.brace-label svg{ width:17px; height:17px; color:var(--blue); flex:0 0 auto; }
 
 /* ---------- Slide 4: plans ---------- */
 .s4 h2{ font-size:clamp(1.3rem,2.1vw,1.7rem); margin:0 0 clamp(18px,3vh,30px); font-weight:600; }
@@ -248,35 +265,39 @@ body{
   <section class="slide s2">
     <div class="eyebrow">見えてきたこと</div>
     <h2 class="serif">今回、お話を伺って見えてきたこと</h2>
-    <div class="flow">
-      <div class="flow-step">
-        <div class="flow-icon" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20h16M6 20l1-9h10l1 9M7 11a5 5 0 0 1 10 0"/></svg>
+    <div class="chain">
+      <div class="chain-node n1">
+        <div class="chain-circle" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-9"/><path d="M15 7h5v5"/></svg>
         </div>
-        <div class="flow-label">繁忙期の<br>利益</div>
+        <div class="chain-label">繁忙期の<br>利益拡大</div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-icon green" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V9l7-5 7 5v12M5 21h14M10 21v-6h4v6"/></svg>
-        </div>
-        <div class="flow-label">厨房の<br>人材定着</div>
+      <div class="chain-connector" aria-hidden="true">
+        <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6,40 C 30,6 70,6 92,26"/>
+          <path d="M92,26 L81,23 M92,26 L87,37"/>
+        </svg>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-icon" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 21c0-4 3-6.5 7-6.5S19 17 19 21"/></svg>
+      <div class="chain-node n2">
+        <div class="chain-circle" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-2.2 0-4 1.8-4 4 0 .55.11 1.07.31 1.55C6.52 9.2 5 11.1 5 13.3 5 15.6 6.7 17.5 9 17.9V21h6v-3.1c2.3-.4 4-2.3 4-4.6 0-2.2-1.52-4.1-3.31-4.75.2-.48.31-1 .31-1.55 0-2.2-1.8-4-4-4z"/></svg>
         </div>
-        <div class="flow-label">フロントの<br>負担</div>
+        <div class="chain-label">厨房の<br>人材定着の課題</div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-icon green" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M5 8l2.5 2M19 8l-2.5 2M4 21h16M6 21v-6a6 6 0 0 1 12 0v6"/></svg>
+      <div class="chain-connector" aria-hidden="true">
+        <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6,26 C 30,46 70,46 92,10"/>
+          <path d="M92,10 L80,11 M92,10 L89,22"/>
+        </svg>
+      </div>
+      <div class="chain-node n3">
+        <div class="chain-circle" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16c0-4.4 3.6-8 8-8s8 3.6 8 8"/><rect x="3" y="16" width="18" height="2.6" rx="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="6" r="1.3" fill="currentColor" stroke="none"/></svg>
         </div>
-        <div class="flow-label">繁忙期を安心して<br>迎える体制づくり</div>
+        <div class="chain-label">フロントスタッフ<br>への負担波及</div>
       </div>
     </div>
+    <p class="callout">「繁忙期を“安心”して迎えるための体制づくり」が急務です</p>
     <p class="caveat">※ 料理長は交代されており、これまでの傾向が今後も続くかどうかは、あらためて状況を見ながらご一緒に確認していければと思います。</p>
     <div class="page-index">02</div>
   </section>
@@ -285,36 +306,41 @@ body{
   <section class="slide s3">
     <div class="eyebrow">伴走のかたち</div>
     <h2 class="serif">オンライン保健室でできること</h2>
-    <div class="timeline">
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">8〜9月</div>
-        <div class="tl-title">現状確認</div>
-        <div class="tl-desc">繁忙期を迎える前の体調・気持ちの確認</div>
+    <div class="phase-block">
+      <div class="phase-highlight" aria-hidden="true"></div>
+      <div class="phase-top-row">
+        <div class="phase-col"><span class="phase-name tabular">8〜9月</span></div>
+        <div class="phase-col"><span class="phase-name">繁忙期</span></div>
+        <div class="phase-col"><span class="phase-name tabular">11〜12月</span></div>
+        <div class="phase-col"><span class="phase-name tabular">3〜4月</span></div>
       </div>
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">〜11月</div>
-        <div class="tl-title">繁忙期</div>
-        <div class="tl-desc">負荷が高まる時期の伴走</div>
+      <div class="phase-axis"></div>
+      <div class="phase-bottom-row">
+        <div class="phase-col">
+          <div class="phase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="1.5"/><path d="M9 4V3h6v1"/><circle cx="15.5" cy="15.5" r="3"/><path d="M17.8 17.8 19.5 19.5"/></svg></div>
+          <span class="phase-step">現状確認</span>
+        </div>
+        <div class="phase-col">
+          <div class="phase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2-3 5-4 8-4s6 1 8 4"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg></div>
+          <span class="phase-step">実践サポート</span>
+        </div>
+        <div class="phase-col">
+          <div class="phase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4h-4"/></svg></div>
+          <span class="phase-step">振り返り</span>
+        </div>
+        <div class="phase-col">
+          <div class="phase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+          <span class="phase-step">改善確認</span>
+        </div>
       </div>
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">11〜12月</div>
-        <div class="tl-title">振り返り</div>
-        <div class="tl-desc">繁忙期を終えての振り返り</div>
-      </div>
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">3〜4月</div>
-        <div class="tl-title">改善確認</div>
-        <div class="tl-desc">準備が計画通り進んでいるか確認</div>
-      </div>
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">随時</div>
-        <div class="tl-title">経営者<br>フィードバック</div>
-        <div class="tl-desc">3か月ごとにレポートで共有</div>
+    </div>
+    <div class="phase-brace" aria-hidden="false">
+      <svg viewBox="0 0 400 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <path d="M4,4 L4,14 L200,14 L200,22 M200,14 L396,14 L396,4"/>
+      </svg>
+      <div class="brace-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 4V5z"/></svg>
+        経営者フィードバック（3か月ごと）
       </div>
     </div>
     <div class="page-index">03</div>
@@ -384,35 +410,39 @@ body{
   <section class="slide s2">
     <div class="eyebrow">見えてきたこと</div>
     <h2 class="serif">今回、お話を伺って見えてきたこと</h2>
-    <div class="flow">
-      <div class="flow-step">
-        <div class="flow-icon" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20h16M6 20l1-9h10l1 9M7 11a5 5 0 0 1 10 0"/></svg>
+    <div class="chain">
+      <div class="chain-node n1">
+        <div class="chain-circle" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-9"/><path d="M15 7h5v5"/></svg>
         </div>
-        <div class="flow-label">繁忙期の<br>利益</div>
+        <div class="chain-label">繁忙期の<br>利益拡大</div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-icon green" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V9l7-5 7 5v12M5 21h14M10 21v-6h4v6"/></svg>
-        </div>
-        <div class="flow-label">厨房の<br>人材定着</div>
+      <div class="chain-connector" aria-hidden="true">
+        <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6,40 C 30,6 70,6 92,26"/>
+          <path d="M92,26 L81,23 M92,26 L87,37"/>
+        </svg>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-icon" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 21c0-4 3-6.5 7-6.5S19 17 19 21"/></svg>
+      <div class="chain-node n2">
+        <div class="chain-circle" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-2.2 0-4 1.8-4 4 0 .55.11 1.07.31 1.55C6.52 9.2 5 11.1 5 13.3 5 15.6 6.7 17.5 9 17.9V21h6v-3.1c2.3-.4 4-2.3 4-4.6 0-2.2-1.52-4.1-3.31-4.75.2-.48.31-1 .31-1.55 0-2.2-1.8-4-4-4z"/></svg>
         </div>
-        <div class="flow-label">フロントの<br>負担</div>
+        <div class="chain-label">厨房の<br>人材定着の課題</div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-icon green" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M5 8l2.5 2M19 8l-2.5 2M4 21h16M6 21v-6a6 6 0 0 1 12 0v6"/></svg>
+      <div class="chain-connector" aria-hidden="true">
+        <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6,26 C 30,46 70,46 92,10"/>
+          <path d="M92,10 L80,11 M92,10 L89,22"/>
+        </svg>
+      </div>
+      <div class="chain-node n3">
+        <div class="chain-circle" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16c0-4.4 3.6-8 8-8s8 3.6 8 8"/><rect x="3" y="16" width="18" height="2.6" rx="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="6" r="1.3" fill="currentColor" stroke="none"/></svg>
         </div>
-        <div class="flow-label">繁忙期を安心して<br>迎える体制づくり</div>
+        <div class="chain-label">フロントスタッフ<br>への負担波及</div>
       </div>
     </div>
+    <p class="callout">「繁忙期を“安心”して迎えるための体制づくり」が急務です</p>
     <p class="caveat">※ 料理長は交代されており、これまでの傾向が今後も続くかどうかは、あらためて状況を見ながらご一緒に確認していければと思います。</p>
     <div class="page-index">02</div>
   </section>
@@ -421,36 +451,41 @@ body{
   <section class="slide s3">
     <div class="eyebrow">伴走のかたち</div>
     <h2 class="serif">オンライン保健室でできること</h2>
-    <div class="timeline">
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">8〜9月</div>
-        <div class="tl-title">現状確認</div>
-        <div class="tl-desc">繁忙期を迎える前の体調・気持ちの確認</div>
+    <div class="phase-block">
+      <div class="phase-highlight" aria-hidden="true"></div>
+      <div class="phase-top-row">
+        <div class="phase-col"><span class="phase-name tabular">8〜9月</span></div>
+        <div class="phase-col"><span class="phase-name">繁忙期</span></div>
+        <div class="phase-col"><span class="phase-name tabular">11〜12月</span></div>
+        <div class="phase-col"><span class="phase-name tabular">3〜4月</span></div>
       </div>
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">〜11月</div>
-        <div class="tl-title">繁忙期</div>
-        <div class="tl-desc">負荷が高まる時期の伴走</div>
+      <div class="phase-axis"></div>
+      <div class="phase-bottom-row">
+        <div class="phase-col">
+          <div class="phase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="1.5"/><path d="M9 4V3h6v1"/><circle cx="15.5" cy="15.5" r="3"/><path d="M17.8 17.8 19.5 19.5"/></svg></div>
+          <span class="phase-step">現状確認</span>
+        </div>
+        <div class="phase-col">
+          <div class="phase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c2-3 5-4 8-4s6 1 8 4"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg></div>
+          <span class="phase-step">実践サポート</span>
+        </div>
+        <div class="phase-col">
+          <div class="phase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4h-4"/></svg></div>
+          <span class="phase-step">振り返り</span>
+        </div>
+        <div class="phase-col">
+          <div class="phase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+          <span class="phase-step">改善確認</span>
+        </div>
       </div>
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">11〜12月</div>
-        <div class="tl-title">振り返り</div>
-        <div class="tl-desc">繁忙期を終えての振り返り</div>
-      </div>
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">3〜4月</div>
-        <div class="tl-title">改善確認</div>
-        <div class="tl-desc">準備が計画通り進んでいるか確認</div>
-      </div>
-      <div class="tl-node">
-        <div class="tl-dot"></div>
-        <div class="tl-month tabular">随時</div>
-        <div class="tl-title">経営者<br>フィードバック</div>
-        <div class="tl-desc">3か月ごとにレポートで共有</div>
+    </div>
+    <div class="phase-brace" aria-hidden="false">
+      <svg viewBox="0 0 400 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <path d="M4,4 L4,14 L200,14 L200,22 M200,14 L396,14 L396,4"/>
+      </svg>
+      <div class="brace-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 4V5z"/></svg>
+        経営者フィードバック（3か月ごと）
       </div>
     </div>
     <div class="page-index">03</div>
