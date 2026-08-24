@@ -1,0 +1,394 @@
+<title>社員の力を、給料に変える経営インフラのご提案｜株式会社orb</title>
+<style>
+:root{
+  --paper:#FBFAF6;
+  --paper-raised:#FFFFFF;
+  --ink:#20303A;
+  --ink-soft:#4B5D66;
+  --ink-muted:#7C8B92;
+  --blue:#356B82;
+  --blue-deep:#1E4756;
+  --green:#6C8F6E;
+  --green-deep:#4C6B4E;
+  --gold:#B8934A;
+  --gold-deep:#8C6C2E;
+  --mist:#E9EFEA;
+  --mist-blue:#E4EDF0;
+  --mist-gold:#F3ECDD;
+  --line:#D8DFD9;
+  --chain-1:#D8E7EC;
+  --chain-2:#5E8F94;
+  --chain-3:#4C6B4E;
+  --chain-1-ink:#1E4756;
+  --card-shadow: 0 1px 2px rgba(32,48,58,.06), 0 8px 24px rgba(32,48,58,.06);
+}
+:root[data-theme="dark"]{
+  --paper:#182420;
+  --paper-raised:#1F2E29;
+  --ink:#EDEFE9;
+  --ink-soft:#C4CFC7;
+  --ink-muted:#8FA095;
+  --blue:#7FB2C6;
+  --blue-deep:#A9D0DE;
+  --green:#9AC29B;
+  --green-deep:#B8D9B6;
+  --gold:#D8BC7C;
+  --gold-deep:#E8D4A4;
+  --mist:#243530;
+  --mist-blue:#213338;
+  --mist-gold:#332C1E;
+  --line:#33443D;
+  --chain-1:#2C4650;
+  --chain-2:#3F6B67;
+  --chain-3:#4C6B4E;
+  --chain-1-ink:#A9D0DE;
+  --card-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#182420;
+    --paper-raised:#1F2E29;
+    --ink:#EDEFE9;
+    --ink-soft:#C4CFC7;
+    --ink-muted:#8FA095;
+    --blue:#7FB2C6;
+    --blue-deep:#A9D0DE;
+    --green:#9AC29B;
+    --green-deep:#B8D9B6;
+    --gold:#D8BC7C;
+    --gold-deep:#E8D4A4;
+    --mist:#243530;
+    --mist-blue:#213338;
+    --mist-gold:#332C1E;
+    --line:#33443D;
+    --chain-1:#2C4650;
+    --chain-2:#3F6B67;
+    --chain-3:#4C6B4E;
+    --chain-1-ink:#A9D0DE;
+    --card-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Yu Gothic Medium","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.serif{
+  font-family:"Shippori Mincho","Zen Old Mincho","Yu Mincho","Hiragino Mincho ProN",serif;
+}
+.tabular{ font-variant-numeric: tabular-nums; }
+
+.deck-wrap{ display:flex; flex-direction:column; align-items:center; gap:28px; padding:40px 16px 64px; }
+
+.slide{
+  width:min(1180px, 94vw);
+  aspect-ratio:16/9;
+  background:var(--paper-raised);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--card-shadow);
+  padding:clamp(28px,4vw,64px);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  overflow:hidden;
+}
+.eyebrow{
+  font-size:.78rem; letter-spacing:.16em; color:var(--blue);
+  text-transform:uppercase; font-weight:600; margin:0 0 10px;
+}
+.page-index{
+  position:absolute; right:clamp(20px,3vw,40px); bottom:clamp(18px,2.6vw,32px);
+  font-size:.78rem; color:var(--ink-muted); letter-spacing:.05em;
+}
+
+/* ---------- Slide 1: cover ---------- */
+.s1{ justify-content:center; align-items:flex-start; }
+.s1 .brand{ font-size:.85rem; color:var(--ink-muted); letter-spacing:.08em; margin-bottom:clamp(20px,4vh,40px); }
+.s1 h1{
+  font-size:clamp(1.9rem,3.8vw,3.1rem); line-height:1.4; margin:0 0 18px; font-weight:600;
+  text-wrap:balance; color:var(--ink); max-width:16ch;
+}
+.s1 .sub{
+  font-size:clamp(1rem,1.5vw,1.15rem); color:var(--ink-soft); line-height:1.9;
+  max-width:36ch; margin:0 0 auto;
+}
+.s1 .footer-row{
+  width:100%; display:flex; justify-content:space-between; align-items:flex-end;
+  border-top:1px solid var(--line); padding-top:18px; margin-top:24px;
+}
+.s1 .client{ font-size:1.05rem; color:var(--ink); }
+.s1 .from{ font-size:.85rem; color:var(--ink-muted); text-align:right; line-height:1.6; }
+
+/* ---------- Slide 2: cost structure ---------- */
+.s2 h2{ font-size:clamp(1.25rem,2vw,1.6rem); margin:0 0 clamp(16px,3vh,26px); font-weight:600; text-wrap:balance; line-height:1.6; }
+.iceberg-row{ display:flex; align-items:center; gap:clamp(20px,4vw,48px); flex:1; }
+.iceberg-visual{ flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.iceberg-tip{ width:clamp(60px,7vw,88px); background:var(--mist-blue); border:1.6px solid var(--blue); border-radius:6px 6px 2px 2px; padding:10px 8px; text-align:center; }
+.iceberg-tip .n{ font-size:1rem; font-weight:700; color:var(--blue-deep); }
+.iceberg-tip .t{ font-size:.68rem; color:var(--ink-soft); margin-top:2px; }
+.iceberg-body{ width:clamp(120px,13vw,168px); background:var(--blue-deep); border-radius:2px 2px 16px 16px; padding:22px 14px; text-align:center; }
+.iceberg-body .n{ font-size:2.1rem; font-weight:700; color:#fff; line-height:1; }
+.iceberg-body .t{ font-size:.74rem; color:var(--mist-blue); margin-top:8px; line-height:1.6; }
+.iceberg-text{ flex:1; display:flex; flex-direction:column; gap:14px; }
+.iceberg-text p{ font-size:.95rem; color:var(--ink-soft); line-height:1.9; margin:0; }
+.iceberg-text .callout{
+  background:var(--mist-gold); border-radius:12px; padding:16px 22px; font-size:1rem; font-weight:700; color:var(--gold-deep);
+}
+.s2 .src{ margin-top:12px; font-size:.76rem; color:var(--ink-muted); }
+
+/* ---------- Slide 3: SPQ ---------- */
+.s3 h2{ font-size:clamp(1.25rem,2vw,1.6rem); margin:0 0 clamp(16px,3vh,26px); font-weight:600; }
+.spq-row{ display:flex; gap:clamp(20px,3vw,40px); flex:1; align-items:center; }
+.spq-card{ flex:1.3; background:var(--mist); border:1px solid var(--line); border-radius:12px; padding:clamp(20px,2.6vw,30px); }
+.spq-q{ font-size:.96rem; color:var(--ink); line-height:1.8; margin:0 0 18px; }
+.spq-scale{ display:flex; align-items:center; gap:10px; }
+.spq-track{ flex:1; height:6px; border-radius:999px; background:var(--line); position:relative; }
+.spq-dot{ position:absolute; left:75%; top:50%; transform:translate(-50%,-50%); width:20px; height:20px; border-radius:50%; background:var(--blue-deep); border:3px solid var(--paper-raised); box-shadow:0 0 0 1px var(--blue-deep); }
+.spq-nums{ display:flex; justify-content:space-between; margin-top:8px; font-size:.78rem; color:var(--ink-muted); }
+.spq-side{ flex:1; display:flex; flex-direction:column; gap:16px; }
+.spq-stat{ background:var(--mist-blue); border-radius:12px; padding:18px 22px; }
+.spq-stat .n{ font-size:2.4rem; font-weight:700; color:var(--blue-deep); line-height:1; }
+.spq-stat .t{ font-size:.82rem; color:var(--ink-soft); margin-top:8px; line-height:1.6; }
+.spq-invite{ font-size:.9rem; color:var(--ink-soft); line-height:1.8; }
+
+/* ---------- Slide 4: hokenroom mechanism ---------- */
+.s4 h2{ font-size:clamp(1.25rem,2vw,1.6rem); margin:0 0 clamp(14px,2.6vh,22px); font-weight:600; }
+.mech-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; flex:0 0 auto; }
+.mech-card{ background:var(--mist); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:flex; align-items:flex-start; gap:12px; }
+.mech-icon{ flex:0 0 auto; width:36px; height:36px; border-radius:50%; background:var(--mist-blue); display:flex; align-items:center; justify-content:center; color:var(--blue-deep); }
+.mech-icon svg{ width:18px; height:18px; }
+.mech-label{ font-size:.86rem; color:var(--ink); line-height:1.5; font-weight:700; }
+.speed-row{ display:flex; gap:20px; margin-top:clamp(14px,2.6vh,22px); flex:1; }
+.speed-col{ flex:1; border-radius:12px; padding:14px 18px; display:flex; flex-direction:column; gap:8px; }
+.speed-col.good{ background:var(--mist); border:1px solid var(--green); }
+.speed-col.bad{ background:var(--mist-gold); border:1px solid var(--line); opacity:.9; }
+.speed-title{ font-size:.82rem; font-weight:700; color:var(--ink); }
+.speed-path{ font-size:.8rem; color:var(--ink-soft); line-height:1.9; }
+.speed-result{ font-size:.94rem; font-weight:700; }
+.speed-col.good .speed-result{ color:var(--green-deep); }
+.speed-col.bad .speed-result{ color:var(--ink-muted); }
+
+/* ---------- Slide 5: SC plan ---------- */
+.s5 h2{ font-size:clamp(1.25rem,2vw,1.6rem); margin:0 0 clamp(16px,3vh,24px); font-weight:600; }
+.sc-top{ display:flex; gap:16px; }
+.sc-badge-card{ flex:1; background:var(--mist-blue); border:1px solid var(--blue); border-radius:12px; padding:18px 22px; }
+.sc-badge-card .label{ font-size:.78rem; color:var(--ink-soft); }
+.sc-badge-card .val{ font-size:1.6rem; font-weight:700; color:var(--blue-deep); margin-top:4px; }
+.sc-badge-card .sub{ font-size:.76rem; color:var(--ink-muted); margin-top:4px; }
+.sc-rows{ margin-top:16px; display:flex; flex-direction:column; gap:8px; }
+.sc-row{ display:flex; justify-content:space-between; font-size:.9rem; color:var(--ink-soft); padding:8px 4px; border-bottom:1px solid var(--line); }
+.sc-row .val{ color:var(--ink); font-weight:600; }
+.sc-note{ margin-top:14px; font-size:.78rem; color:var(--ink-muted); line-height:1.8; background:var(--mist); border-radius:10px; padding:12px 16px; }
+
+/* ---------- Slide 6: profiling option ---------- */
+.s6 h2{ font-size:clamp(1.25rem,2vw,1.6rem); margin:0 0 clamp(16px,3vh,24px); font-weight:600; }
+.opt-row{ display:flex; gap:24px; flex:1; }
+.opt-text{ flex:1.3; display:flex; flex-direction:column; gap:14px; justify-content:center; }
+.opt-text p{ font-size:.92rem; color:var(--ink-soft); line-height:1.9; margin:0; }
+.opt-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.opt-list li{ font-size:.86rem; color:var(--ink-soft); padding-left:22px; position:relative; }
+.opt-list li::before{ content:"◦"; position:absolute; left:2px; color:var(--blue); }
+.opt-price{ flex:1; background:var(--mist-gold); border:1px solid var(--gold); border-radius:12px; padding:24px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:10px; }
+.opt-price .badge{ font-size:.72rem; letter-spacing:.06em; font-weight:700; color:var(--paper); background:var(--gold-deep); padding:4px 14px; border-radius:999px; }
+.opt-price .unit{ font-size:1.1rem; color:var(--ink-soft); margin-top:6px; }
+.opt-price .amount{ font-size:2rem; font-weight:700; color:var(--gold-deep); }
+.opt-price .total{ font-size:.86rem; color:var(--ink-muted); }
+
+/* ---------- Slide 7: AI + subsidy consultation ---------- */
+.s7 h2{ font-size:clamp(1.25rem,2vw,1.6rem); margin:0 0 clamp(16px,3vh,24px); font-weight:600; }
+.consult-box{ background:var(--mist); border:1px dashed var(--ink-muted); border-radius:14px; padding:clamp(20px,3vw,32px); flex:1; display:flex; flex-direction:column; justify-content:center; gap:16px; }
+.consult-tag{ align-self:flex-start; font-size:.74rem; font-weight:700; color:var(--blue-deep); background:var(--mist-blue); padding:4px 12px; border-radius:999px; }
+.consult-box p{ font-size:.92rem; color:var(--ink-soft); line-height:1.95; margin:0; max-width:64ch; }
+.consult-box .em{ color:var(--ink); font-weight:700; }
+.consult-caveat{ font-size:.78rem; color:var(--ink-muted); line-height:1.8; }
+
+/* ---------- Slide 8: summary + closing ---------- */
+.s8 h2{ font-size:clamp(1.3rem,2.2vw,1.8rem); margin:0 0 clamp(16px,3vh,26px); font-weight:600; }
+.sum-table{ display:flex; flex-direction:column; border-top:1px solid var(--line); }
+.sum-row{ display:flex; justify-content:space-between; align-items:baseline; padding:12px 4px; border-bottom:1px solid var(--line); }
+.sum-row .item{ font-size:.92rem; color:var(--ink-soft); }
+.sum-row .amount{ font-size:1.05rem; font-weight:700; color:var(--ink); }
+.sum-row.total .item{ font-size:1rem; color:var(--ink); font-weight:700; }
+.sum-row.total .amount{ font-size:1.5rem; color:var(--blue-deep); }
+.sum-row.opt .item, .sum-row.opt .amount{ color:var(--gold-deep); }
+.s8 .closing{ margin-top:clamp(16px,2.6vh,24px); font-size:.95rem; color:var(--ink); line-height:1.9; max-width:52ch; }
+
+@media print{
+  .deck-wrap{ padding:0; gap:0; }
+  .slide{ box-shadow:none; border-radius:0; width:100%; page-break-after:always; }
+}
+</style>
+
+<div class="deck-wrap">
+
+  <!-- Slide 1: 表紙 -->
+  <section class="slide s1">
+    <div class="brand serif">海音〜心体の調律〜　ご提案</div>
+    <h1 class="serif">社員の力を、<br>給料に変える経営インフラ</h1>
+    <p class="sub">見えない「状態」を可視化し、<br>賃上げの原資と離職防止を同時につくる</p>
+    <div class="footer-row">
+      <div class="client serif">株式会社orb 御中</div>
+      <div class="from">海音〜心体の調律〜　髙橋由香<br>企業のオンライン保健室</div>
+    </div>
+    <div class="page-index">01</div>
+  </section>
+
+  <!-- Slide 2: 課題提起 -->
+  <section class="slide s2">
+    <div class="eyebrow">見えていないコスト</div>
+    <h2 class="serif">健康関連コストの大半は、「休んでいる人」ではなく<br>「出社しているが本調子でない人」によるもの</h2>
+    <div class="iceberg-row">
+      <div class="iceberg-visual" aria-hidden="true">
+        <div class="iceberg-tip"><div class="n">20%</div><div class="t">休職・欠勤</div></div>
+        <div class="iceberg-body"><div class="n">77.9%</div><div class="t">出社しているが<br>力が出せていない状態<br>（プレゼンティーイズム）</div></div>
+      </div>
+      <div class="iceberg-text">
+        <p>厚労省データ・東大の研究によれば、健康関連総コストの77.9%は「出社しているが本調子ではない人」によるものです。休職対応は目に見えるから対処しているだけで、伸びしろは「今日も現場に立っている人」の中にあります。</p>
+        <p>接客・厨房ともに、その日の"状態"がそのままお客様への提供価値になる飲食業では、この差はとりわけ大きく効いてきます。</p>
+        <p class="callout">同じ8時間働いても、本来の力を10割出せる日と6割しか出せない日がある。この差額こそが、賃上げの原資になります。</p>
+      </div>
+    </div>
+    <div class="page-index">02</div>
+  </section>
+
+  <!-- Slide 3: SPQ -->
+  <section class="slide s3">
+    <div class="eyebrow">眠っている力を測る</div>
+    <h2 class="serif">たった1つの質問で、現在地がわかる（SPQ）</h2>
+    <div class="spq-row">
+      <div class="spq-card">
+        <p class="spq-q">「病気やけががないときに発揮できる仕事の出来を100%として、過去4週間の自身の仕事を評価してください。」</p>
+        <div class="spq-scale" aria-hidden="true">
+          <div class="spq-track"><div class="spq-dot"></div></div>
+        </div>
+        <div class="spq-nums"><span>0%</span><span>75%</span><span>100%</span></div>
+      </div>
+      <div class="spq-side">
+        <div class="spq-stat">
+          <div class="n tabular">22.5%</div>
+          <div class="t">SPQ（東大1項目版）による<br>全国平均の損失率</div>
+        </div>
+        <p class="spq-invite">御社の損失率がこれを上回っていれば、他社より多く「本来の力」を眠らせている＝伸びしろがある、ということになります。ストレスチェックの導入とあわせて、まずはこの数値を測ってみませんか。</p>
+      </div>
+    </div>
+    <div class="page-index">03</div>
+  </section>
+
+  <!-- Slide 4: 保健室の仕組み -->
+  <section class="slide s4">
+    <div class="eyebrow">解決の仕組み</div>
+    <h2 class="serif">病院ではなく、会社の中の「オンライン保健室」</h2>
+    <div class="mech-grid">
+      <div class="mech-card">
+        <div class="mech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3a3.5 3.5 0 0 1 3.5 3.5V9M9.5 3A3.5 3.5 0 0 0 6 6.5V9m3.5-6c1 1.5 1 4.5-1 6M14.5 3A3.5 3.5 0 0 1 18 6.5V9"/><path d="M6 9c-1.5 0-3 1.3-3 3.5S4.5 17 6 17h1M18 9c1.5 0 3 1.3 3 3.5S19.5 17 18 17h-1"/><path d="M7 17v1a5 5 0 0 0 10 0v-1"/></svg></div>
+        <div class="mech-label">特性分析（利き脳・VAK等）<br><span style="font-weight:400;color:var(--ink-muted);font-size:.78rem;">自分がどう考え、どう受け取るタイプかを知る</span></div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="13" height="10" rx="1.5"/><path d="M17 9l4-2v8l-4-2"/></svg></div>
+        <div class="mech-label">定期的なオンライン面談<br><span style="font-weight:400;color:var(--ink-muted);font-size:.78rem;">自分の状態を言葉にする訓練</span></div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 7-9"/><path d="M4 20h16"/></svg></div>
+        <div class="mech-label">状態の定点観測<br><span style="font-weight:400;color:var(--ink-muted);font-size:.78rem;">「先月より落ちている」を見える化</span></div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="16" rx="4"/><path d="M12 22v-4M9 22h6"/></svg></div>
+        <div class="mech-label">セルフケアの習慣化<br><span style="font-weight:400;color:var(--ink-muted);font-size:.78rem;">自分で戻す方法（自分のトリセツ）を持つ</span></div>
+      </div>
+    </div>
+    <div class="speed-row">
+      <div class="speed-col good">
+        <div class="speed-title">オンライン保健室 あり</div>
+        <div class="speed-path">不調の兆し → 2週間で面談 → 自己調整</div>
+        <div class="speed-result">3日で元のパフォーマンスへ回復</div>
+      </div>
+      <div class="speed-col bad">
+        <div class="speed-title">オンライン保健室 なし</div>
+        <div class="speed-path">不調の兆し → 蓄積（数ヶ月） → 社長が気づく → 限界</div>
+        <div class="speed-result">休職（数ヶ月の離脱）</div>
+      </div>
+    </div>
+    <div class="page-index">04</div>
+  </section>
+
+  <!-- Slide 5: 法定ストレスチェック プラン -->
+  <section class="slide s5">
+    <div class="eyebrow">サービス内容①</div>
+    <h2 class="serif">法定ストレスチェック（プレミアムプラン・33名）</h2>
+    <div class="sc-top">
+      <div class="sc-badge-card">
+        <div class="label">対象人数</div>
+        <div class="val tabular">33名</div>
+        <div class="sub">実施者委託＋産業医連携込みの丸投げプラン</div>
+      </div>
+      <div class="sc-badge-card">
+        <div class="label">無料面談枠</div>
+        <div class="val tabular">年間18回</div>
+        <div class="sub">ご希望の「月1回ペース（年12回）」は枠内で対応可能</div>
+      </div>
+    </div>
+    <div class="sc-rows">
+      <div class="sc-row"><span>年額（14,400円 × 33名）</span><span class="val tabular">475,200円</span></div>
+      <div class="sc-row"><span>初期費用（初回のみ）</span><span class="val tabular">50,000円</span></div>
+      <div class="sc-row"><span>追加面談（無料枠を超えた分・1回）</span><span class="val tabular">15,000円</span></div>
+    </div>
+    <div class="sc-note">※ 無料枠18回の内訳イメージ：社員面談 月1回（年12回）＋会社ご担当者との相談（年2回程度）＋残り4回を産業医連携・生活相談等に充当。高ストレス者の状況によっては枠を超える場合があり、その際は追加面談費（上記単価）でご案内します。（税別）</div>
+    <div class="page-index">05</div>
+  </section>
+
+  <!-- Slide 6: プロファイリングのご提案 -->
+  <section class="slide s6">
+    <div class="eyebrow">サービス内容②（オプション）</div>
+    <h2 class="serif">社員一人ひとりの「トリセツ」を持つ、プロファイリング</h2>
+    <div class="opt-row">
+      <div class="opt-text">
+        <p>ストレスチェックが「今の状態」を見るのに対し、プロファイリングは「一人ひとりの特性」を見るものです。利き脳・VAK等の分析により、配置・声かけ・マネジメントの精度を上げることができます。</p>
+        <ul class="opt-list">
+          <li>本人が自分の思考・行動の傾向を知り、セルフケアに活かせる</li>
+          <li>現場責任者・店長が、スタッフごとの関わり方の違いを把握できる</li>
+          <li>採用・配置の判断材料としても活用可能</li>
+        </ul>
+      </div>
+      <div class="opt-price">
+        <div class="badge">任意オプション</div>
+        <div class="unit">1名あたり</div>
+        <div class="amount tabular">3,000円</div>
+        <div class="total tabular">33名合計　99,000円（税別）</div>
+      </div>
+    </div>
+    <div class="page-index">06</div>
+  </section>
+
+  <!-- Slide 7: AI連携・補助金のご相談 -->
+  <section class="slide s7">
+    <div class="eyebrow">あわせてご相談したいこと</div>
+    <h2 class="serif">AI業務改善支援との連携について</h2>
+    <div class="consult-box">
+      <div class="consult-tag">要ご相談・検討事項</div>
+      <p>システム開発を担当する大関さんが提供する<span class="em">AI業務改善支援</span>と、今回のストレスチェックを<span class="em">1つの請求書</span>にまとめることで、<span class="em">補助金・助成金の対象になる可能性</span>があります。</p>
+      <p>まだ制度の詳細を精査できていない段階のため、ご興味があれば、対象となりうる制度も含めて別途詳しくご案内させてください。</p>
+      <div class="consult-caveat">※ 現時点では可能性のご案内であり、対象要件の確定・保証をするものではありません。実際の適用可否は、制度の要件を確認のうえ改めてご説明します。</div>
+    </div>
+    <div class="page-index">07</div>
+  </section>
+
+  <!-- Slide 8: 料金まとめ・クロージング -->
+  <section class="slide s8">
+    <div class="eyebrow">ご提案のまとめ</div>
+    <h2 class="serif">料金まとめ</h2>
+    <div class="sum-table">
+      <div class="sum-row"><span class="item">法定ストレスチェック（プレミアム・33名／年額）</span><span class="amount tabular">475,200円</span></div>
+      <div class="sum-row"><span class="item">初期費用（初回のみ）</span><span class="amount tabular">50,000円</span></div>
+      <div class="sum-row total"><span class="item">初年度合計（税別）</span><span class="amount tabular">525,200円</span></div>
+      <div class="sum-row opt"><span class="item">＋ プロファイリング（任意オプション・33名）</span><span class="amount tabular">99,000円</span></div>
+    </div>
+    <p class="closing serif">義務化への対応で終わらせず、社員一人ひとりの力を可視化し、賃上げの原資と離職防止につなげる。orb様の現場を、これから一緒に支えていけたら嬉しいです。</p>
+    <div class="page-index">08</div>
+  </section>
+
+</div>
