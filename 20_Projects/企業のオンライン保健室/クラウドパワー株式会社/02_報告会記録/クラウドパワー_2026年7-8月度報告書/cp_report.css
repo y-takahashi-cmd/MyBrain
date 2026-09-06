@@ -1,0 +1,212 @@
+/* ============================================================
+   企業のオンライン保健室 月次報告書 — CLOUDPOWER Palette
+   weasyprint 用スタイル（A4 / 日本語）
+   ============================================================ */
+
+:root {
+  --cp-blue-50:  #F2F8FC;
+  --cp-blue-100: #D6E9F5;
+  --cp-blue-200: #C5DDE9;
+  --cp-blue-300: #A3CDE8;
+  --cp-blue-400: #74B2E0;
+  --cp-blue-700: #2E6BA6;
+  --cp-blue-800: #245180;
+  --cp-blue-900: #1A3A5C;
+  --cp-gray-600: #666666;
+  --cp-gray-700: #4A4A4A;
+  --cp-warning:  #F0AD00;
+  --cp-error:    #DC3545;
+  --cp-success:  #28A745;
+}
+
+/* ---------- ページ設定 ---------- */
+@page {
+  size: A4;
+  margin: 18mm 16mm 20mm 16mm;
+  background: var(--cp-blue-50);
+  @bottom-center {
+    content: "海音〜心体の調律〜　髙橋 由香";
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+    font-size: 8pt;
+    color: var(--cp-blue-700);
+  }
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font-family: "Hiragino Sans", sans-serif;
+    font-size: 8pt;
+    color: var(--cp-gray-600);
+  }
+}
+/* 表紙は余白なし・フッターなし */
+@page cover {
+  margin: 0;
+  background: var(--cp-blue-900);
+  @bottom-center { content: none; }
+  @bottom-right  { content: none; }
+}
+
+html { font-size: 10.5pt; }
+body {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  color: var(--cp-gray-700);
+  line-height: 1.75;
+  margin: 0;
+  -weasy-hyphens: none;
+}
+
+/* ============================================================
+   表紙
+   ============================================================ */
+.cover {
+  page: cover;
+  page-break-after: always;
+  height: 297mm;
+  box-sizing: border-box;
+  background: linear-gradient(150deg, #1A3A5C 0%, #245180 55%, #2E6BA6 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40mm 24mm;
+}
+.cover .logo { width: 46mm; height: 46mm; margin-bottom: 10mm;
+  background:#fff; border-radius:50%; padding:6mm; box-sizing:border-box; }
+.cover .kicker { font-size: 12pt; letter-spacing: .35em; color: var(--cp-blue-200); margin-bottom: 6mm; }
+.cover h1 { font-size: 27pt; font-weight: 700; line-height: 1.5; margin: 0 0 4mm; letter-spacing: .04em; }
+.cover .client { font-size: 15pt; margin-top: 8mm; color: #fff; }
+.cover .client b { font-size: 18pt; }
+.cover .period { font-size: 12pt; color: var(--cp-blue-200); margin-top: 3mm; }
+.cover .author {
+  margin-top: 22mm; font-size: 11pt; color: var(--cp-blue-100);
+  border-top: 1px solid rgba(255,255,255,.35); padding-top: 5mm; width: 70mm;
+}
+.cover .author b { color:#fff; font-size: 13pt; }
+
+/* ============================================================
+   目次
+   ============================================================ */
+.toc { page-break-after: always; }
+.toc h2 {
+  font-size: 16pt; color: var(--cp-blue-900); border:none;
+  border-left: 6px solid var(--cp-blue-400); padding-left: 10px; margin: 4mm 0 8mm;
+}
+.toc ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+.toc > ol > li {
+  counter-increment: toc; margin: 0 0 3mm; padding: 3.5mm 5mm;
+  background: #fff; border: 1px solid var(--cp-blue-200); border-radius: 6px;
+  border-left: 5px solid var(--cp-blue-400);
+}
+.toc > ol > li > a {
+  color: var(--cp-blue-900); text-decoration: none; font-weight: 700; font-size: 12pt;
+}
+.toc > ol > li > a::before {
+  content: counter(toc, decimal-leading-zero); color: var(--cp-blue-400);
+  font-weight: 700; margin-right: 10px;
+}
+.toc .sub { display:block; font-weight: 400; font-size: 9.5pt; color: var(--cp-gray-600); margin-top: 1mm; margin-left: 30px; }
+.toc ol ol { margin: 3mm 0 1mm 30px; }
+.toc ol ol li { margin: 1.5mm 0; }
+.toc ol ol a { color: var(--cp-blue-700); text-decoration: none; font-size: 10.5pt; }
+.toc ol ol a::before { content: "▸ "; color: var(--cp-blue-400); }
+
+/* ============================================================
+   セクション見出し
+   ============================================================ */
+.section { page-break-before: always; }
+h1.sec {
+  font-size: 17pt; color: #fff; background: linear-gradient(135deg, var(--cp-blue-700), var(--cp-blue-400));
+  padding: 5mm 6mm; border-radius: 6px; margin: 0 0 6mm; letter-spacing: .03em;
+}
+h1.sec .no { opacity: .8; font-size: 13pt; margin-right: 8px; }
+h2 {
+  font-size: 13.5pt; color: var(--cp-blue-900);
+  border-left: 5px solid var(--cp-blue-400); padding-left: 10px;
+  margin: 8mm 0 3mm; page-break-after: avoid;
+}
+h3 { font-size: 11.5pt; color: var(--cp-blue-800); margin: 5mm 0 2mm; page-break-after: avoid; }
+p { margin: 0 0 2.5mm; }
+strong { color: var(--cp-blue-900); }
+a { color: var(--cp-blue-700); }
+
+/* メタ情報ボックス（報告書ヘッダー） */
+.meta {
+  width: 100%; border-collapse: collapse; margin: 0 0 6mm; font-size: 10pt;
+  background:#fff; border:1px solid var(--cp-blue-200); border-radius:6px; overflow:hidden;
+}
+.meta th, .meta td { padding: 2.5mm 4mm; border: 1px solid var(--cp-blue-100); text-align: left; }
+.meta th { background: var(--cp-blue-50); color: var(--cp-blue-900); width: 22%; font-weight: 700; }
+
+/* 通常テーブル */
+table.data { width:100%; border-collapse: collapse; margin: 3mm 0 5mm; font-size: 9.5pt; }
+table.data th { background: var(--cp-blue-700); color:#fff; padding: 2.5mm 3mm; text-align:left; font-weight:700; }
+table.data td { padding: 2.5mm 3mm; border-bottom: 1px solid var(--cp-blue-100); vertical-align: top; background:#fff; }
+table.data tr:nth-child(even) td { background: var(--cp-blue-50); }
+
+/* セッション者カード */
+.person {
+  background:#fff; border:1px solid var(--cp-blue-200); border-radius:8px;
+  border-top:4px solid var(--cp-blue-400); padding: 4mm 5mm; margin: 0 0 4mm;
+  page-break-inside: avoid;
+}
+.person h3 { margin: 0 0 1mm; color: var(--cp-blue-900); font-size: 12pt; }
+.person .status { font-size: 9pt; color: var(--cp-gray-600); margin-bottom: 2mm; }
+.person .badges { margin: 2mm 0; }
+.badge {
+  display:inline-block; font-size: 8.5pt; padding: .8mm 2.5mm; border-radius: 10px; margin: 0 2mm 1.5mm 0;
+  background: var(--cp-blue-50); color: var(--cp-blue-800); border:1px solid var(--cp-blue-200);
+}
+.badge.warn { background:#FFF8E1; color:#C68A00; border-color:#FFD666; }
+.badge.ok   { background:#E6F5EB; color:#1B7D3A; border-color:#7DD39B; }
+.person .view { font-size: 10pt; }
+.person .view b { color: var(--cp-blue-700); }
+
+/* コールアウト（所見・ポイント） */
+.callout {
+  background: var(--cp-blue-50); border:1px solid var(--cp-blue-200);
+  border-left: 5px solid var(--cp-blue-400); border-radius: 6px;
+  padding: 4mm 5mm; margin: 4mm 0;
+}
+.callout.warn { background:#FFF8E1; border-color:#FFD666; border-left-color: var(--cp-warning); }
+.callout h3 { margin-top: 0; }
+
+/* 番号付き所見リスト */
+ul, ol { margin: 2mm 0 4mm; padding-left: 6mm; }
+li { margin: 1mm 0; }
+
+/* 相関図 */
+figure { margin: 4mm 0 6mm; page-break-inside: avoid; text-align:center; }
+figure img { width: 100%; border:1px solid var(--cp-blue-200); border-radius:6px; }
+figure figcaption { font-size: 9.5pt; color: var(--cp-blue-800); font-weight:700; margin-bottom: 2mm; text-align:left;
+  border-left: 4px solid var(--cp-blue-400); padding-left: 8px; }
+
+/* 別添リンクボタン */
+.attach-link {
+  display:block; background:#fff; border:1px solid var(--cp-blue-300);
+  border-left:5px solid var(--cp-blue-400); border-radius:6px; padding:3.5mm 5mm; margin:4mm 0;
+  color: var(--cp-blue-900); text-decoration:none; font-weight:700;
+}
+.attach-link .arrow { color: var(--cp-blue-400); }
+.attach-link small { display:block; font-weight:400; color: var(--cp-gray-600); font-size:9pt; margin-top:1mm; }
+
+/* アンケート簡易バー */
+.qbar-wrap { margin: 2mm 0 4mm; }
+.qbar-row { display:flex; align-items:center; margin:1.5mm 0; font-size:9.5pt; page-break-inside:avoid; padding-right:12mm; }
+.qbar-label { width: 40%; padding-right: 3mm; color: var(--cp-gray-700); }
+.qbar-track { flex:1; background: var(--cp-blue-100); border-radius: 4px; height: 6mm; position:relative; }
+.qbar-fill { background: linear-gradient(90deg, var(--cp-blue-400), var(--cp-blue-700)); height:100%; border-radius:4px; min-width:2px; }
+.qbar-fill.zero { background: var(--cp-error); opacity:.5; }
+.qbar-val { position:absolute; right:-11mm; top:0; line-height:6mm; font-size:8.5pt; color: var(--cp-blue-800); font-weight:700; width:10mm; text-align:left; }
+.q-block { page-break-inside: avoid; margin-bottom: 5mm; }
+.q-note { font-size: 9pt; color: var(--cp-gray-600); background:var(--cp-blue-50); padding:2mm 3mm; border-radius:4px; }
+
+.hr { border:none; border-top:1px dashed var(--cp-blue-200); margin: 5mm 0; }
+.tail { text-align:right; color: var(--cp-gray-600); font-size:10pt; margin-top:4mm; }
+
+/* ---- 追加: ページ内リンク / 改ページ (2026-07-06) ---- */
+.page-break { page-break-before: always; }
+.toc-block { display: block; }
+.toc .toc-block .sub { margin-top: 1mm; }
+.prof-summary table.data a { color: var(--cp-blue-700); text-decoration: none; font-weight: 600; }
+.prof-summary table.data a:hover { text-decoration: underline; }
