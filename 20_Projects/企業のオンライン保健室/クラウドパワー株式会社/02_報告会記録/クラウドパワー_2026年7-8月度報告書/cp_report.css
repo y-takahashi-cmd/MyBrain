@@ -48,7 +48,7 @@
 html { font-size: 10.5pt; }
 body {
   font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-  color: var(--cp-gray-700);
+  color: var(--cp-gray-900);
   line-height: 1.75;
   margin: 0;
   -weasy-hyphens: none;
