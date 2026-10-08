@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ストレスチェックのご案内</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#74B2E0; --navy:#1A3A5C; --deep:#2E6BA6; --text:#4A4A4A; --bg:#F2F8FC;
+  --teal:#5BBFB5; --amber:#F0AD00; --sand:#D4885C; --line:#D6E6F3; --white:#fff;
+}
+@page{ size:A4; margin:0; }
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ background:#e9eef3; }
+body{ font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif; color:var(--text); font-size:8.6pt; line-height:1.55; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.page{ width:210mm; height:297mm; margin:10mm auto; background:var(--white); padding:9mm 11mm 8mm; position:relative; overflow:hidden; display:flex; flex-direction:column; gap:3.6mm; }
+@media print{ html,body{background:#fff;} .page{ margin:0; break-after:page; } }
+
+/* header */
+.hero{ background:var(--navy); color:#fff; border-radius:3mm; padding:5mm 6mm 4.6mm; position:relative; overflow:hidden; }
+.hero::after{ content:""; position:absolute; right:-18mm; top:-18mm; width:62mm; height:62mm; border-radius:50%; background:var(--primary); opacity:.28; }
+.hero .kicker{ font-size:8pt; letter-spacing:.12em; color:#CFE5F5; font-weight:500; }
+.hero h1{ font-size:19pt; font-weight:900; line-height:1.3; margin:1.2mm 0 1.4mm; position:relative; z-index:1; }
+.hero h1 em{ font-style:normal; color:#FFD66B; }
+.hero p{ font-size:9pt; color:#E8F2FA; position:relative; z-index:1; }
+.notice{ display:inline-block; margin-top:2.4mm; background:#fff; color:var(--navy); font-weight:700; border-radius:10mm; padding:.8mm 3.4mm; font-size:8.2pt; position:relative; z-index:1; }
+
+h2{ font-size:11.4pt; color:var(--navy); font-weight:900; display:flex; align-items:center; gap:2mm; margin-bottom:1.8mm; }
+h2 .no{ background:var(--primary); color:#fff; width:6.4mm; height:6.4mm; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9pt; flex:none; }
+h2 small{ font-size:8pt; color:var(--deep); font-weight:500; }
+.lead{ font-size:8.4pt; margin:-.6mm 0 1.8mm; }
+
+/* badges */
+.b{ display:inline-block; font-size:7pt; font-weight:700; border-radius:1mm; padding:.1mm 1.4mm; color:#fff; vertical-align:middle; }
+.b-co{ background:var(--sand); } .b-emp{ background:var(--teal); } .b-hk{ background:var(--deep); } .b-auto{ background:var(--amber); color:#3a2c00; }
+
+/* flow */
+.flow{ display:grid; grid-template-columns:repeat(4,1fr); gap:2.2mm 3.2mm; }
+.step{ border:1px solid var(--line); border-radius:2mm; padding:2mm 2.4mm; background:var(--bg); position:relative; }
+.step:not(:nth-child(4n))::after{ content:"▶"; position:absolute; right:-3.1mm; top:50%; transform:translateY(-50%); color:var(--primary); font-size:7pt; }
+.step .n{ font-weight:900; color:var(--deep); font-size:9pt; }
+.step .t{ font-weight:700; color:var(--navy); font-size:8.8pt; }
+.step p{ font-size:7.7pt; line-height:1.45; margin-top:.6mm; }
+.legend{ font-size:7.4pt; margin-top:1.4mm; display:flex; gap:3mm; flex-wrap:wrap; }
+
+/* auto table */
+table{ width:100%; border-collapse:collapse; }
+.auto th, .auto td{ border-bottom:1px solid var(--line); padding:1.25mm 1.8mm; text-align:left; vertical-align:top; }
+.auto thead th{ background:var(--navy); color:#fff; font-size:8pt; font-weight:700; border-bottom:none; }
+.auto thead th:first-child{ border-radius:1.6mm 0 0 0; } .auto thead th:last-child{ border-radius:0 1.6mm 0 0; }
+.auto td:first-child{ font-weight:700; color:var(--navy); width:22%; }
+.auto td.before{ width:30%; color:#7a7a7a; }
+.auto td.after b{ color:var(--deep); }
+.auto tbody tr:nth-child(even) td{ background:#F8FBFE; }
+
+.foot-note{ font-size:7.2pt; color:#6b7b8a; }
+
+/* page 2 */
+.analysis{ display:grid; grid-template-columns:1.05fr 1fr; gap:3.6mm; }
+.pipe{ display:flex; flex-direction:column; gap:.9mm; }
+.pipe .box{ border-radius:2mm; padding:1.2mm 2.2mm; border:1px solid var(--line); background:var(--bg); }
+.pipe .box .h{ font-weight:700; color:var(--navy); font-size:8.6pt; }
+.pipe .box p{ font-size:7.7pt; line-height:1.45; }
+.pipe .arrow{ text-align:center; color:var(--primary); font-size:6.5pt; line-height:.8; }
+.pipe .split{ display:grid; grid-template-columns:1fr 1fr; gap:2mm; }
+.pipe .box.me{ border-color:var(--teal); background:#EEF9F7; }
+.pipe .box.co{ border-color:var(--sand); background:#FBF2EC; }
+.see{ font-size:7.8pt; }
+.see th, .see td{ border:1px solid var(--line); padding:1mm 1.6mm; vertical-align:top; }
+.see thead th{ font-size:8pt; color:#fff; }
+.see thead th.ok{ background:var(--deep); } .see thead th.ng{ background:#8A9AA8; }
+.see ul{ padding-left:3.4mm; }
+.see li{ margin:.2mm 0; }
+.out td{ font-size:7.7pt; border-bottom:1px solid var(--line); padding:1mm 1.6mm; vertical-align:top; }
+.out td:first-child{ font-weight:700; color:var(--navy); white-space:nowrap; }
+
+.qs{ display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:2.6mm; }
+.qcard{ border:1px solid var(--line); border-radius:2mm; overflow:hidden; display:flex; flex-direction:column; }
+.qcard .qh{ background:var(--primary); color:#fff; padding:1.3mm 2.4mm; font-weight:700; font-size:8.6pt; }
+.qcard.w .qh{ background:var(--teal); } .qcard.h .qh{ background:var(--deep); }
+.qcard .qh span{ font-weight:400; font-size:7.3pt; display:block; opacity:.95; }
+.qcard .qb{ padding:1.3mm 2.2mm; font-size:7.7pt; line-height:1.45; flex:1; }
+.qcard ol{ padding-left:4mm; }
+.qcard .ans{ margin-top:1mm; color:#6b7b8a; font-size:7.2pt; }
+.qcard .why{ margin-top:1.2mm; background:var(--bg); border-radius:1.4mm; padding:1.2mm 1.8mm; font-size:7.3pt; color:var(--navy); }
+
+.two{ display:grid; grid-template-columns:1.15fr 1fr; gap:3.6mm; }
+.cmp th, .cmp td{ border-bottom:1px solid var(--line); padding:1.1mm 1.6mm; font-size:7.7pt; text-align:left; vertical-align:top; }
+.cmp thead th{ font-size:7.9pt; color:#fff; background:#8A9AA8; }
+.cmp thead th.us{ background:var(--deep); }
+.cmp td.us{ color:var(--navy); font-weight:500; background:#F4F9FD; }
+.plan th, .plan td{ border:1px solid var(--line); padding:1mm 1.4mm; font-size:7.6pt; text-align:center; vertical-align:middle; }
+.plan thead th{ background:var(--navy); color:#fff; font-size:7.6pt; }
+.plan td:first-child{ text-align:left; color:var(--navy); font-weight:500; }
+.plan .y{ color:var(--deep); font-weight:900; } .plan .n{ color:#aab4bd; } .plan .o{ color:var(--sand); font-weight:700; font-size:7.2pt; }
+
+.footer{ margin-top:auto; border-top:2px solid var(--primary); padding-top:2mm; display:flex; justify-content:space-between; align-items:flex-end; gap:4mm; }
+.footer .org{ font-weight:900; color:var(--navy); font-size:9.4pt; }
+.footer .org small{ display:block; font-weight:500; font-size:7.6pt; color:var(--text); }
+.footer .contact{ font-size:7.6pt; text-align:right; line-height:1.5; }
+</style>
+</head>
+<body>
+
+<!-- ================= 表面 ================= -->
+<section class="page">
+  <div class="hero">
+    <div class="kicker">企業のオンライン保健室　｜　ストレスチェックのご案内</div>
+    <h1>受けて終わり、にしない。<br><em>ほとんど自動</em>で回るストレスチェック</h1>
+    <p>配信・採点・集団分析・報告書づくりは、システムが自動で行います。<br>保健室の有資格スタッフが結果を確認し、必要な方を面談・相談につなぎます。</p>
+    <span class="notice">2028年4月から、従業員50人未満の事業場もストレスチェックが義務になります</span>
+  </div>
+
+  <div>
+    <h2><span class="no">1</span>ご契約から1年間の流れ <small>会社にご対応いただくのは、主に「担当者・対象者を決める」「社員へのご案内」の2つです</small></h2>
+    <div class="flow">
+      <div class="step"><div class="n">STEP 1</div><div class="t">お問い合わせ・お見積り</div><p>人数・プランをお伺いし、同じ画面を見ながら内容をすり合わせます。</p><span class="b b-co">会社</span> <span class="b b-hk">保健室</span></div>
+      <div class="step"><div class="n">STEP 2</div><div class="t">お申込み・ご契約</div><p>お申込みと同時に、御社専用の環境が開設され、契約書も作成されます。</p><span class="b b-auto">自動</span></div>
+      <div class="step"><div class="n">STEP 3</div><div class="t">担当者・対象者を決める</div><p>ご担当者を決めていただきます。対象者名簿は人事情報から自動で用意されます。</p><span class="b b-co">会社</span> <span class="b b-auto">自動</span></div>
+      <div class="step"><div class="n">STEP 4</div><div class="t">社員へのご案内</div><p>目的・期間・不利益な取扱いをしないことを周知。文面はこちらでご用意します。</p><span class="b b-co">会社</span></div>
+      <div class="step"><div class="n">STEP 5</div><div class="t">受検（年1回）</div><p>メールのリンクから回答。57問・約5〜10分。スマホでもOK、ログイン不要。</p><span class="b b-emp">社員</span></div>
+      <div class="step"><div class="n">STEP 6</div><div class="t">採点・判定・結果のお知らせ</div><p>国の基準で自動採点。有資格スタッフが確認してから、ご本人へ結果をお知らせします。</p><span class="b b-auto">自動</span> <span class="b b-hk">保健室</span></div>
+      <div class="step"><div class="n">STEP 7</div><div class="t">集団分析・会社へのご報告</div><p>部署・年代ごとの傾向を自動集計し、報告書（PDF）にしてお渡しします。</p><span class="b b-auto">自動</span> <span class="b b-hk">保健室</span></div>
+      <div class="step"><div class="n">STEP 8</div><div class="t">振り返り・次年度へ</div><p>結果の保管も自動。今年度を振り返り、次年度の計画につなげます。</p><span class="b b-co">会社</span> <span class="b b-hk">保健室</span></div>
+    </div>
+    <div class="legend"><span><span class="b b-co">会社</span> 御社のご担当者</span><span><span class="b b-emp">社員</span> 社員のみなさん</span><span><span class="b b-hk">保健室</span> 保健室の有資格スタッフ</span><span><span class="b b-auto">自動</span> システムが自動で行う</span></div>
+  </div>
+
+  <div>
+    <h2><span class="no">2</span>自動でできること　<small>ご担当者の手間が、ここまで減ります</small></h2>
+    <table class="auto">
+      <thead><tr><th>仕事</th><th>これまで（ご担当者が手作業）</th><th>保健室のストレスチェック</th></tr></thead>
+      <tbody>
+        <tr><td>対象者の名簿</td><td class="before">毎年、名簿を作り直して提出</td><td class="after">人事情報から<b>配信のたびに最新を自動確認</b>。退職された方は自動で外れます</td></tr>
+        <tr><td>規程・社内文書</td><td class="before">実施規程や案内文を一から作成</td><td class="after">実施規程・情報管理規程・社員向け案内文など<b>十数種類のひな形を用意</b>。会社名などは自動で入ります</td></tr>
+        <tr><td>受検のご案内</td><td class="before">一人ずつメール、回答状況を確認して声かけ</td><td class="after"><b>メールで一斉配信</b>。同じ人への二重送信は自動で防止。だれが未回答かは画面で確認できます</td></tr>
+        <tr><td>採点・高ストレス判定</td><td class="before">集計表で点数を計算</td><td class="after">国の基準（職業性ストレス簡易調査票57項目）で<b>回答と同時に自動採点</b>。最終確認は有資格スタッフが行います</td></tr>
+        <tr><td>結果のお知らせ</td><td class="before">個人結果を印刷・封入して配布</td><td class="after">確認が済んだ結果が<b>ご本人の画面に表示</b>されます。会社を通りません</td></tr>
+        <tr><td>集団分析・報告書</td><td class="before">部署ごとに集計し、資料を作成</td><td class="after">部署・年代ごとに<b>自動集計し、報告書（PDF）を出力</b>。安全衛生委員会の資料にそのまま使えます</td></tr>
+        <tr><td>個人情報の管理</td><td class="before">結果の保管・閲覧の制限を社内で管理</td><td class="after">個人の結果は<b>システム内で保管</b>し、会社の画面には表示されない作り。法令違反の心配を減らせます</td></tr>
+        <tr><td>毎月・毎週のチェック<br><span style="font-weight:400;font-size:7pt;">（スタンダード以上）</span></td><td class="before">体調や意欲の変化は、本人の申告か上司の気づき頼み</td><td class="after"><b>決まった日に自動で配信・集計</b>し、未回答の方には自動で催促。気になる回答はすぐに保健室へお知らせが届きます</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <div class="org">企業のオンライン保健室<small>海音〜心体の調律〜　髙橋 由香</small></div>
+    <div class="contact">〒183-0027 東京都府中市本町1-9-41 平井ビル3F<br>TEL 042-306-6630　／　info@kokorocare.business　／　https://kokorocare.business/</div>
+  </div>
+</section>
+
+<!-- ================= 裏面 ================= -->
+<section class="page" style="gap:2.6mm;">
+  <div>
+    <h2><span class="no">3</span>分析はこう出てきます　<small>だれに、何が届くのか</small></h2>
+    <div class="analysis">
+      <div class="pipe">
+        <div class="box"><div class="h">① 社員が回答する</div><p>年1回の法定チェック（57問）と、毎月・毎週の定期チェックに回答します。</p></div>
+        <div class="arrow">▼</div>
+        <div class="box"><div class="h">② システムが自動で採点・集計</div><p>「仕事の負担」「心と体の反応」「周りからの支え」の3つに分けて点数化し、高ストレスの候補を自動で判定します。</p></div>
+        <div class="arrow">▼</div>
+        <div class="box"><div class="h">③ 保健室の有資格スタッフが確認</div><p>システムの判定はあくまで候補。人が確認して確定するまで、だれにも通知されません。</p></div>
+        <div class="arrow">▼</div>
+        <div class="split">
+          <div class="box me"><div class="h">ご本人へ</div><p>自分の結果・3つの領域の状態。高ストレスの方には面接指導や保健室への相談をご案内。</p></div>
+          <div class="box co"><div class="h">会社へ</div><p>個人が分からない形にまとめた<b>集団の傾向</b>と<b>受検状況</b>。</p></div>
+        </div>
+      </div>
+      <div>
+        <table class="see">
+          <thead><tr><th class="ok">会社が見られるもの</th><th class="ng">会社が見られないもの</th></tr></thead>
+          <tbody><tr>
+            <td><ul><li>受検率（何人中何人が受けたか）</li><li>だれが受けて、だれがまだか（受検のお声がけ用）</li><li>集団分析（部署・年代ごとの傾向）</li><li>実施状況の報告書</li><li>行政への報告に必要な数値（50人以上の事業場）</li></ul></td>
+            <td><ul><li>個人の回答内容</li><li>個人の点数</li><li>だれが高ストレスと判定されたか</li><li>個人の面談・相談の内容</li><li>10人未満の集団の分析結果</li></ul></td>
+          </tr></tbody>
+        </table>
+        <table class="out" style="margin-top:1.8mm;">
+          <tbody>
+            <tr><td>集団分析報告書</td><td>部署・年代ごとのストレスの傾向。お渡しした時点の数字で固定されるため、委員会資料と食い違いません</td></tr>
+            <tr><td>定期チェックの推移</td><td>毎月の変化を追うことで、年1回では見えない「下がり始め」に気づけます</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note" style="margin-top:1mm;">※ 10人未満の集団は個人が推測できるため表示しません（部署をまとめる等の区切り方をご相談ください）。<br>※ ご本人が自ら医師の面接指導を申し出た場合のみ、会社は「申し出があった」事実を知ることになります（法律上の義務のため）。</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h2><span class="no">4</span>毎月・毎週、こんな質問をしています　<small>年1回の法定チェックとは別の、保健室独自のチェックです</small></h2>
+    <div class="qs">
+      <div class="qcard">
+        <div class="qh">毎月｜はたらく前向きさ 7問＋SPQ<span>全社員・スタンダード以上</span></div>
+        <div class="qb">
+          <ol>
+            <li>仕事にやりがい・意味を感じる</li>
+            <li>前向きに仕事に取り組める</li>
+            <li>仕事中に活力を感じる</li>
+            <li>会社・職場の方向性を理解している</li>
+            <li>自分の働き方と組織の方向性が合っている</li>
+            <li>仕事を通じて会社に貢献したいと思う</li>
+            <li>今の職場で働き続けたい</li>
+          </ol>
+          <div class="ans">回答：当てはまる／まあ当てはまる／あまり当てはまらない／当てはまらない</div>
+          <div class="ans"><b>SPQ（1問）</b>：病気やけががないときの仕事の出来を100%として、過去4週間の自分の仕事を評価</div>
+          <div class="why">わかること：①〜③は仕事への熱意や活力、④〜⑥は会社との方向性のそろい方、⑦は定着の見通し。SPQで「本来の力がどれだけ出せていないか」を数字で見られます（全国平均の損失は22.5%）</div>
+        </div>
+      </div>
+      <div class="qcard w">
+        <div class="qh">毎週｜体調の確認 体温＋4問<span>全社員・スタンダード以上・1分ほど</span></div>
+        <div class="qb">
+          <ol style="list-style:none;padding-left:0;">
+            <li>・体温</li>
+            <li>・今日の体調はいかがですか？</li>
+            <li>・昨夜は眠れましたか？</li>
+            <li>・発熱など、いつもと違う症状はありますか？</li>
+            <li>・今日、通常どおり仕事ができそうですか？</li>
+          </ol>
+          <div class="why">わかること：その日の働ける状態。「少し気になる」回答は保健室へお知らせ。「不調」「勤務が難しい」、または37.5℃以上のときは、ご本人の画面に「上司・総務に一報を」とご案内します</div>
+        </div>
+      </div>
+      <div class="qcard h">
+        <div class="qh">毎月｜コンディションチェック 6問<span>保健室の面談をご利用の方</span></div>
+        <div class="qb">
+          <ol style="list-style:none;padding-left:0;">
+            <li>・体調</li><li>・集中力</li><li>・ストレス</li><li>・睡眠の質</li><li>・人間関係のストレス</li><li>・仕事量の負担感</li>
+          </ol>
+          <div class="ans">回答：0〜10の11段階</div>
+          <div class="why">わかること：面談の前後で、心と体の状態がどう変わったか。先月との比較で、改善しているかを確かめながら面談を進めます</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      <h2><span class="no">5</span>今のシステムとの違い</h2>
+      <table class="cmp">
+        <thead><tr><th style="width:22%;"></th><th>一般的なストレスチェック</th><th class="us">企業のオンライン保健室</th></tr></thead>
+        <tbody>
+          <tr><td><b>見る頻度</b></td><td>年1回の「点」</td><td class="us">年1回＋毎月・毎週の「線」で変化を追う</td></tr>
+          <tr><td><b>結果のあと</b></td><td>結果を渡して終わり、対応は会社まかせ</td><td class="us">有資格スタッフが確認し、面談・相談・医師へつなぐ</td></tr>
+          <tr><td><b>気づくタイミング</b></td><td>本人が言い出すか、上司が気づいたとき</td><td class="us">気になる回答は、その週のうちに保健室へお知らせ</td></tr>
+          <tr><td><b>測るもの</b></td><td>ストレスの高さ</td><td class="us">ストレスに加え、前向きさ・本来の力の出せ具合（SPQ）</td></tr>
+          <tr><td><b>正直に答えやすいか</b></td><td>会社に知られる不安が残りやすい</td><td class="us">会社に届くのは集計と「本人が申し出た事実」だけ</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h2><span class="no">6</span>プランでできること</h2>
+      <table class="plan">
+        <thead><tr><th style="width:46%;"></th><th>ライト</th><th>スタンダード</th><th>プレミアム</th></tr></thead>
+        <tbody>
+          <tr><td>法定57問の配信・自動採点</td><td class="y">●</td><td class="y">●</td><td class="y">●</td></tr>
+          <tr><td>集団分析・報告書の自動作成</td><td class="y">●</td><td class="y">●</td><td class="y">●</td></tr>
+          <tr><td>実施の運営をまるごとお任せ</td><td class="n">—</td><td class="y">●</td><td class="y">●</td></tr>
+          <tr><td>毎月・毎週の定期チェック</td><td class="n">—</td><td class="y">●</td><td class="y">●</td></tr>
+          <tr><td>保健室の面談・相談</td><td class="o">追加可</td><td class="o">追加可</td><td class="y">●</td></tr>
+          <tr><td>産業医との連携</td><td class="o">追加可</td><td class="o">追加可</td><td class="y">●</td></tr>
+          <tr><td>保健室だより</td><td class="o">追加可</td><td class="o">追加可</td><td class="y">●</td></tr>
+        </tbody>
+      </table>
+      <p class="foot-note" style="margin-top:1mm;">ライト＝システムのみのご利用（運営は自社）。追加可＝オプションで追加できます。料金は人数・プランにより異なります。お見積りはお気軽にお問い合わせください。</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="org">企業のオンライン保健室<small>海音〜心体の調律〜　髙橋 由香</small></div>
+    <div class="contact">〒183-0027 東京都府中市本町1-9-41 平井ビル3F<br>TEL 042-306-6630　／　info@kokorocare.business　／　https://kokorocare.business/</div>
+  </div>
+</section>
+
+</body>
+</html>
