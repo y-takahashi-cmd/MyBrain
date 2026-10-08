@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>集団分析の見本</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{ --primary:#74B2E0; --navy:#1A3A5C; --deep:#2E6BA6; --text:#4A4A4A; --bg:#F2F8FC; --line:#D6E6F3;
+  --sales:#2E6BA6; --mfg:#C9773F; --all:#1E9E8C; }
+@page{ size:A4; margin:0; }
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ background:#e9eef3; }
+body{ font-family:"Noto Sans JP","Yu Gothic",sans-serif; color:var(--text); font-size:8.6pt; line-height:1.55; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.page{ width:210mm; height:297mm; margin:10mm auto; background:#fff; padding:9mm 11mm 8mm; position:relative; overflow:hidden; display:flex; flex-direction:column; gap:3.2mm; }
+@media print{ html,body{background:#fff;} .page{ margin:0; break-after:page; } }
+.sample{ position:absolute; top:6mm; right:11mm; background:#C0392B; color:#fff; font-weight:900; font-size:8pt; padding:.6mm 3mm; border-radius:1mm; letter-spacing:.1em; }
+.head{ border-bottom:3px solid var(--navy); padding-bottom:2mm; }
+.head .k{ font-size:8pt; color:var(--deep); font-weight:700; letter-spacing:.08em; }
+.head h1{ font-size:16pt; color:var(--navy); font-weight:900; line-height:1.3; }
+.head .meta{ font-size:8pt; margin-top:.8mm; }
+h2{ font-size:10.6pt; color:var(--navy); font-weight:900; border-left:4px solid var(--primary); padding-left:2mm; margin-bottom:1.6mm; }
+h2 small{ font-size:7.8pt; color:var(--deep); font-weight:500; margin-left:1.5mm; }
+.tiles{ display:grid; grid-template-columns:repeat(4,1fr); gap:2.4mm; }
+.tile{ background:var(--bg); border-radius:2mm; padding:2mm 3mm; }
+.tile .l{ font-size:7.6pt; color:var(--navy); font-weight:500; }
+.tile .v{ font-size:17pt; font-weight:900; color:var(--navy); line-height:1.2; }
+.tile .v small{ font-size:8.5pt; font-weight:500; }
+.tile .s{ font-size:7.2pt; color:#6b7b8a; }
+.charts{ display:grid; grid-template-columns:1fr 1fr; gap:3.4mm; }
+.chart{ border:1px solid var(--line); border-radius:2mm; padding:1.6mm 2mm 1mm; }
+.chart .t{ font-weight:700; color:var(--navy); font-size:8.8pt; }
+.chart .d{ font-size:7.4pt; color:#6b7b8a; line-height:1.4; }
+.legend{ display:flex; gap:3mm; font-size:7.6pt; margin-top:1mm; flex-wrap:wrap; }
+.sw{ display:inline-block; width:2.6mm; height:2.6mm; border-radius:50%; vertical-align:-.3mm; margin-right:.8mm; }
+table{ width:100%; border-collapse:collapse; }
+.tbl th,.tbl td{ border-bottom:1px solid var(--line); padding:1.1mm 1.6mm; text-align:center; font-size:7.9pt; }
+.tbl thead th{ background:var(--navy); color:#fff; font-weight:700; font-size:7.7pt; }
+.tbl td:first-child,.tbl th:first-child{ text-align:left; }
+.tbl td.hi{ color:#B03A2E; font-weight:700; }
+.tbl tr.hide td{ color:#8A9AA8; background:#F6F7F9; }
+.read{ display:grid; grid-template-columns:1fr 1fr; gap:3mm; }
+.box{ border-radius:2mm; padding:2mm 3mm; font-size:7.9pt; line-height:1.55; }
+.box.a{ background:var(--bg); } .box.b{ background:#FBF2EC; }
+.box .bt{ font-weight:900; color:var(--navy); font-size:8.6pt; margin-bottom:.6mm; }
+.box ul{ padding-left:3.6mm; } .box li{ margin:.3mm 0; }
+.note{ font-size:7.1pt; color:#6b7b8a; line-height:1.5; }
+.footer{ margin-top:auto; border-top:2px solid var(--primary); padding-top:1.6mm; display:flex; justify-content:space-between; font-size:7.4pt; }
+.footer b{ color:var(--navy); }
+.alerts{ display:grid; grid-template-columns:repeat(3,1fr); gap:2.4mm; }
+</style>
+</head>
+<body>
+
+<!-- ============ 1ページ目：法定ストレスチェック 集団分析 ============ -->
+<section class="page">
+  <div class="sample">見本（数字はすべて架空）</div>
+  <div class="head">
+    <div class="k">法定ストレスチェック（年1回）｜集団分析報告書</div>
+    <h1>株式会社サンプル　2026年度 集団分析結果</h1>
+    <div class="meta">実施期間：2026年6月1日〜6月30日　／　対象：全社41名（3部署）　／　作成：企業のオンライン保健室</div>
+  </div>
+
+  <div>
+    <h2>1. 実施の状況</h2>
+    <div class="tiles">
+      <div class="tile"><div class="l">受検率</div><div class="v">95.1<small>%</small></div><div class="s">41名中39名が受検</div></div>
+      <div class="tile"><div class="l">高ストレスの方の割合</div><div class="v">10.3<small>%</small></div><div class="s">39名中4名（だれかはお伝えしません）</div></div>
+      <div class="tile"><div class="l">総合健康リスク（全社）</div><div class="v">109</div><div class="s">全国平均＝100。高いほど不調が出やすい職場</div></div>
+      <div class="tile"><div class="l">面接指導の申出</div><div class="v">1<small>件</small></div><div class="s">ご本人の申出があった件数のみ</div></div>
+    </div>
+  </div>
+
+  <div>
+    <h2>2. 仕事のストレス判定図<small>厚生労働省の標準の分析方法です</small></h2>
+    <div class="charts">
+      <div class="chart">
+        <div class="t">① 仕事の量とコントロール</div>
+        <div class="d">右下に行くほど「仕事が多く、自分で進め方を決められない」状態。点線は健康リスクの目安（太線＝全国平均100）。</div>
+        <svg viewBox="0 0 300 232" width="100%" role="img" aria-label="量-コントロール判定図"><defs><clipPath id="c量-"><rect x="40" y="14" width="246" height="178"/></clipPath></defs><line x1="40.0" y1="14" x2="40.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="40.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">6</text><line x1="81.0" y1="14" x2="81.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="81.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">7</text><line x1="122.0" y1="14" x2="122.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="122.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">8</text><line x1="163.0" y1="14" x2="163.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="163.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">9</text><line x1="204.0" y1="14" x2="204.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="204.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">10</text><line x1="245.0" y1="14" x2="245.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="245.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">11</text><line x1="286.0" y1="14" x2="286.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="286.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">12</text><line x1="40" y1="192.0" x2="286" y2="192.0" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="195.0" font-size="8" fill="#8A9AA8" text-anchor="end">5</text><line x1="40" y1="156.4" x2="286" y2="156.4" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="159.4" font-size="8" fill="#8A9AA8" text-anchor="end">6</text><line x1="40" y1="120.8" x2="286" y2="120.8" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="123.8" font-size="8" fill="#8A9AA8" text-anchor="end">7</text><line x1="40" y1="85.2" x2="286" y2="85.2" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="88.2" font-size="8" fill="#8A9AA8" text-anchor="end">8</text><line x1="40" y1="49.6" x2="286" y2="49.6" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="52.6" font-size="8" fill="#8A9AA8" text-anchor="end">9</text><line x1="40" y1="14.0" x2="286" y2="14.0" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="17.0" font-size="8" fill="#8A9AA8" text-anchor="end">10</text><rect x="40" y="14" width="246" height="178" fill="none" stroke="#8A9AA8" stroke-width="1"/><g clip-path="url(#c量-)"><line x1="40.0" y1="81.6" x2="286.0" y2="-100.8" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/><line x1="40.0" y1="128.7" x2="286.0" y2="-53.7" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/><line x1="40.0" y1="170.8" x2="286.0" y2="-11.6" stroke="#B9C6D2" stroke-width="1.6"/><line x1="40.0" y1="209.0" x2="286.0" y2="26.6" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/><line x1="40.0" y1="243.8" x2="286.0" y2="61.4" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/><line x1="40.0" y1="275.8" x2="286.0" y2="93.4" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/></g><text x="183.1" y="18.1" font-size="7.5" fill="#7E8E9C" text-anchor="end">90</text><text x="242.2" y="16.4" font-size="7.5" fill="#7E8E9C" text-anchor="end">100</text><text x="274.2" y="30.9" font-size="7.5" fill="#7E8E9C" text-anchor="end">110</text><text x="274.2" y="65.7" font-size="7.5" fill="#7E8E9C" text-anchor="end">120</text><g><line x1="145.7" y1="83.75999999999999" x2="155.7" y2="93.75999999999999" stroke="#4A4A4A" stroke-width="2"/><line x1="145.7" y1="93.75999999999999" x2="155.7" y2="83.75999999999999" stroke="#4A4A4A" stroke-width="2"/><text x="143.7" y="82.75999999999999" font-size="8" fill="#4A4A4A" text-anchor="end">全国平均</text></g><circle cx="163.0" cy="99.4" r="5" fill="#1E9E8C" stroke="#fff" stroke-width="2"/><text x="171.0" y="93.4" font-size="8.5" font-weight="700" fill="#4A4A4A" text-anchor="start">全社</text><circle cx="187.6" cy="78.1" r="5" fill="#2E6BA6" stroke="#fff" stroke-width="2"/><text x="195.6" y="72.1" font-size="8.5" font-weight="700" fill="#4A4A4A" text-anchor="start">営業部</text><circle cx="154.8" cy="124.4" r="5" fill="#C9773F" stroke="#fff" stroke-width="2"/><text x="162.8" y="136.4" font-size="8.5" font-weight="700" fill="#4A4A4A" text-anchor="start">製造部</text><text x="163.0" y="220" font-size="8.5" fill="#4A4A4A" text-anchor="middle">仕事の量的負担（右ほど負担が大きい）</text><text x="11" y="103.0" font-size="8.5" fill="#4A4A4A" text-anchor="middle" transform="rotate(-90 11 103.0)">仕事のコントロール（上ほど裁量がある）</text></svg>
+      </div>
+      <div class="chart">
+        <div class="t">② 上司・同僚からの支援</div>
+        <div class="d">左下に行くほど「上司にも同僚にも頼りにくい」状態。点線は健康リスクの目安（太線＝全国平均100）。</div>
+        <svg viewBox="0 0 300 232" width="100%" role="img" aria-label="職場の支援判定図"><defs><clipPath id="c職場"><rect x="40" y="14" width="246" height="178"/></clipPath></defs><line x1="40.0" y1="14" x2="40.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="40.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">5</text><line x1="89.2" y1="14" x2="89.2" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="89.2" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">6</text><line x1="138.4" y1="14" x2="138.4" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="138.4" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">7</text><line x1="187.6" y1="14" x2="187.6" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="187.6" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">8</text><line x1="236.8" y1="14" x2="236.8" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="236.8" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">9</text><line x1="286.0" y1="14" x2="286.0" y2="192" stroke="#E3EBF2" stroke-width="1"/><text x="286.0" y="203" font-size="8" fill="#8A9AA8" text-anchor="middle">10</text><line x1="40" y1="192.0" x2="286" y2="192.0" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="195.0" font-size="8" fill="#8A9AA8" text-anchor="end">6</text><line x1="40" y1="147.5" x2="286" y2="147.5" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="150.5" font-size="8" fill="#8A9AA8" text-anchor="end">7</text><line x1="40" y1="103.0" x2="286" y2="103.0" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="106.0" font-size="8" fill="#8A9AA8" text-anchor="end">8</text><line x1="40" y1="58.5" x2="286" y2="58.5" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="61.5" font-size="8" fill="#8A9AA8" text-anchor="end">9</text><line x1="40" y1="14.0" x2="286" y2="14.0" stroke="#E3EBF2" stroke-width="1"/><text x="35" y="17.0" font-size="8" fill="#8A9AA8" text-anchor="end">10</text><rect x="40" y="14" width="246" height="178" fill="none" stroke="#8A9AA8" stroke-width="1"/><g clip-path="url(#c職場)"><line x1="40.0" y1="-115.1" x2="286.0" y2="107.4" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/><line x1="40.0" y1="-61.0" x2="286.0" y2="161.5" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/><line x1="40.0" y1="-12.7" x2="286.0" y2="209.8" stroke="#B9C6D2" stroke-width="1.6"/><line x1="40.0" y1="31.0" x2="286.0" y2="253.5" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/><line x1="40.0" y1="70.9" x2="286.0" y2="293.4" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/><line x1="40.0" y1="107.7" x2="286.0" y2="330.2" stroke="#B9C6D2" stroke-width="1" stroke-dasharray="3 3"/></g><text x="271.7" y="147.3" font-size="7.5" fill="#7E8E9C" text-anchor="end">90</text><text x="254.5" y="180.1" font-size="7.5" fill="#7E8E9C" text-anchor="end">100</text><text x="207.7" y="181.5" font-size="7.5" fill="#7E8E9C" text-anchor="end">110</text><text x="163.5" y="181.4" font-size="7.5" fill="#7E8E9C" text-anchor="end">120</text><g><line x1="158.0" y1="93.55000000000001" x2="168.0" y2="103.55000000000001" stroke="#4A4A4A" stroke-width="2"/><line x1="158.0" y1="103.55000000000001" x2="168.0" y2="93.55000000000001" stroke="#4A4A4A" stroke-width="2"/><text x="170.0" y="110.55000000000001" font-size="8" fill="#4A4A4A" text-anchor="start">全国平均</text></g><circle cx="148.2" cy="103.0" r="5" fill="#1E9E8C" stroke="#fff" stroke-width="2"/><text x="140.2" y="97.0" font-size="8.5" font-weight="700" fill="#4A4A4A" text-anchor="end">全社</text><circle cx="118.7" cy="120.8" r="5" fill="#2E6BA6" stroke="#fff" stroke-width="2"/><text x="110.7" y="132.8" font-size="8.5" font-weight="700" fill="#4A4A4A" text-anchor="end">営業部</text><circle cx="177.8" cy="85.2" r="5" fill="#C9773F" stroke="#fff" stroke-width="2"/><text x="185.8" y="79.2" font-size="8.5" font-weight="700" fill="#4A4A4A" text-anchor="start">製造部</text><text x="163.0" y="220" font-size="8.5" fill="#4A4A4A" text-anchor="middle">上司の支援（右ほど支援がある）</text><text x="11" y="103.0" font-size="8.5" fill="#4A4A4A" text-anchor="middle" transform="rotate(-90 11 103.0)">同僚の支援（上ほど支援がある）</text></svg>
+      </div>
+    </div>
+    <div class="legend"><span><span class="sw" style="background:var(--all)"></span>全社</span><span><span class="sw" style="background:var(--sales)"></span>営業部</span><span><span class="sw" style="background:var(--mfg)"></span>製造部</span><span>✕ 全国平均</span><span style="color:#6b7b8a;">※管理部（8名）は10人未満のため、図にも表にも出しません</span></div>
+  </div>
+
+  <div>
+    <h2>3. 部署ごとの結果<small>全国平均を100とした健康リスク。110以上を太字で示しています</small></h2>
+    <table class="tbl">
+      <thead><tr><th>部署</th><th>受検者数</th><th>量−コントロールのリスク</th><th>職場の支援のリスク</th><th>総合健康リスク</th><th>高ストレスの方の割合</th></tr></thead>
+      <tbody>
+        <tr><td><b>全社</b></td><td>39名</td><td>105</td><td>104</td><td>109</td><td>10.3%</td></tr>
+        <tr><td>営業部</td><td>17名</td><td>104</td><td class="hi">115</td><td class="hi">119</td><td>11.8%</td></tr>
+        <tr><td>製造部</td><td>15名</td><td class="hi">110</td><td>94</td><td>104</td><td>13.3%</td></tr>
+        <tr class="hide"><td>管理部</td><td>7名</td><td colspan="4">10人未満のため表示しません（だれの回答か推測できてしまうため）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="read">
+    <div class="box a">
+      <div class="bt">保健室の読み取り</div>
+      <ul>
+        <li><b>営業部</b>：仕事の量はやや多いものの進め方を自分で決められるため、そこは大きな問題ではありません。一方で<b>上司・同僚からの支援が少ない</b>ことでリスクが高くなっています。外回りが多く、相談するタイミングがない可能性があります。</li>
+        <li><b>製造部</b>：支援は十分ですが、<b>仕事量が多く、進め方を自分で決めにくい</b>状態です。</li>
+      </ul>
+    </div>
+    <div class="box b">
+      <div class="bt">職場づくりのご提案（例）</div>
+      <ul>
+        <li>営業部：週1回15分の1on1、日報へのひと言コメントなど「相談のきっかけ」を増やす</li>
+        <li>製造部：繁忙期の人員配置の見直し、作業の段取りを現場で決められる範囲を広げる</li>
+        <li>安全衛生委員会でこの報告書を共有し、取り組みを決める</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="note">※ 会社にお渡しするのは、このような「集団の傾向」だけです。個人の回答・点数・だれが高ストレスかは含まれません。報告書の数字はお渡しした時点で固定されます。<br>※ 判定図と健康リスクは、厚生労働省「職業性ストレス簡易調査票」の仕事のストレス判定図の考え方にもとづいています。実際の報告書の見た目は、システムの画面と異なる場合があります。</p>
+  <div class="footer"><span><b>企業のオンライン保健室</b>　海音〜心体の調律〜　髙橋 由香</span><span>1 / 2</span></div>
+</section>
+
+<!-- ============ 2ページ目：毎月・毎週の定期チェック ============ -->
+<section class="page">
+  <div class="sample">見本（数字はすべて架空）</div>
+  <div class="head">
+    <div class="k">保健室独自の定期チェック（毎月・毎週）｜スタンダード・プレミアム</div>
+    <h1>株式会社サンプル　2026年4月〜9月の変化</h1>
+    <div class="meta">年1回の結果だけでは見えない「上がり下がり」を、毎月の線で追いかけます</div>
+  </div>
+
+  <div class="charts">
+    <div class="chart">
+      <div class="t">はたらく前向きさ（毎月7問・4点満点の平均）</div>
+      <div class="d">やりがい・熱意・活力・会社の方向性との重なり・定着の見通しをまとめた数字。高いほど前向き。</div>
+      <svg viewBox="0 0 330 170" width="100%" role="img"><line x1="34" y1="146.0" x2="272" y2="146.0" stroke="#E3EBF2"/><text x="29" y="149.0" font-size="8" fill="#8A9AA8" text-anchor="end">2.4</text><line x1="34" y1="112.5" x2="272" y2="112.5" stroke="#E3EBF2"/><text x="29" y="115.5" font-size="8" fill="#8A9AA8" text-anchor="end">2.6</text><line x1="34" y1="79.0" x2="272" y2="79.0" stroke="#E3EBF2"/><text x="29" y="82.0" font-size="8" fill="#8A9AA8" text-anchor="end">2.8</text><line x1="34" y1="45.5" x2="272" y2="45.5" stroke="#E3EBF2"/><text x="29" y="48.5" font-size="8" fill="#8A9AA8" text-anchor="end">3.0</text><line x1="34" y1="12.0" x2="272" y2="12.0" stroke="#E3EBF2"/><text x="29" y="15.0" font-size="8" fill="#8A9AA8" text-anchor="end">3.2</text><line x1="34" y1="146" x2="272" y2="146" stroke="#8A9AA8"/><text x="34.0" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">4月</text><text x="81.6" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">5月</text><text x="129.2" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">6月</text><text x="176.8" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">7月</text><text x="224.4" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">8月</text><text x="272.0" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">9月</text><polyline points="34.0,45.5 81.6,45.5 129.2,62.3 176.8,79.0 224.4,95.7 272.0,112.5" fill="none" stroke="#2E6BA6" stroke-width="2" stroke-linejoin="round"/><circle cx="34.0" cy="45.5" r="3.2" fill="#2E6BA6" stroke="#fff" stroke-width="1.5"/><circle cx="81.6" cy="45.5" r="3.2" fill="#2E6BA6" stroke="#fff" stroke-width="1.5"/><circle cx="129.2" cy="62.3" r="3.2" fill="#2E6BA6" stroke="#fff" stroke-width="1.5"/><circle cx="176.8" cy="79.0" r="3.2" fill="#2E6BA6" stroke="#fff" stroke-width="1.5"/><circle cx="224.4" cy="95.7" r="3.2" fill="#2E6BA6" stroke="#fff" stroke-width="1.5"/><circle cx="272.0" cy="112.5" r="3.2" fill="#2E6BA6" stroke="#fff" stroke-width="1.5"/><text x="279.0" y="115.5" font-size="8.5" font-weight="700" fill="#4A4A4A">営業部 2.6</text><polyline points="34.0,95.7 81.6,95.7 129.2,79.0 176.8,62.3 224.4,45.5 272.0,45.5" fill="none" stroke="#C9773F" stroke-width="2" stroke-linejoin="round"/><circle cx="34.0" cy="95.7" r="3.2" fill="#C9773F" stroke="#fff" stroke-width="1.5"/><circle cx="81.6" cy="95.7" r="3.2" fill="#C9773F" stroke="#fff" stroke-width="1.5"/><circle cx="129.2" cy="79.0" r="3.2" fill="#C9773F" stroke="#fff" stroke-width="1.5"/><circle cx="176.8" cy="62.3" r="3.2" fill="#C9773F" stroke="#fff" stroke-width="1.5"/><circle cx="224.4" cy="45.5" r="3.2" fill="#C9773F" stroke="#fff" stroke-width="1.5"/><circle cx="272.0" cy="45.5" r="3.2" fill="#C9773F" stroke="#fff" stroke-width="1.5"/><text x="279.0" y="48.5" font-size="8.5" font-weight="700" fill="#4A4A4A">製造部 3.0</text><polyline points="34.0,62.3 81.6,62.3 129.2,62.3 176.8,62.3 224.4,62.3 272.0,79.0" fill="none" stroke="#1E9E8C" stroke-width="2" stroke-linejoin="round" stroke-dasharray="5 3"/><circle cx="34.0" cy="62.3" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="81.6" cy="62.3" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="129.2" cy="62.3" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="176.8" cy="62.3" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="224.4" cy="62.3" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="272.0" cy="79.0" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><text x="279.0" y="82.0" font-size="8.5" font-weight="700" fill="#4A4A4A">全社 2.8</text></svg>
+      <div class="legend"><span><span class="sw" style="background:var(--sales)"></span>営業部</span><span><span class="sw" style="background:var(--mfg)"></span>製造部</span><span><span class="sw" style="background:var(--all)"></span>全社（点線）</span></div>
+    </div>
+    <div class="chart">
+      <div class="t">本来の力が出せていない割合（SPQ・全社）</div>
+      <div class="d">「病気やけががないときを100%として、過去4週間の自分の仕事は何%か」から計算。低いほど良い。</div>
+      <svg viewBox="0 0 330 170" width="100%" role="img"><line x1="34" y1="146.0" x2="272" y2="146.0" stroke="#E3EBF2"/><text x="29" y="149.0" font-size="8" fill="#8A9AA8" text-anchor="end">18%</text><line x1="34" y1="119.2" x2="272" y2="119.2" stroke="#E3EBF2"/><text x="29" y="122.2" font-size="8" fill="#8A9AA8" text-anchor="end">20%</text><line x1="34" y1="92.4" x2="272" y2="92.4" stroke="#E3EBF2"/><text x="29" y="95.4" font-size="8" fill="#8A9AA8" text-anchor="end">22%</text><line x1="34" y1="65.6" x2="272" y2="65.6" stroke="#E3EBF2"/><text x="29" y="68.6" font-size="8" fill="#8A9AA8" text-anchor="end">24%</text><line x1="34" y1="38.8" x2="272" y2="38.8" stroke="#E3EBF2"/><text x="29" y="41.8" font-size="8" fill="#8A9AA8" text-anchor="end">26%</text><line x1="34" y1="12.0" x2="272" y2="12.0" stroke="#E3EBF2"/><text x="29" y="15.0" font-size="8" fill="#8A9AA8" text-anchor="end">28%</text><line x1="34" y1="146" x2="272" y2="146" stroke="#8A9AA8"/><text x="34.0" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">4月</text><text x="81.6" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">5月</text><text x="129.2" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">6月</text><text x="176.8" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">7月</text><text x="224.4" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">8月</text><text x="272.0" y="158" font-size="8" fill="#8A9AA8" text-anchor="middle">9月</text><line x1="34" y1="85.7" x2="272" y2="85.7" stroke="#4A4A4A" stroke-width="1.2" stroke-dasharray="4 3"/><text x="276" y="88.7" font-size="8" fill="#4A4A4A">全国平均22.5%</text><polyline points="34.0,52.2 81.6,57.6 129.2,68.3 176.8,77.7 224.4,92.4 272.0,100.4" fill="none" stroke="#1E9E8C" stroke-width="2" stroke-linejoin="round"/><circle cx="34.0" cy="52.2" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="81.6" cy="57.6" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="129.2" cy="68.3" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="176.8" cy="77.7" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="224.4" cy="92.4" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><circle cx="272.0" cy="100.4" r="3.2" fill="#1E9E8C" stroke="#fff" stroke-width="1.5"/><text x="279.0" y="103.4" font-size="8.5" font-weight="700" fill="#4A4A4A">全社 21.4%</text></svg>
+      <div class="legend"><span><span class="sw" style="background:var(--all)"></span>全社</span><span>点線＝全国平均 22.5%</span></div>
+    </div>
+  </div>
+
+  <div>
+    <h2>毎週の体調確認（体温＋4問）<small>4月〜9月の合計</small></h2>
+    <div class="alerts">
+      <div class="tile"><div class="l">回答率（毎週の平均）</div><div class="v">92<small>%</small></div><div class="s">未回答の方には自動で催促メール</div></div>
+      <div class="tile"><div class="l">保健室へのお知らせ</div><div class="v">6<small>件</small></div><div class="s">「少し気になる」「やや寝不足」など。保健室が確認し、必要な方へ連絡</div></div>
+      <div class="tile"><div class="l">「上司・総務に一報を」の案内</div><div class="v">2<small>件</small></div><div class="s">「不調」「勤務が難しい」または37.5℃以上。ご本人から申し出があった事実のみ会社へ</div></div>
+    </div>
+  </div>
+
+  <div>
+    <h2>この半年で見えたこと</h2>
+    <table class="tbl">
+      <thead><tr><th style="width:16%;">部署</th><th style="width:38%;">変化</th><th>保健室の読み取りと、次の一手</th></tr></thead>
+      <tbody>
+        <tr><td>営業部</td><td style="text-align:left;">前向きさが <b>3.0 → 2.6</b> に少しずつ下がっている</td><td style="text-align:left;">6月の法定チェックで出た「支援の少なさ」と同じ方向の動き。年1回の結果を待たずに、上司との1on1の時間づくりを早めにご提案します。</td></tr>
+        <tr><td>製造部</td><td style="text-align:left;">前向きさが <b>2.7 → 3.0</b> に上がっている</td><td style="text-align:left;">7月に始めた段取りの見直しのあとから上向き。取り組みの効果が数字で確かめられます。</td></tr>
+        <tr><td>全社</td><td style="text-align:left;">SPQの損失が <b>25.0% → 21.4%</b>（全国平均を下回った）</td><td style="text-align:left;">本来の力が出せている人が増えています。面談・相談の利用と合わせて、続けて見ていきます。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="read">
+    <div class="box a">
+      <div class="bt">年1回のチェックとのちがい</div>
+      <ul>
+        <li>年1回では「6月の時点」しか分かりません。毎月見ると、<b>下がり始めの段階</b>で手を打てます。</li>
+        <li>取り組みのあとに数字が動いたかで、<b>効果を確かめながら</b>進められます。</li>
+      </ul>
+    </div>
+    <div class="box b">
+      <div class="bt">会社にお渡しする範囲</div>
+      <ul>
+        <li>部署・全社の集計と変化のみ。<b>個人の回答はお渡ししません</b>。</li>
+        <li>10人未満の部署は、集団分析と同じく表示しません。</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="note">※ 定期チェックは、年1回の法定ストレスチェックとは別の、保健室独自のチェックです。<br>※ SPQは東京大学が開発した1問版の調査票です。</p>
+  <div class="footer"><span><b>企業のオンライン保健室</b>　海音〜心体の調律〜　髙橋 由香</span><span>2 / 2</span></div>
+</section>
+</body>
+</html>
+
