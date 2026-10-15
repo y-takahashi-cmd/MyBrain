@@ -158,7 +158,8 @@ Ask before（B：構造変更）:
 1. `90_System/現在タスク.md`を更新する（持ち越しタスクの記入、完了タスクの削除、更新履歴への追記）
 2. README.mdは会社情報そのものに変更があった時だけ更新する（契約変更・新メンバー追加等。日々の進捗は書かない）
 3. セッションで保存・更新したメモリファイルを読み返し、内容が正しいか確認する
-4. Commit & push all uncommitted changes
+4. 翌朝7:00〜8:00のOutlook予定「今日のタスク（M/D曜）」に未完了タスクを並べて入れる（金土も7:00・既にあれば上書き。メモリ`feedback_morning_task_calendar`）
+5. Commit & push all uncommitted changes
 
 ## セッション文字起こしを渡された時のルール（絶対に守る）
 
