@@ -358,6 +358,11 @@
 <div class="sticky-cta" id="sticky"><a class="btn" href="#apply">体験セッションを申し込む</a></div>
 
 <script>
+  // URLに #menus などが付いて開かれても、必ずページの一番上から始める
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  window.addEventListener("load", () => window.scrollTo({ top: 0, behavior: "instant" }));
+
   // ▼ 申し込みボタンのリンク先（ここを書き換えるだけで全ボタンに反映されます）
   //   空欄 "" のままのボタンは「準備中」と表示されます
   const APPLY_LINKS = {
