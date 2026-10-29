@@ -4,7 +4,7 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 
-OUT = r"C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室\顧客\有限会社グリットワークス\01_メンバーカルテ\グリットワークス_トリセツ名札_v0.1.pptx"
+OUT = r"C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室\顧客\有限会社グリットワークス\01_メンバーカルテ\グリットワークス_トリセツ名札_v0.2.pptx"
 FONT = "游ゴシック"
 
 NAVY = RGBColor(0x1F, 0x3A, 0x5F)
@@ -31,6 +31,8 @@ ENGINE = {"純": "気持ちに正直", "海": "しなやか・柔軟", "樹": "�
           "旅": "新しいこと好き", "陽": "まじめ・誠実"}
 
 # (氏名, パワーカラー, 色の説明, 深層心理, アクティビティレベル, シンキングパターン, ひとこと（仮）, ラッキーナンバー)
+# 利き脳：(行, 列)。未判定は登録しない
+KIKINOU = {"大関 謙吾": (1, 0)}  # 義＝親指右・腕右
 PEOPLE = [
     ("林 範世", "紫", "興味心旺盛・旅や移動が好き", "海", 41275248, 61,
      "新しい話、大好きです。\n理由と全体像をもらえると早いです！", 3),
@@ -141,13 +143,17 @@ for name, pc, pc_desc, engine, act, tp, hitokoto, lucky in PEOPLE:
     text(s, 6.95, 1.02, 1.8, 0.25, ENGINE[engine], size=4.5, color=GRAY, align=PP_ALIGN.CENTER)
 
     gx, gy, cw, ch = 0.35, 1.95, 1.55, 0.95
-    text(s, gx, 1.65, 3.3, 0.3, "利き脳タイプ（未判定）", size=6, bold=True, color=GRAY)
+    my = KIKINOU.get(name)
+    text(s, gx, 1.65, 3.3, 0.3, "利き脳タイプ" if my else "利き脳タイプ（未判定）", size=6, bold=True, color=GRAY)
     for r_, c_, tname, col in TYPES:
+        mine = (r_, c_) == my
         x = gx + c_ * (cw + 0.08)
         y = gy + r_ * (ch + 0.08)
-        box(s, x, y, cw, ch, fill=LIGHT, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
-        text(s, x, y + 0.08, cw, 0.5, tname, size=6.5, color=GRAY, align=PP_ALIGN.CENTER)
-        text(s, x, y + 0.55, cw, 0.3, "の人", size=5.5, color=GRAY, align=PP_ALIGN.CENTER)
+        box(s, x, y, cw, ch, fill=col if mine else LIGHT, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+        text(s, x, y + 0.08, cw, 0.5, tname, size=7 if mine else 6.5, bold=mine,
+             color=WHITE if mine else GRAY, align=PP_ALIGN.CENTER)
+        text(s, x, y + 0.55, cw, 0.3, "の人 ★あなた" if mine else "の人", size=5.5, bold=mine,
+             color=WHITE if mine else GRAY, align=PP_ALIGN.CENTER)
 
     mx, mw = 3.85, 4.9
     meter(s, mx, 1.65, mw, "動き出し方（アクティビティレベル）", "じっくり考えて", "まず体が動く",
