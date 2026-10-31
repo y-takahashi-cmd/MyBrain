@@ -243,9 +243,38 @@ story(5, "でも、その「当たり前」は人によって全然ちがう", "
 story(6, "ポジティブとは「入れ替えられる」こと", "yk22.jpg", 0.5625,
   "痛みを無理に「もう平気」と思い込むことではありません。\n古い受け取り方を、新しい受け取り方に入れ替えられる状態のことです。",
   "ネガティブ＝情報の入れ替えができない、自分の正しさに固執する。ポジティブ＝入れ替えができる、他の正しさを認められる。");
-story(7, "入れ替えるには、感情を順番に感じ切る", "mc9.jpg", 893 / 1600,
-  "胸の奥にしまってきた怒りや悲しみが出てきても大丈夫。\nそれは痛みがほどけはじめているサインです。",
-  "焦り・無価値観→嫉妬・怒り→悲しみ→絶対的安心感。「だから、今から感じ切るワークをしましょう」とワークへ。スキップせずに順番に感じることで癒える。無理にポジティブに変えない（ポジ変禁止）。");
+// 7：感情とエネルギー値（ホーキンズ『パワーか、フォースか』の意識のマップをもとに作図）
+s = pres.addSlide({ masterName: "CONTENT", sectionTitle: S1 });
+label(s, `第2部　頭の構造を知る ｜ 7 / ${STORY_TOTAL}`);
+s.addText("感情には「エネルギーの高さ」がある", { placeholder: "title" });
+const levels = [
+  ["700〜1000", "悟り", "言語に絶する"], ["600", "平和", "至福"], ["540", "喜び", "静穏"],
+  ["500", "愛", "尊敬"], ["400", "理性", "理解"], ["350", "受容", "許し"],
+  ["310", "意欲", "楽観"], ["250", "中立", "信頼"], ["200", "勇気", "肯定"],
+  ["175", "プライド", "嘲笑"], ["150", "怒り", "憎しみ"], ["125", "欲望", "切望"],
+  ["100", "恐怖", "不安"], ["75", "深い悲しみ", "後悔"], ["50", "無気力", "絶望"],
+  ["30", "罪悪感", "非難"], ["20", "恥", "屈辱"],
+];
+const lvFill = (v) => v >= 600 ? "F0CC6A" : v >= 400 ? "F3D98B" : v >= 200 ? "F8EBC8" : "EEF0F5";
+const LX = 0.5, LW = 5.6, LY = 1.42, RH = 0.21;
+const colX = [LX, LX + 1.15, LX + 2.85], colW = [1.15, 1.7, 1.5];
+[["エネルギー値", 0], ["意識のレベル", 1], ["感情", 2]].forEach(([t, c]) =>
+  txt(s, "lv_head" + c, t, { x: colX[c], y: 1.2, w: colW[c], h: 0.22, fontSize: 9, bold: true, color: C.accent2, align: "center", valign: "middle", margin: 0 }));
+levels.forEach((lv, i) => {
+  const y = LY + i * RH, v = parseInt(lv[0]);
+  s.addShape(pres.shapes.RECTANGLE, { objectName: "lv_row" + i, x: LX, y, w: LW, h: RH, fill: { color: lvFill(v) }, line: { color: T.lt1, width: 0.75 } });
+  lv.forEach((t, c) => txt(s, `lv_${i}_${c}`, t, { x: colX[c], y, w: colW[c], h: RH, fontSize: 10, bold: c === 1, color: C.text2, align: "center", valign: "middle", margin: 0 }));
+});
+// 200（勇気）と175（プライド）の間：パワーとフォースの境目
+const by = LY + 9 * RH;
+s.addShape(pres.shapes.LINE, { objectName: "lv_border", x: LX, y: by, w: LW, h: 0, line: { color: T.accent2, width: 2, dashType: "dash" } });
+txt(s, "lv_power", "▲ パワー（生かす力）", { x: LX + LW - 1.9, y: by - 0.22, w: 1.85, h: 0.2, fontSize: 8, bold: true, color: C.accent2, align: "right", valign: "middle", margin: 0 });
+txt(s, "lv_force", "▼ フォース（押す力）", { x: LX + LW - 1.9, y: by + 0.01, w: 1.85, h: 0.2, fontSize: 8, bold: true, color: C.accent2, align: "right", valign: "middle", margin: 0 });
+card(s, "money_card", 6.35, 1.2, 3.15, 3.78, T.accent6);
+txt(s, "money_head", "胸の痛みで言うと…", { x: 6.55, y: 1.32, w: 2.8, h: 0.4, fontSize: 15, bold: true, color: C.accent2 });
+txt(s, "money_body", "胸の奥にしまってきた感情にも、エネルギーの高さがあります。\n出てきた感情を否定せずに感じ切ると、統合されて、上へ上がっていきます。\n怒りや悲しみが出ても大丈夫。\nほどけはじめているサインです。", { x: 6.55, y: 1.75, w: 2.8, h: 2.75, fontSize: 13, paraSpaceAfter: 6 });
+txt(s, "lv_src", "D.R.ホーキンズ『パワーか、フォースか』の意識のマップをもとに作成", { x: 6.5, y: 4.5, w: 2.9, h: 0.4, fontSize: 8, color: C.accent1 });
+s.addNotes("ホーキンズ博士の意識のマップ。200（勇気）より下は人から奪う・押す力（フォース）、上は生かす力（パワー）。恥20・罪悪感30・無気力50・深い悲しみ75・恐怖100は、エネルギーがとても低い。胸の奥にしまってきた感情がこのあたりにあると、自分ではヒーリングしようにも痛すぎて触れられない。出てきた感情を否定せず、順番に感じ切って統合していくと、上へ上がっていく。怒り150は悲しみ75より上＝怒りが出てきたら上がってきたサイン。「だから、今から感情を統合するワークをしましょう」とワークへ。無理にポジティブに変えない（ポジ変禁止）。");
 
 
 // =========== ワーク ===========
