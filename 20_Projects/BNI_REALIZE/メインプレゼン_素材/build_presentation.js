@@ -113,13 +113,13 @@ pres.author = "髙橋由香";
     { x: 5.1, img: "honnin", head: "② 社員さんご本人", body: "睡眠や体の疲れ、気持ちの持ち方。\n自分でバランスを整える", c: G, bg: G_L },
   ];
   cols.forEach(o => {
-    card(s, o.x, 1.05, 4.4, 2.95, o.bg);
-    addImg(s, o.img, o.x + 0.15, 1.15, 4.1, 1.6);
-    t(s, o.head, { x: o.x + 0.25, y: 2.85, w: 3.9, h: 0.4, fontSize: 17, bold: true, color: o.c });
-    t(s, o.body, { x: o.x + 0.25, y: 3.25, w: 3.9, h: 0.7, fontSize: 13, color: TX });
+    card(s, o.x, 1.0, 4.4, 3.3, o.bg);
+    addImg(s, o.img, o.x + 0.4, 1.1, 3.6, 3.6 * 941 / 1672);
+    t(s, o.head, { x: o.x + 0.25, y: 3.18, w: 3.9, h: 0.4, fontSize: 17, bold: true, color: o.c });
+    t(s, o.body, { x: o.x + 0.25, y: 3.58, w: 3.9, h: 0.65, fontSize: 13, color: TX });
   });
-  s.addShape("roundRect", { x: 1.5, y: 4.3, w: 7, h: 0.75, fill: { color: O }, line: { color: O }, rectRadius: 0.12 });
-  t(s, "両方そろわないと、ストレスが積み重なって　休職・退職へ", { x: 1.5, y: 4.3, w: 7, h: 0.75, fontSize: 17, bold: true, color: W, align: "center", valign: "middle" });
+  s.addShape("roundRect", { x: 1.5, y: 4.5, w: 7, h: 0.7, fill: { color: O }, line: { color: O }, rectRadius: 0.12 });
+  t(s, "両方そろわないと、ストレスが積み重なって　休職・退職へ", { x: 1.5, y: 4.5, w: 7, h: 0.7, fontSize: 17, bold: true, color: W, align: "center", valign: "middle" });
   s.addNotes("結果が出たら、変わらなければいけないことが2つあります。1つは、会社。どの部署で、何が負担になっているのか。会社として手を打つこと。もう1つは、社員さんご本人。睡眠や体の疲れ、気持ちの持ち方。自分でバランスを整えること。この両方がそろわないと、ストレスは高いまま積み重なって、休職や退職につながってしまいます。");
 }
 
