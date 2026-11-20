@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>ストレスチェックアプリでできること</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root { --navy:#1B3A5C; --blue:#74B2E0; --pale:#EEF6FC; --line:#D5E6F3; --gray:#6B7785; --soft:#F4F6F8; --accent:#E8913A; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Noto Sans JP", sans-serif; color: #24303C; background:#fff; }
+  .page { width: 297mm; height: 210mm; padding: 13mm 15mm 10mm; position: relative; page-break-after: always; overflow: hidden; border: 1.2mm solid var(--blue); border-width: 0 0 0 4mm; }
+  .page:last-child { page-break-after: auto; }
+  .eyebrow { font-size: 10pt; color: var(--blue); letter-spacing: .15em; font-weight: 700; }
+  h1 { font-size: 24pt; color: var(--navy); font-weight: 900; margin: 2mm 0 2mm; line-height: 1.3; }
+  .sub { font-size: 11pt; color: var(--gray); margin-bottom: 6mm; }
+  .footer { position: absolute; bottom: 6mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; font-size: 8pt; color: var(--gray); border-top: 1px solid var(--line); padding-top: 2mm; }
+  /* cover */
+  .cover { display: grid; grid-template-columns: 1.35fr 1fr; gap: 10mm; height: 165mm; align-items: center; }
+  .tag { display:inline-block; background: var(--navy); color:#fff; font-size: 11pt; font-weight:700; padding: 2mm 6mm; border-radius: 10mm; margin-bottom: 6mm; }
+  .big { font-size: 32pt; font-weight: 900; color: var(--navy); line-height: 1.35; }
+  .big em { font-style: normal; color: var(--accent); }
+  .lead { font-size: 12.5pt; line-height: 1.9; margin-top: 6mm; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-top: 9mm; }
+  .stat { border: 1.5px solid var(--blue); border-radius: 3mm; padding: 4mm 3mm; text-align: center; background: #fff; }
+  .stat b { display:block; font-size: 16pt; white-space: nowrap; color: var(--navy); font-weight: 900; }
+  .stat span { font-size: 9pt; color: var(--gray); line-height: 1.5; display:block; margin-top: 1mm; }
+  .side { background: var(--pale); border-radius: 4mm; padding: 9mm 8mm; height: 150mm; display:flex; flex-direction:column; justify-content:center; }
+  .side h3 { font-size: 13pt; color: var(--navy); margin-bottom: 5mm; }
+  .side li { list-style: none; font-size: 10.8pt; line-height: 1.6; padding: 3mm 0 3mm 8mm; position: relative; border-bottom: 1px dashed var(--line); }
+  .side li::before { content: "□"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .side p { font-size: 11pt; margin-top: 5mm; color: var(--navy); font-weight: 700; }
+  /* compare */
+  table { width: 100%; border-collapse: collapse; font-size: 10.5pt; }
+  th, td { padding: 2.6mm 4mm; border-bottom: 1px solid var(--line); vertical-align: middle; line-height: 1.55; }
+  thead th { background: var(--navy); color: #fff; font-weight: 700; text-align: left; }
+  thead th.ours { background: #2F6FA3; }
+  td.k { font-weight: 700; color: var(--navy); width: 17%; background: var(--soft); }
+  td.old { color: var(--gray); width: 33%; }
+  td.new { font-weight: 500; }
+  td.new b { color: #2F6FA3; }
+  .note { font-size: 8.5pt; color: var(--gray); margin-top: 3mm; }
+  /* cards */
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+  .card { background: var(--pale); border-radius: 3mm; padding: 5mm; }
+  .card .n { display:inline-flex; width: 9mm; height: 9mm; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 900; align-items:center; justify-content:center; font-size: 12pt; margin-bottom: 2mm; }
+  .card h4 { font-size: 12.5pt; color: var(--navy); margin-bottom: 2mm; }
+  .card p { font-size: 10pt; line-height: 1.65; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-top: 6mm; }
+  .box { border: 1.5px solid var(--line); border-radius: 3mm; padding: 4mm 5mm; }
+  .box h4 { font-size: 11.5pt; margin-bottom: 2mm; }
+  .box.ok h4 { color: #2F6FA3; } .box.ng h4 { color: #9A5B5B; }
+  .box li { font-size: 10pt; line-height: 1.75; margin-left: 5mm; }
+  /* referral */
+  .ref { display: grid; grid-template-columns: 1fr 1.25fr; gap: 7mm; }
+  .chips { display: flex; flex-wrap: wrap; gap: 2.5mm; margin: 3mm 0 6mm; }
+  .chip { border: 1.5px solid var(--blue); color: var(--navy); border-radius: 10mm; padding: 1.8mm 4.5mm; font-size: 10.5pt; font-weight: 700; background:#fff; }
+  .lbl { font-size: 10pt; color: var(--blue); font-weight: 700; margin-bottom: 1.5mm; }
+  .talk { border: 1.5px solid var(--navy); border-radius: 3mm; padding: 4mm 5mm; font-size: 12pt; font-weight: 700; color: var(--navy); line-height: 1.6; margin-bottom: 5mm; }
+  .letter { background: var(--pale); border-radius: 3mm; padding: 5mm 6mm; font-size: 10.5pt; line-height: 1.9; }
+  .plans { margin-top: 2mm; font-size: 9.5pt; }
+  .plans td, .plans th { padding: 1.5mm 2mm; text-align: center; white-space: nowrap; }
+  .plans td:first-child { text-align: left; }
+  .contact { margin-top: 4mm; background: var(--navy); color:#fff; border-radius: 3mm; padding: 4mm 5mm; font-size: 10pt; line-height: 1.7; }
+  .contact b { font-size: 12pt; }
+</style>
+</head>
+<body>
+
+<!-- 1 表紙 -->
+<section class="page">
+  <div class="cover">
+    <div>
+      <span class="tag">企業のオンライン保健室｜ストレスチェック</span>
+      <div class="big">そのストレスチェック、<br><em>「受けて終わり」</em>に<br>なっていませんか？</div>
+      <p class="lead">年に1回受けて、結果を配って、おしまい。<br>
+      保健室のストレスチェックは、<b>受けたあと</b>からが本番です。<br>
+      有資格スタッフが結果を確認し、必要な方を相談・医師へつなぎます。</p>
+      <div class="stats">
+        <div class="stat"><b>スマホで10分</b><span>メールのリンクから回答<br>ログイン不要</span></div>
+        <div class="stat"><b>ほぼ自動</b><span>配信・採点・集団分析<br>報告書づくりまで</span></div>
+        <div class="stat"><b>年1回＋毎月</b><span>「点」ではなく「線」で<br>変化を追う（スタンダード以上）</span></div>
+      </div>
+    </div>
+    <div class="side">
+      <h3>こんな会社に、おすすめです</h3>
+      <ul>
+        <li>毎年やっているけど、結果を活かせていない</li>
+        <li>高ストレスの人がいても、その後が分からない</li>
+        <li>社員が本音で答えているか、自信がない</li>
+        <li>担当者の準備・集計の手間が重い</li>
+        <li>辞める人が出てから、初めて気づく</li>
+      </ul>
+      <p>ひとつでも当てはまったら、<br>見直しどきです。</p>
+    </div>
+  </div>
+  <div class="footer"><span>企業のオンライン保健室　海音〜心体の調律〜　髙橋 由香</span><span>1</span></div>
+</section>
+
+<!-- 2 今のストレスチェックとの違い -->
+<section class="page">
+  <div class="eyebrow">COMPARE</div>
+  <h1>今のストレスチェックと、ここが違います</h1>
+  <p class="sub">法律で決まった57問はそのまま。変わるのは「受けたあと」と「担当者の手間」です。</p>
+  <table>
+    <thead><tr><th></th><th>よくあるストレスチェック</th><th class="ours">企業のオンライン保健室のアプリ</th></tr></thead>
+    <tbody>
+      <tr><td class="k">結果のあと</td><td class="old">結果を渡して終わり。対応は会社まかせ</td><td class="new"><b>有資格スタッフが結果を確認</b>し、面談・相談・医師へつなぐ</td></tr>
+      <tr><td class="k">見る頻度</td><td class="old">年1回の「点」</td><td class="new">年1回＋<b>毎月・毎週</b>の「線」で変化を追う（スタンダード以上）</td></tr>
+      <tr><td class="k">気づくタイミング</td><td class="old">本人が言い出すか、上司が気づいたとき</td><td class="new">気になる変化は<b>保健室から早めに会社へ</b>お知らせ</td></tr>
+      <tr><td class="k">測るもの</td><td class="old">ストレスの高さ</td><td class="new">ストレスに加えて、<b>はたらく前向きさ</b>と<b>本来の力の出せ具合</b>（体調で失われている仕事の割合）</td></tr>
+      <tr><td class="k">正直に答えやすいか</td><td class="old">会社に知られる不安が残りやすい</td><td class="new">会社の画面には<b>個人の結果が表示されない作り</b>。だから本音が集まる</td></tr>
+      <tr><td class="k">担当者の手間</td><td class="old">名簿づくり・配布・回収・集計・声かけ</td><td class="new">名簿は人事情報から<b>自動</b>。配信・未回答の確認・採点も自動</td></tr>
+      <tr><td class="k">報告書・書類</td><td class="old">業者待ち・手集計。規程や案内文は自作</td><td class="new">集団分析・労基署への報告書を<b>自動で作成</b>。規程・案内文のひな形<b>十数種類</b>つき</td></tr>
+    </tbody>
+  </table>
+  <p class="note">※ 毎月・毎週のチェックはスタンダードプラン以上。回答は保健室だけが確認し、会社には個人の回答・点数をお見せしません。</p>
+  <div class="footer"><span>企業のオンライン保健室　海音〜心体の調律〜　髙橋 由香</span><span>2</span></div>
+</section>
+
+<!-- 3 会社に届くもの -->
+<section class="page">
+  <div class="eyebrow">WHAT YOU GET</div>
+  <h1>会社に届くもの、届かないもの</h1>
+  <p class="sub">個人の結果はお渡ししません。そのかわり、会社の課題を見つける材料をお渡しします。</p>
+  <div class="grid3">
+    <div class="card"><div class="n">1</div><h4>部署ごとの傾向が分かる</h4><p>部署・年代ごとに「仕事の負担」「裁量」「上司・同僚の支え」を全国平均と比べた集団分析報告書。安全衛生委員会の資料にそのまま使えます。</p></div>
+    <div class="card"><div class="n">2</div><h4>「本来の力」の損失が見える</h4><p>体調によって発揮できていない仕事の割合を数字で出します。健康を「コスト」ではなく「生産性」の話にできます。</p></div>
+    <div class="card"><div class="n">3</div><h4>下がり始めに気づける</h4><p>毎月の変化を保健室が追い、前向きさが続けて下がった方がいれば、保健室から会社へご連絡します。辞める前に、手が打てます。</p></div>
+  </div>
+  <div class="two">
+    <div class="box ok"><h4>会社が見られるもの</h4><ul>
+      <li>受検率、だれが受けてだれがまだか（声かけ用）</li>
+      <li>部署ごとの集団分析・実施状況の報告書</li>
+      <li>労基署への報告に必要な数値（50人以上の事業場）</li>
+      <li>保健室からのご連絡（気になる変化があったとき）</li></ul></div>
+    <div class="box ng"><h4>会社が見られないもの</h4><ul>
+      <li>個人の回答内容・点数</li>
+      <li>だれが高ストレスと判定されたか</li>
+      <li>個人の面談・相談の内容</li>
+      <li>10人未満の集団の結果（個人が推測できるため）</li></ul></div>
+  </div>
+  <p class="note">※ 本人が自ら医師の面接指導を申し出た場合のみ、会社は「申し出があった」事実を知ります（法律上の義務のため）。</p>
+  <div class="footer"><span>企業のオンライン保健室　海音〜心体の調律〜　髙橋 由香</span><span>3</span></div>
+</section>
+
+<!-- 4 紹介のお願い -->
+<section class="page">
+  <div class="eyebrow">REFERRAL</div>
+  <h1>ご紹介のお願い｜すでにストレスチェックをしている会社へ</h1>
+  <p class="sub">「やっているけど、活かせていない」会社が、いちばんの出番です。</p>
+  <div class="ref">
+    <div>
+      <div class="lbl">こんな言葉が出たら</div>
+      <div class="chips">
+        <span class="chip">ストレスチェックはやってるけど…</span>
+        <span class="chip">結果、見てもよく分からない</span>
+        <span class="chip">高ストレスの人、その後どうしてる？</span>
+        <span class="chip">最近、若い子がすぐ辞める</span>
+        <span class="chip">休みがちな社員がいて</span>
+        <span class="chip">産業医はいるけど相談しづらい</span>
+        <span class="chip">集計とか報告が面倒</span>
+      </div>
+      <div class="lbl">声かけ例</div>
+      <div class="talk">「ストレスチェックの結果、そのあと何かに使えてます？」</div>
+    </div>
+    <div>
+      <div class="lbl">紹介文（そのまま送れます）</div>
+      <div class="letter">
+        ○○さん、この前ストレスチェックの話をされていましたよね。<br>
+        私の知り合いに、看護師で、企業のオンライン保健室をやっている髙橋由香さんという方がいます。<br>
+        法律で決まったストレスチェックをアプリでほぼ自動にしてくれて、結果を有資格のスタッフが確認し、気になる人を相談につないでくれるそうです。<br>
+        毎月の変化も追ってくれるので、<b>辞める前の「下がり始め」に気づける</b>のが他と違うところだそうです。<br>
+        今のやり方を変えなくても、話を聞くだけでも大丈夫とのこと。一度つないでもいいですか？
+      </div>
+      <table class="plans" style="margin-top:4mm">
+        <thead><tr><th>プラン</th><th>ライト</th><th>スタンダード</th><th>プレミアム</th></tr></thead>
+        <tbody>
+          <tr><td>法定57問・自動採点・集団分析</td><td>●</td><td>●</td><td>●</td></tr>
+          <tr><td>運営まるごとお任せ</td><td>—</td><td>●</td><td>●</td></tr>
+          <tr><td>毎月・毎週の定期チェック</td><td>—</td><td>●</td><td>●</td></tr>
+          <tr><td>保健室の面談・相談</td><td>追加可</td><td>追加可</td><td>●</td></tr>
+        </tbody>
+      </table>
+      <div class="contact"><b>企業のオンライン保健室　髙橋 由香</b><br>
+        TEL 042-306-6630 ／ info@kokorocare.business ／ https://kokorocare.business/</div>
+    </div>
+  </div>
+  <div class="footer"><span>企業のオンライン保健室　海音〜心体の調律〜　髙橋 由香</span><span>4</span></div>
+</section>
+
+</body>
+</html>
