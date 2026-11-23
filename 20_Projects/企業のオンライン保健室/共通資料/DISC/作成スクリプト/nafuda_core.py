@@ -117,13 +117,13 @@ def tp_note(t):
     return "ロジカル：理屈・データで受け取る"
 
 
-def _front(prs, person, my):
+def _front(prs, person, my, header="企業のオンライン保健室　はたらくトリセツ"):
     name, pc, pc_desc, engine, act, tp, hitokoto, lucky = person
     band, ink, dark = COLORS[pc]
     s = prs.slides.add_slide(prs.slide_layouts[6])
     _box(s, 0, 0, 9.1, 5.5, fill=WHITE)
     _box(s, 0, 0, 9.1, 1.55, fill=band)
-    _text(s, 0.35, 0.12, 5.5, 0.3, "企業のオンライン保健室　はたらくトリセツ", size=5.5, color=ink)
+    _text(s, 0.35, 0.12, 5.5, 0.3, header, size=5.5, color=ink)
     _text(s, 0.35, 0.42, 6.3, 0.75, name, size=17, bold=True, color=ink)
     _text(s, 0.35, 1.13, 6.3, 0.3, f"パワーカラー {pc}：{pc_desc}", size=5.5, color=ink)
     _box(s, 6.95, 0.22, 1.8, 1.1, fill=WHITE, line=LIGHT if pc == "白" else None,
@@ -157,11 +157,11 @@ def _front(prs, person, my):
     _text(s, 7.5, 4.3, 1.15, 0.75, f"Lucky\n{lucky}", size=6.5, bold=True, color=dark, align=PP_ALIGN.CENTER)
 
 
-def _back(prs):
+def _back(prs, back_title="トリセツ名札の見方"):
     s = prs.slides.add_slide(prs.slide_layouts[6])
     _box(s, 0, 0, 9.1, 5.5, fill=WHITE)
     _box(s, 0, 0, 9.1, 0.6, fill=NAVY)
-    _text(s, 0.35, 0.05, 8.4, 0.5, "トリセツ名札の見方", size=9, bold=True, color=WHITE)
+    _text(s, 0.35, 0.05, 8.4, 0.5, back_title, size=9, bold=True, color=WHITE)
     _text(s, 0.35, 0.7, 8.4, 0.35, "利き脳タイプ：指を組んで下になる親指＝受け取り方／腕を組んで下になる腕＝出し方", size=5.5, color=GRAY)
     desc = {
         "切りひらく": "親指 左・腕 右｜新しいことの最初の一歩",
@@ -180,12 +180,12 @@ def _back(prs):
     _text(s, 0.55, 4.25, 8.0, 0.85, "これは評価ではありません。関わり方のヒントです。\n「この人にはどう伝えるといいかな？」と思った時に見てください。", size=6.5, bold=True, color=NAVY)
 
 
-def build(out, people, kikinou):
+def build(out, people, kikinou, header="企業のオンライン保健室　はたらくトリセツ", back_title="トリセツ名札の見方"):
     prs = Presentation()
     prs.slide_width = Cm(9.1)
     prs.slide_height = Cm(5.5)
     for person in people:
-        _front(prs, person, kikinou.get(person[0]))
-    _back(prs)
+        _front(prs, person, kikinou.get(person[0]), header)
+    _back(prs, back_title)
     prs.save(out)
     return out
