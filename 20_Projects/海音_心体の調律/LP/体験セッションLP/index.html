@@ -126,6 +126,12 @@
 
   /* 期待できること */
   .expect { background: var(--white); }
+  .voice { background: var(--ivory); }
+  .voice-card { background: var(--white); border-radius: var(--radius); padding: 26px 22px 22px; border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(140,106,52,.08); }
+  .voice-card .score { display: flex; align-items: center; justify-content: center; gap: 14px; background: var(--lavender); border-radius: 14px; padding: 12px 10px; margin-bottom: 18px; font-size: 13px; color: var(--ink-soft); flex-wrap: wrap; }
+  .voice-card .score b { font-family: "Shippori Mincho", serif; font-size: 24px; color: var(--gold-deep); }
+  .voice-card .quote { font-family: "Shippori Mincho", serif; font-size: 15px; line-height: 2; margin: 0 0 12px; }
+  .voice-card .who { text-align: right; font-size: 13px; color: var(--ink-soft); margin: 14px 0 0; }
   .expect-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px; }
   .expect-item .icon { flex: 0 0 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; font-family: "Shippori Mincho", serif; color: var(--gold-deep); font-size: 20px; font-weight: 700; }
   .expect-item.e1 .icon { background: var(--blush); }
@@ -280,6 +286,20 @@
     <div class="expect-item e2"><div class="icon">二</div><div><h3>自分の扱い方がわかる</h3><p>うまくいかない理由を「自分のせい」にするのではなく、性質として理解しやすくなります。</p></div></div>
     <div class="expect-item e3"><div class="icon">三</div><div><h3>次の一歩が見えてくる</h3><p>これから何をしてみたいか、考えるヒントを持ち帰っていただけます。</p></div></div>
     <p class="disclaimer">※感じ方には個人差があります。特定の変化や結果をお約束するものではありません。<br>※本セッションは医療行為・診断・治療ではありません。治療が必要と考えられる場合は、医療機関の受診をおすすめしています。</p>
+  </section>
+
+  <!-- 4-2. お客様の声 -->
+  <section class="voice fade">
+    <span class="sec-label">VOICE</span>
+    <h2 class="sec-title">お客様の声</h2>
+    <div class="voice-card">
+      <div class="score"><span>お悩みの強さ（ご本人の10点評価）</span><span>セッション前 <b>7</b> → 1週間後 <b>2</b></span></div>
+      <p class="quote">自分軸がしっかりできた感じで、ぶれにくくなりました。マイナスのできごとに引きずられなくなり、人と自分の境界線をしっかり引けるようになりました。金額を伝えることにも迷いがなくなりました。</p>
+      <p class="quote">いちばん心に残っているのは、黄金の風に乗って、山のてっぺんにあるゴールドの棒を取ったシーンです。</p>
+      <p class="quote">自己否定に悩んでいる方におすすめしたいです。</p>
+      <p class="who">A.N.様（お金のブロック 単発セッション）</p>
+    </div>
+    <p class="disclaimer">※ご本人の感想です。感じ方には個人差があり、同じ変化をお約束するものではありません。</p>
   </section>
 
   <!-- 5. セッションの流れ -->
