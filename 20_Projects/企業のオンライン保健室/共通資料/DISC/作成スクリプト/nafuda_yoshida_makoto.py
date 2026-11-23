@@ -1,7 +1,7 @@
 r"""吉田誠さんのトリセツ名札。元データ：Downloads\shinshiki01_rInthQ8vmwZMa6h7oDpijFZxDLD21731657380.pdf（プロファイリング）。2026-11-22作成。"""
 from nafuda_core import build
 
-OUT = r"C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室\共通資料\DISC\吉田誠_トリセツ名札_v0.1.pptx"
+OUT = r"C:\Users\y-takahashi\MyBrain\20_Projects\BNI_REALIZE\121記録\吉田誠_トリセツ名札_v0.1.pptx"
 
 # (氏名, パワーカラー, 色の説明, 深層心理, アクティビティレベル, シンキングパターン, ひとこと（仮）, ラッキーナンバー)
 PEOPLE = [

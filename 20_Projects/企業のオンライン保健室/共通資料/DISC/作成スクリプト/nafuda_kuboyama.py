@@ -1,7 +1,7 @@
 r"""久保山侑斗さんのトリセツ名札。元データ：Downloads\shinshiki01_rInthQ8vmwZMa6h7oDpijFZxDLD21731320832.pdf（プロファイリング 2024-11-11作成）。2026-11-22作成。"""
 from nafuda_core import build
 
-OUT = r"C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室\共通資料\DISC\久保山侑斗_トリセツ名札_v0.2.pptx"
+OUT = r"C:\Users\y-takahashi\MyBrain\20_Projects\海音_心体の調律\タマラ\久保山侑斗さん\久保山侑斗_トリセツ名札_v0.2.pptx"
 
 # (氏名, パワーカラー, 色の説明, 深層心理, アクティビティレベル, シンキングパターン, ひとこと（仮）, ラッキーナンバー)
 PEOPLE = [
