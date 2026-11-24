@@ -1,7 +1,7 @@
 r"""沢村古都さんのトリセツ名札。元データ：Downloads\沢村　古都様_LPベーシック2024.pdf（詳しい版・書式が通常と違う）。パワーカラーはPDF4ページ目の画像で確認。2026-11-24作成。"""
 from nafuda_core import build
 
-OUT = r"C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室養成講座\上級コース\沢村古都\沢村古都_トリセツ名札_v0.1.pptx"
+OUT = r"C:\Users\y-takahashi\MyBrain\20_Projects\企業のオンライン保健室養成講座\上級コース\沢村古都\沢村古都_組織力UP個性伸ばし方カード_v0.2.pptx"
 
 # (氏名, パワーカラー, 色の説明, 深層心理, アクティビティレベル, シンキングパターン, ひとこと（仮）, ラッキーナンバー)
 PEOPLE = [
@@ -13,4 +13,4 @@ PEOPLE = [
 KIKINOU = {"沢村 古都": (0, 1)}
 
 if __name__ == "__main__":
-    print(build(OUT, PEOPLE, KIKINOU))
+    print(build(OUT, PEOPLE, KIKINOU, header="企業のオンライン保健室　組織力UP 個性伸ばし方カード", back_title="個性伸ばし方カードの見方"))
